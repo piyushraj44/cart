@@ -1,0 +1,54 @@
+{
+ "name": "ClearCart text dark-pattern classifier",
+ "version": "2026-11-11 17:45:06",
+ "architecture": "Soft-voting ensemble: TF-IDF (word 1-2g + char 2-5g) + Logistic Regression (weight 0.7) and frozen MiniLM embeddings + surface features + XGBoost (weight 0.3); temperature-scaled (T=0.448); flag if calibrated P(dark) >= 0.68",
+ "embedder": "sentence-transformers/all-MiniLM-L6-v2 (pretrained, frozen - not fine-tuned)",
+ "categories": [
+  {
+   "key": "urgency",
+   "label": "Misleading urgency",
+   "method": "ML classifier"
+  },
+  {
+   "key": "scarcity",
+   "label": "Misleading scarcity",
+   "method": "ML classifier"
+  },
+  {
+   "key": "social_proof",
+   "label": "Social proof pressure",
+   "method": "ML classifier"
+  },
+  {
+   "key": "misdirection",
+   "label": "Misdirection / confirmshaming",
+   "method": "ML classifier"
+  },
+  {
+   "key": "preselected_option",
+   "label": "Preselected option",
+   "method": "DOM observation (HTML only)"
+  }
+ ],
+ "threshold": 0.68,
+ "temperature": 0.4477,
+ "training_data": "yamanalab/ec-darkpattern dataset.tsv - train split only (1645 rows); grouped by page and text template to prevent leakage",
+ "test_metrics": {
+  "macro_f1": 0.8823,
+  "accuracy": 0.9179,
+  "dark_vs_benign_precision": 0.9932,
+  "dark_vs_benign_recall": 0.9074,
+  "dark_vs_benign_f1": 0.9484,
+  "roc_auc_ovr_macro": 0.9882,
+  "test_rows": 329,
+  "calibration_ece": 0.0409
+ },
+ "limitations": [
+  "Trained on short English e-commerce strings from 2019 shopping sites; other languages and domains are out of scope.",
+  "Obstruction, sneaking and forced-action patterns had too few examples (43 rows total) to be learned as categories.",
+  "Scores estimate how closely text matches labelled dark-pattern examples; they cannot verify whether a deadline or stock claim is actually false.",
+  "Screenshot support is OCR + text classification; visual layout and styling are not analysed.",
+  "Preselected-option findings are rule-based DOM observations, not model predictions."
+ ],
+ "ocr_available": true
+}

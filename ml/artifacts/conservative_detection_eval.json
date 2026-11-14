@@ -1,0 +1,557 @@
+{
+  "description": "Reproducible, deliberately small synthetic stress test for false-positive changes.",
+  "model": "served v1",
+  "n_benign": 24,
+  "n_dark": 16,
+  "max_acceptable_recall_drop": 0.05,
+  "threshold_sweep": {
+    "0.68": {
+      "tp": 12,
+      "fp": 15,
+      "fn": 4,
+      "tn": 9,
+      "precision": 0.4444,
+      "recall": 0.75,
+      "f1": 0.5581,
+      "false_positive_rate": 0.625
+    },
+    "0.75": {
+      "tp": 12,
+      "fp": 14,
+      "fn": 4,
+      "tn": 10,
+      "precision": 0.4615,
+      "recall": 0.75,
+      "f1": 0.5714,
+      "false_positive_rate": 0.5833
+    },
+    "0.8": {
+      "tp": 12,
+      "fp": 13,
+      "fn": 4,
+      "tn": 11,
+      "precision": 0.48,
+      "recall": 0.75,
+      "f1": 0.5854,
+      "false_positive_rate": 0.5417
+    },
+    "0.85": {
+      "tp": 12,
+      "fp": 12,
+      "fn": 4,
+      "tn": 12,
+      "precision": 0.5,
+      "recall": 0.75,
+      "f1": 0.6,
+      "false_positive_rate": 0.5
+    },
+    "0.9": {
+      "tp": 11,
+      "fp": 8,
+      "fn": 5,
+      "tn": 16,
+      "precision": 0.5789,
+      "recall": 0.6875,
+      "f1": 0.6286,
+      "false_positive_rate": 0.3333
+    }
+  },
+  "synthetic_eligible_thresholds": [
+    0.75,
+    0.8,
+    0.85
+  ],
+  "heldout_threshold_sweep": {
+    "0.68": {
+      "tp": 144,
+      "fp": 1,
+      "fn": 18,
+      "tn": 166,
+      "precision": 0.9931,
+      "recall": 0.8889,
+      "f1": 0.9381,
+      "false_positive_rate": 0.006
+    },
+    "0.75": {
+      "tp": 136,
+      "fp": 1,
+      "fn": 26,
+      "tn": 166,
+      "precision": 0.9927,
+      "recall": 0.8395,
+      "f1": 0.9097,
+      "false_positive_rate": 0.006
+    },
+    "0.8": {
+      "tp": 131,
+      "fp": 1,
+      "fn": 31,
+      "tn": 166,
+      "precision": 0.9924,
+      "recall": 0.8086,
+      "f1": 0.8912,
+      "false_positive_rate": 0.006
+    },
+    "0.85": {
+      "tp": 126,
+      "fp": 1,
+      "fn": 36,
+      "tn": 166,
+      "precision": 0.9921,
+      "recall": 0.7778,
+      "f1": 0.872,
+      "false_positive_rate": 0.006
+    },
+    "0.9": {
+      "tp": 124,
+      "fp": 1,
+      "fn": 38,
+      "tn": 166,
+      "precision": 0.992,
+      "recall": 0.7654,
+      "f1": 0.8641,
+      "false_positive_rate": 0.006
+    }
+  },
+  "heldout_improved": {
+    "tp": 144,
+    "fp": 1,
+    "fn": 18,
+    "tn": 166,
+    "precision": 0.9931,
+    "recall": 0.8889,
+    "f1": 0.9381,
+    "false_positive_rate": 0.006
+  },
+  "thresholds_passing_both": [],
+  "baseline_rows": [
+    {
+      "id": "b01",
+      "label": 0,
+      "text": "Sale price \u20b92,990. Regular price \u20b93,950.",
+      "p_dark": 0.7745,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b02",
+      "label": 0,
+      "text": "Free shipping on orders over \u20b92,990",
+      "p_dark": 0.9267,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b03",
+      "label": 0,
+      "text": "Delivery in 3-5 working days",
+      "p_dark": 0.8527,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b04",
+      "label": 0,
+      "text": "20% off selected shoes through 30 November",
+      "p_dark": 0.6895,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b05",
+      "label": 0,
+      "text": "Save $15 with code WELCOME15",
+      "p_dark": 0.8706,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b06",
+      "label": 0,
+      "text": "Buy one, get one half price",
+      "p_dark": 0.852,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b07",
+      "label": 0,
+      "text": "Limited-time offer: 15% off until Sunday at 23:59",
+      "p_dark": 1.0,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b08",
+      "label": 0,
+      "text": "Offer ends in 02:00:00 on 30 November",
+      "p_dark": 1.0,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b09",
+      "label": 0,
+      "text": "Only 2 left in stock at this location",
+      "p_dark": 1.0,
+      "category": "scarcity",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b10",
+      "label": 0,
+      "text": "12 customers reviewed this product",
+      "p_dark": 0.9953,
+      "category": "social_proof",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b11",
+      "label": 0,
+      "text": "Popular this week",
+      "p_dark": 0.3896,
+      "category": "social_proof",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b12",
+      "label": 0,
+      "text": "Subscribe to get 10% off your first order",
+      "p_dark": 0.9501,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b13",
+      "label": 0,
+      "text": "No thanks",
+      "p_dark": 0.9938,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b14",
+      "label": 0,
+      "text": "Reject optional cookies",
+      "p_dark": 0.001,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b15",
+      "label": 0,
+      "text": "We use cookies to remember your preferences.",
+      "p_dark": 0.007,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b16",
+      "label": 0,
+      "text": "Accept all cookies",
+      "p_dark": 0.0002,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b17",
+      "label": 0,
+      "text": "Reject all cookies",
+      "p_dark": 0.0003,
+      "category": "urgency",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b18",
+      "label": 0,
+      "text": "Get 20% off",
+      "p_dark": 0.8524,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b19",
+      "label": 0,
+      "text": "25% off",
+      "p_dark": 0.827,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b20",
+      "label": 0,
+      "text": "Offer ends 30 November at 23:59",
+      "p_dark": 0.9958,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "b21",
+      "label": 0,
+      "text": "Email me offers",
+      "p_dark": 0.0396,
+      "category": "urgency",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b22",
+      "label": 0,
+      "text": "Remember me",
+      "p_dark": 0.006,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b23",
+      "label": 0,
+      "text": "View all available sizes",
+      "p_dark": 0.0045,
+      "category": "scarcity",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "b24",
+      "label": 0,
+      "text": "Coupon valid from 1 to 30 November",
+      "p_dark": 0.659,
+      "category": "urgency",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "d01",
+      "label": 1,
+      "text": "No thanks, I hate saving money",
+      "p_dark": 0.9995,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d02",
+      "label": 1,
+      "text": "No thanks, I prefer paying full price",
+      "p_dark": 1.0,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d03",
+      "label": 1,
+      "text": "Hurry! Only 2 left in stock.",
+      "p_dark": 1.0,
+      "category": "scarcity",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d04",
+      "label": 1,
+      "text": "Sale ends in 02:14:09 - order now!",
+      "p_dark": 0.9999,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d05",
+      "label": 1,
+      "text": "12 people are viewing this right now",
+      "p_dark": 1.0,
+      "category": "social_proof",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d06",
+      "label": 1,
+      "text": "Someone in your city bought this 2 minutes ago",
+      "p_dark": 1.0,
+      "category": "social_proof",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d07",
+      "label": 1,
+      "text": "You will miss out forever if you leave this page",
+      "p_dark": 0.2205,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "d08",
+      "label": 1,
+      "text": "Claim your offer before the timer runs out",
+      "p_dark": 0.9124,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d09",
+      "label": 1,
+      "text": "No, I do not care about my family's safety",
+      "p_dark": 0.5518,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "d10",
+      "label": 1,
+      "text": "Only 1 room left at this price! Book now",
+      "p_dark": 0.9981,
+      "category": "scarcity",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d11",
+      "label": 1,
+      "text": "Everyone is buying this right now. Hurry!",
+      "p_dark": 0.8924,
+      "category": "social_proof",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d12",
+      "label": 1,
+      "text": "Your discount expires in 00:05:00",
+      "p_dark": 0.9989,
+      "category": "urgency",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d13",
+      "label": 1,
+      "text": "No, I do not want to protect my account",
+      "p_dark": 0.9925,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d14",
+      "label": 1,
+      "text": "Add shipping protection for $4.99",
+      "p_dark": 0.9867,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": true
+    },
+    {
+      "id": "d15",
+      "label": 1,
+      "text": "Accept all cookies",
+      "p_dark": 0.0002,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    },
+    {
+      "id": "d16",
+      "label": 1,
+      "text": "Get your free trial",
+      "p_dark": 0.1996,
+      "category": "misdirection",
+      "gate": null,
+      "flagged": false
+    }
+  ],
+  "improved_decision": {
+    "metrics": {
+      "tp": 12,
+      "fp": 11,
+      "fn": 4,
+      "tn": 13,
+      "precision": 0.5217,
+      "recall": 0.75,
+      "f1": 0.6154,
+      "false_positive_rate": 0.4583
+    },
+    "withheld_ids": [
+      "b13",
+      "b18",
+      "b19",
+      "b20"
+    ]
+  },
+  "second_synthetic_check": {
+    "before": {
+      "tp": 5,
+      "fp": 6,
+      "fn": 3,
+      "tn": 2,
+      "precision": 0.4545,
+      "recall": 0.625,
+      "f1": 0.5263,
+      "false_positive_rate": 0.75
+    },
+    "after": {
+      "tp": 5,
+      "fp": 2,
+      "fn": 3,
+      "tn": 6,
+      "precision": 0.7143,
+      "recall": 0.625,
+      "f1": 0.6667,
+      "false_positive_rate": 0.25
+    },
+    "withheld_ids": [
+      "cb01",
+      "cb02",
+      "cb03",
+      "cb04"
+    ]
+  },
+  "essential_consent_check": {
+    "before": {
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "tn": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6667,
+      "false_positive_rate": 1.0
+    },
+    "after": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 2,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_positive_rate": 0.0
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "model": "label prior (TRAIN prevalence)",
+  "val": {
+    "per_label": {
+      "Hard to Close": {
+        "prevalence": 0.4232,
+        "n_pos": 102,
+        "ap": 0.4232,
+        "auroc": 0.5
+      },
+      "Default Choice": {
+        "prevalence": 0.1826,
+        "n_pos": 44,
+        "ap": 0.1826,
+        "auroc": 0.5
+      },
+      "False Hierarchy": {
+        "prevalence": 0.1784,
+        "n_pos": 43,
+        "ap": 0.1784,
+        "auroc": 0.5
+      },
+      "Nagging": {
+        "prevalence": 0.1535,
+        "n_pos": 37,
+        "ap": 0.1535,
+        "auroc": 0.5
+      },
+      "Privacy Zuckering": {
+        "prevalence": 0.0705,
+        "n_pos": 17,
+        "ap": 0.0705,
+        "auroc": 0.5
+      },
+      "Pay to Avoid Ad": {
+        "prevalence": 0.0622,
+        "n_pos": 15,
+        "ap": 0.0622,
+        "auroc": 0.5
+      }
+    },
+    "macro_ap_required": 0.2344
+  }
+}

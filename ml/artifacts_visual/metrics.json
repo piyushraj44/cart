@@ -1,0 +1,945 @@
+{
+  "created": "2026-11-14T11:40:25+00:00",
+  "criteria": {
+    "fixed_at": "2026-11-14T11:08:30+00:00",
+    "selection": "highest VAL macro average precision over the required labels among the fine-tuned candidates",
+    "a": "the selected model beats BOTH baselines (label prior, frozen CLIP linear probe) on VAL macro-AP (required labels)",
+    "b": "for every required label, VAL AP > VAL prevalence + 0.1",
+    "c": "TEST is evaluated exactly once, after selection, by `finalize`, and reported whatever it shows",
+    "optional_labels": "Privacy Zuckering, Pay to Avoid Ad are shown only if VAL AP > prevalence + 0.1 and a threshold with VAL precision >= 0.7 exists",
+    "thresholds": "per label, highest-F1 VAL threshold with VAL precision >= 0.7; otherwise the label is 'not reliable' and never shown",
+    "required_labels": [
+      "Hard to Close",
+      "Default Choice",
+      "False Hierarchy",
+      "Nagging"
+    ],
+    "all_labels": [
+      "Hard to Close",
+      "Default Choice",
+      "False Hierarchy",
+      "Nagging",
+      "Privacy Zuckering",
+      "Pay to Avoid Ad"
+    ]
+  },
+  "split": {
+    "corrections": {
+      "rows": 98,
+      "matched": 97,
+      "already_reflected_in_groundtruth": 94,
+      "discrepancies_not_applied": [
+        {
+          "image": "12810_9mifsrp.jpg",
+          "groundtruth": [
+            "Default Choice"
+          ],
+          "correction_would_give": [
+            "Attention Distraction",
+            "Default Choice"
+          ]
+        },
+        {
+          "image": "www.stealthangelsurvival.com.png",
+          "groundtruth": [
+            "Activity Message",
+            "Low Stock Message"
+          ],
+          "correction_would_give": [
+            "Activity Message",
+            "Limited Time Message",
+            "Low Stock Message"
+          ]
+        },
+        {
+          "image": "4636.jpg",
+          "groundtruth": [
+            "Nagging"
+          ],
+          "correction_would_give": [
+            "False Hierarchy",
+            "Nagging"
+          ]
+        }
+      ],
+      "image_not_in_groundtruth": [
+        "50736.jpg"
+      ]
+    },
+    "images": 1606,
+    "groundtruth_entries": 1608,
+    "files_without_label": [
+      "50736.jpg",
+      "642b1fe13be378a1b9fc68a0_yxQIu_kBj4KtZGqVCRk61HUKIUaOZ-heq7dIqxQdrJU.png",
+      "artsper.com.png"
+    ],
+    "near_duplicate_pairs_merged": 181,
+    "groups": 1414,
+    "largest_group": 10,
+    "per_split": {
+      "train": {
+        "images": 1124,
+        "groups": 976,
+        "web": 58,
+        "Hard to Close": 478,
+        "Default Choice": 203,
+        "False Hierarchy": 202,
+        "Nagging": 174,
+        "Privacy Zuckering": 79,
+        "Pay to Avoid Ad": 68,
+        "no_target_label": 99
+      },
+      "val": {
+        "images": 241,
+        "groups": 219,
+        "web": 12,
+        "Hard to Close": 102,
+        "Default Choice": 44,
+        "False Hierarchy": 43,
+        "Nagging": 37,
+        "Privacy Zuckering": 17,
+        "Pay to Avoid Ad": 15,
+        "no_target_label": 24
+      },
+      "test": {
+        "images": 241,
+        "groups": 219,
+        "web": 13,
+        "Hard to Close": 103,
+        "Default Choice": 43,
+        "False Hierarchy": 43,
+        "Nagging": 38,
+        "Privacy Zuckering": 17,
+        "Pay to Avoid Ad": 14,
+        "no_target_label": 21
+      }
+    },
+    "group_overlap": {
+      "train-val": 0,
+      "train-test": 0,
+      "val-test": 0
+    },
+    "source_md5": {
+      "groundtrue.json": "73ca3644c308864eea9dc63ca87e200f",
+      "correction.xlsx": "c0a4cf7a3caab3f92b6cfdbbd56ddf3a"
+    },
+    "ocr_eval_images_also_in_visual_split": {
+      "train": 228,
+      "val": 52,
+      "test": 53
+    },
+    "ocr_eval_note": "ml/eval_screenshots DEV/TEST images are ContextRico files and also appear here. The OCR/text evaluation is unaffected because the text model is not trained on them and does not change."
+  },
+  "val": {
+    "prior": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4232,
+          "n_pos": 102,
+          "ap": 0.4232,
+          "auroc": 0.5
+        },
+        "Default Choice": {
+          "prevalence": 0.1826,
+          "n_pos": 44,
+          "ap": 0.1826,
+          "auroc": 0.5
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.1784,
+          "auroc": 0.5
+        },
+        "Nagging": {
+          "prevalence": 0.1535,
+          "n_pos": 37,
+          "ap": 0.1535,
+          "auroc": 0.5
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.0705,
+          "auroc": 0.5
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0622,
+          "n_pos": 15,
+          "ap": 0.0622,
+          "auroc": 0.5
+        }
+      },
+      "macro_ap_required": 0.2344
+    },
+    "clip_lr": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4232,
+          "n_pos": 102,
+          "ap": 0.9043,
+          "auroc": 0.9142
+        },
+        "Default Choice": {
+          "prevalence": 0.1826,
+          "n_pos": 44,
+          "ap": 0.6126,
+          "auroc": 0.8456
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.6959,
+          "auroc": 0.8659
+        },
+        "Nagging": {
+          "prevalence": 0.1535,
+          "n_pos": 37,
+          "ap": 0.836,
+          "auroc": 0.9528
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.3877,
+          "auroc": 0.8829
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0622,
+          "n_pos": 15,
+          "ap": 0.5888,
+          "auroc": 0.8788
+        }
+      },
+      "macro_ap_required": 0.7622
+    },
+    "mobilenet_v3_large": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4232,
+          "n_pos": 102,
+          "ap": 0.9023,
+          "auroc": 0.9152
+        },
+        "Default Choice": {
+          "prevalence": 0.1826,
+          "n_pos": 44,
+          "ap": 0.6838,
+          "auroc": 0.892
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.6642,
+          "auroc": 0.8946
+        },
+        "Nagging": {
+          "prevalence": 0.1535,
+          "n_pos": 37,
+          "ap": 0.7908,
+          "auroc": 0.949
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.4058,
+          "auroc": 0.8921
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0622,
+          "n_pos": 15,
+          "ap": 0.3547,
+          "auroc": 0.8835
+        }
+      },
+      "macro_ap_required": 0.7603
+    },
+    "efficientnet_b0": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4232,
+          "n_pos": 102,
+          "ap": 0.9198,
+          "auroc": 0.9323
+        },
+        "Default Choice": {
+          "prevalence": 0.1826,
+          "n_pos": 44,
+          "ap": 0.6178,
+          "auroc": 0.8671
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.7266,
+          "auroc": 0.905
+        },
+        "Nagging": {
+          "prevalence": 0.1535,
+          "n_pos": 37,
+          "ap": 0.741,
+          "auroc": 0.9163
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.3066,
+          "auroc": 0.8645
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0622,
+          "n_pos": 15,
+          "ap": 0.4602,
+          "auroc": 0.8708
+        }
+      },
+      "macro_ap_required": 0.7513
+    }
+  },
+  "training": {
+    "mobilenet_v3_large": {
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 1.1129,
+          "val_macro_ap": 0.4152,
+          "seconds": 29.2
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.9941,
+          "val_macro_ap": 0.5948,
+          "seconds": 21.4
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.8251,
+          "val_macro_ap": 0.6734,
+          "seconds": 21.1
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.7138,
+          "val_macro_ap": 0.7181,
+          "seconds": 22.4
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.6332,
+          "val_macro_ap": 0.7341,
+          "seconds": 22.7
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.5855,
+          "val_macro_ap": 0.7339,
+          "seconds": 22.1
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.5182,
+          "val_macro_ap": 0.7433,
+          "seconds": 21.3
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.4877,
+          "val_macro_ap": 0.7491,
+          "seconds": 20.8
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.4525,
+          "val_macro_ap": 0.7483,
+          "seconds": 22.5
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.4289,
+          "val_macro_ap": 0.7523,
+          "seconds": 23.2
+        },
+        {
+          "epoch": 11,
+          "train_loss": 0.413,
+          "val_macro_ap": 0.7535,
+          "seconds": 22.7
+        },
+        {
+          "epoch": 12,
+          "train_loss": 0.41,
+          "val_macro_ap": 0.7537,
+          "seconds": 23.8
+        },
+        {
+          "epoch": 13,
+          "train_loss": 0.3936,
+          "val_macro_ap": 0.7553,
+          "seconds": 24.9
+        },
+        {
+          "epoch": 14,
+          "train_loss": 0.3984,
+          "val_macro_ap": 0.7598,
+          "seconds": 26.2
+        },
+        {
+          "epoch": 15,
+          "train_loss": 0.4066,
+          "val_macro_ap": 0.7603,
+          "seconds": 24.9
+        }
+      ],
+      "best_epoch": 15,
+      "wall_seconds": 356.7
+    },
+    "efficientnet_b0": {
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 1.0968,
+          "val_macro_ap": 0.5445,
+          "seconds": 42.3
+        },
+        {
+          "epoch": 2,
+          "train_loss": 1.0026,
+          "val_macro_ap": 0.6099,
+          "seconds": 41.7
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.8965,
+          "val_macro_ap": 0.6517,
+          "seconds": 44.2
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.7785,
+          "val_macro_ap": 0.673,
+          "seconds": 43.2
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.7034,
+          "val_macro_ap": 0.6874,
+          "seconds": 42.0
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.6539,
+          "val_macro_ap": 0.71,
+          "seconds": 44.4
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.6026,
+          "val_macro_ap": 0.7213,
+          "seconds": 47.8
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.5642,
+          "val_macro_ap": 0.7269,
+          "seconds": 46.2
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.548,
+          "val_macro_ap": 0.734,
+          "seconds": 45.2
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.5197,
+          "val_macro_ap": 0.7393,
+          "seconds": 43.1
+        },
+        {
+          "epoch": 11,
+          "train_loss": 0.4942,
+          "val_macro_ap": 0.7401,
+          "seconds": 45.3
+        },
+        {
+          "epoch": 12,
+          "train_loss": 0.4935,
+          "val_macro_ap": 0.7428,
+          "seconds": 43.5
+        },
+        {
+          "epoch": 13,
+          "train_loss": 0.5018,
+          "val_macro_ap": 0.7488,
+          "seconds": 44.1
+        },
+        {
+          "epoch": 14,
+          "train_loss": 0.4821,
+          "val_macro_ap": 0.7457,
+          "seconds": 43.7
+        },
+        {
+          "epoch": 15,
+          "train_loss": 0.4853,
+          "val_macro_ap": 0.7513,
+          "seconds": 43.2
+        }
+      ],
+      "best_epoch": 15,
+      "wall_seconds": 666.9
+    }
+  },
+  "cv": {},
+  "selected": "mobilenet_v3_large",
+  "clip_C": {
+    "Hard to Close": 10.0,
+    "Default Choice": 1.0,
+    "False Hierarchy": 10.0,
+    "Nagging": 10.0,
+    "Privacy Zuckering": 10.0,
+    "Pay to Avoid Ad": 10.0
+  },
+  "clip_embedding_seconds": 126.2,
+  "criteria_result": {
+    "a_beats_both_baselines_on_val": false,
+    "b_per_label_val_ap_margin": {
+      "Hard to Close": {
+        "ap": 0.9023,
+        "needs_more_than": 0.5232
+      },
+      "Default Choice": {
+        "ap": 0.6838,
+        "needs_more_than": 0.2826
+      },
+      "False Hierarchy": {
+        "ap": 0.6642,
+        "needs_more_than": 0.2784
+      },
+      "Nagging": {
+        "ap": 0.7908,
+        "needs_more_than": 0.2535
+      }
+    },
+    "b_pass": true,
+    "c_test_evaluated_once": true,
+    "all_pass": false
+  },
+  "label_config": {
+    "Hard to Close": {
+      "temperature": 1.288,
+      "threshold": 0.3231,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.8148,
+        "precision": 0.7719,
+        "recall": 0.8627
+      },
+      "ece_val_before": 0.0611,
+      "ece_val_after": 0.053
+    },
+    "Default Choice": {
+      "temperature": 1.1281,
+      "threshold": 0.8325,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.5753,
+        "precision": 0.7241,
+        "recall": 0.4773
+      },
+      "ece_val_before": 0.1729,
+      "ece_val_after": 0.1797
+    },
+    "False Hierarchy": {
+      "temperature": 1.0954,
+      "threshold": 0.7635,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.6133,
+        "precision": 0.7188,
+        "recall": 0.5349
+      },
+      "ece_val_before": 0.1298,
+      "ece_val_after": 0.143
+    },
+    "Nagging": {
+      "temperature": 1.2264,
+      "threshold": 0.7967,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.6471,
+        "precision": 0.7097,
+        "recall": 0.5946
+      },
+      "ece_val_before": 0.1373,
+      "ece_val_after": 0.1462
+    },
+    "Privacy Zuckering": {
+      "temperature": 0.9781,
+      "threshold": 0.9485,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.1111,
+        "precision": 1.0,
+        "recall": 0.0588
+      },
+      "ece_val_before": 0.1319,
+      "ece_val_after": 0.1302
+    },
+    "Pay to Avoid Ad": {
+      "temperature": 0.8481,
+      "threshold": 0.9873,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.125,
+        "precision": 1.0,
+        "recall": 0.0667
+      },
+      "ece_val_before": 0.1204,
+      "ece_val_after": 0.1072
+    }
+  },
+  "test": {
+    "selected": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4274,
+          "n_pos": 103,
+          "ap": 0.9374,
+          "auroc": 0.9519,
+          "precision_at_val_threshold": 0.7442,
+          "recall_at_val_threshold": 0.932,
+          "f1_at_val_threshold": 0.8276,
+          "ece_after_calibration": 0.0524
+        },
+        "Default Choice": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.6691,
+          "auroc": 0.8802,
+          "precision_at_val_threshold": 0.6897,
+          "recall_at_val_threshold": 0.4651,
+          "f1_at_val_threshold": 0.5556,
+          "ece_after_calibration": 0.1537
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.722,
+          "auroc": 0.9292,
+          "precision_at_val_threshold": 0.8333,
+          "recall_at_val_threshold": 0.5814,
+          "f1_at_val_threshold": 0.6849,
+          "ece_after_calibration": 0.0909
+        },
+        "Nagging": {
+          "prevalence": 0.1577,
+          "n_pos": 38,
+          "ap": 0.8123,
+          "auroc": 0.9599,
+          "precision_at_val_threshold": 0.8621,
+          "recall_at_val_threshold": 0.6579,
+          "f1_at_val_threshold": 0.7463,
+          "ece_after_calibration": 0.0984
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.3962,
+          "auroc": 0.9031,
+          "precision_at_val_threshold": 0.5,
+          "recall_at_val_threshold": 0.0588,
+          "f1_at_val_threshold": 0.1053,
+          "ece_after_calibration": 0.1008
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0581,
+          "n_pos": 14,
+          "ap": 0.5562,
+          "auroc": 0.8084,
+          "precision_at_val_threshold": 1.0,
+          "recall_at_val_threshold": 0.2143,
+          "f1_at_val_threshold": 0.3529,
+          "ece_after_calibration": 0.1523
+        }
+      },
+      "macro_ap_required": 0.7852
+    },
+    "prior": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4274,
+          "n_pos": 103,
+          "ap": 0.4274,
+          "auroc": 0.5
+        },
+        "Default Choice": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.1784,
+          "auroc": 0.5
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.1784,
+          "auroc": 0.5
+        },
+        "Nagging": {
+          "prevalence": 0.1577,
+          "n_pos": 38,
+          "ap": 0.1577,
+          "auroc": 0.5
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.0705,
+          "auroc": 0.5
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0581,
+          "n_pos": 14,
+          "ap": 0.0581,
+          "auroc": 0.5
+        }
+      },
+      "macro_ap_required": 0.2355
+    },
+    "clip_lr": {
+      "per_label": {
+        "Hard to Close": {
+          "prevalence": 0.4274,
+          "n_pos": 103,
+          "ap": 0.9143,
+          "auroc": 0.9548
+        },
+        "Default Choice": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.667,
+          "auroc": 0.8983
+        },
+        "False Hierarchy": {
+          "prevalence": 0.1784,
+          "n_pos": 43,
+          "ap": 0.7155,
+          "auroc": 0.8965
+        },
+        "Nagging": {
+          "prevalence": 0.1577,
+          "n_pos": 38,
+          "ap": 0.8062,
+          "auroc": 0.9433
+        },
+        "Privacy Zuckering": {
+          "prevalence": 0.0705,
+          "n_pos": 17,
+          "ap": 0.7024,
+          "auroc": 0.9504
+        },
+        "Pay to Avoid Ad": {
+          "prevalence": 0.0581,
+          "n_pos": 14,
+          "ap": 0.503,
+          "auroc": 0.8486
+        }
+      },
+      "macro_ap_required": 0.7758
+    },
+    "selected_macro_ap_by_subset": {
+      "Mobile": 0.7912,
+      "Web": 0.5833
+    },
+    "n_images": 241
+  },
+  "pointing_game_test": {
+    "n_images": 20,
+    "peak_in_segment_rate": 0.45,
+    "image_centre_baseline_rate": 0.3,
+    "mean_best_iou_evidence_box": 0.1657,
+    "note": "segments are image-level dark-pattern regions from groundtrue.json (x, y, w, h); not per label"
+  },
+  "probes_not_metrics": [
+    {
+      "file": "data/probes/clearcart_pages/about_1280_viewport.png",
+      "known_good": true,
+      "contextrico_split": null,
+      "fired": [
+        "Default Choice"
+      ],
+      "probabilities": {
+        "Hard to Close": 0.01,
+        "Default Choice": 0.925,
+        "False Hierarchy": 0.102,
+        "Nagging": 0.051,
+        "Privacy Zuckering": 0.404,
+        "Pay to Avoid Ad": 0.145
+      }
+    },
+    {
+      "file": "data/probes/clearcart_pages/about_1440.png",
+      "known_good": true,
+      "contextrico_split": null,
+      "fired": [],
+      "probabilities": {
+        "Hard to Close": 0.158,
+        "Default Choice": 0.606,
+        "False Hierarchy": 0.03,
+        "Nagging": 0.047,
+        "Privacy Zuckering": 0.154,
+        "Pay to Avoid Ad": 0.087
+      }
+    },
+    {
+      "file": "data/samples/screenshots/(177)www.adoreme.com_a719.jpg",
+      "known_good": false,
+      "contextrico_split": "train",
+      "fired": [
+        "Hard to Close"
+      ],
+      "probabilities": {
+        "Hard to Close": 0.406,
+        "Default Choice": 0.18,
+        "False Hierarchy": 0.16,
+        "Nagging": 0.162,
+        "Privacy Zuckering": 0.135,
+        "Pay to Avoid Ad": 0.023
+      }
+    },
+    {
+      "file": "data/samples/screenshots/knockaround.com.png",
+      "known_good": false,
+      "contextrico_split": "train",
+      "fired": [],
+      "probabilities": {
+        "Hard to Close": 0.072,
+        "Default Choice": 0.386,
+        "False Hierarchy": 0.052,
+        "Nagging": 0.004,
+        "Privacy Zuckering": 0.073,
+        "Pay to Avoid Ad": 0.0
+      }
+    },
+    {
+      "file": "data/samples/screenshots/www.aafnation.com.png",
+      "known_good": false,
+      "contextrico_split": "train",
+      "fired": [],
+      "probabilities": {
+        "Hard to Close": 0.181,
+        "Default Choice": 0.519,
+        "False Hierarchy": 0.317,
+        "Nagging": 0.108,
+        "Privacy Zuckering": 0.569,
+        "Pay to Avoid Ad": 0.054
+      }
+    },
+    {
+      "file": "data/samples/screenshots/www.gasbike.net.png",
+      "known_good": false,
+      "contextrico_split": "train",
+      "fired": [],
+      "probabilities": {
+        "Hard to Close": 0.125,
+        "Default Choice": 0.368,
+        "False Hierarchy": 0.061,
+        "Nagging": 0.002,
+        "Privacy Zuckering": 0.137,
+        "Pay to Avoid Ad": 0.053
+      }
+    }
+  ],
+  "export": {
+    "arch": "mobilenet_v3_large",
+    "pretrained_weights": "IMAGENET1K_V2",
+    "pretrained_file": "mobilenet_v3_large-5c1a4163.pth",
+    "pretrained_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+    "size": 384,
+    "labels": [
+      "Hard to Close",
+      "Default Choice",
+      "False Hierarchy",
+      "Nagging",
+      "Privacy Zuckering",
+      "Pay to Avoid Ad"
+    ],
+    "label_config": {
+      "Hard to Close": {
+        "temperature": 1.288,
+        "threshold": 0.3231,
+        "reliable": true,
+        "val_at_threshold": {
+          "f1": 0.8148,
+          "precision": 0.7719,
+          "recall": 0.8627
+        },
+        "ece_val_before": 0.0611,
+        "ece_val_after": 0.053
+      },
+      "Default Choice": {
+        "temperature": 1.1281,
+        "threshold": 0.8325,
+        "reliable": true,
+        "val_at_threshold": {
+          "f1": 0.5753,
+          "precision": 0.7241,
+          "recall": 0.4773
+        },
+        "ece_val_before": 0.1729,
+        "ece_val_after": 0.1797
+      },
+      "False Hierarchy": {
+        "temperature": 1.0954,
+        "threshold": 0.7635,
+        "reliable": true,
+        "val_at_threshold": {
+          "f1": 0.6133,
+          "precision": 0.7188,
+          "recall": 0.5349
+        },
+        "ece_val_before": 0.1298,
+        "ece_val_after": 0.143
+      },
+      "Nagging": {
+        "temperature": 1.2264,
+        "threshold": 0.7967,
+        "reliable": true,
+        "val_at_threshold": {
+          "f1": 0.6471,
+          "precision": 0.7097,
+          "recall": 0.5946
+        },
+        "ece_val_before": 0.1373,
+        "ece_val_after": 0.1462
+      },
+      "Privacy Zuckering": {
+        "temperature": 0.9781,
+        "threshold": 0.9485,
+        "reliable": true,
+        "val_at_threshold": {
+          "f1": 0.1111,
+          "precision": 1.0,
+          "recall": 0.0588
+        },
+        "ece_val_before": 0.1319,
+        "ece_val_after": 0.1302
+      },
+      "Pay to Avoid Ad": {
+        "temperature": 0.8481,
+        "threshold": 0.9873,
+        "reliable": true,
+        "val_at_threshold": {
+          "f1": 0.125,
+          "precision": 1.0,
+          "recall": 0.0667
+        },
+        "ece_val_before": 0.1204,
+        "ece_val_after": 0.1072
+      }
+    },
+    "model_sha256": "08acd61e3195e6cdc126baf32bd96de72687579494f76aa3f3716c96a89ff018",
+    "trained_on": "ContextRico-DP TRAIN split (data/processed/visual_split.csv)",
+    "provenance": "model (visual, experimental)"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "arch": "convnext_tiny",
+  "status": "stopped before completing",
+  "reason": "stopped at the user's request for time; the training process was killed before its first epoch finished, so no VAL score exists and finalize does not consider it (no runs/convnext_tiny.json)",
+  "stopped_at": "2026-11-14T11:35:41+00:00",
+  "partial_log": "runs/convnext_tiny.log"
+}

@@ -1,0 +1,3895 @@
+{
+  "generated_at": "2026-11-13T18:24:22+00:00",
+  "config_version": "intel-v1.0",
+  "stage_pressure_definition": "p = lam*max_k c_k + (1-lam)*sum_k c_k/4 over urgency/scarcity/social_proof/misdirection, c_k = max calibrated P(dark) of flagged findings of category k; lam = 0.5 (backend/intelligence/pressure.py)",
+  "seed": 2026,
+  "python": "3.12.16",
+  "classifier_threshold": 0.68,
+  "test_split_rows": 329,
+  "test_split_label_counts": {
+    "benign": 167,
+    "scarcity": 59,
+    "social_proof": 45,
+    "urgency": 30,
+    "misdirection": 28
+  },
+  "caveats": [
+    "No ground truth exists for journey pressure, choice asymmetry or composite deception; nothing here is real-world validation.",
+    "A1 and A3 are pure mathematics of the weighting schemes; A3 confirms the score is linear in each stage pressure (marginal = 100*w_i).",
+    "A2 and A4 journeys are SYNTHETIC: random combinations of real held-out TEST-split strings. A4 labels come from the construction.",
+    "B choice sets and screenshots are SYNTHETIC and AUTHORED (markup, CSS, accept labels, 'No thanks', headings); levels come from the construction. Decline wordings marked misdirection_test_split are verbatim TEST-split rows.",
+    "B uses hex colours on purpose; see the bug note about rgb()/rgba() backgrounds written with spaces (mcai.html_visual_features).",
+    "C describes the shipped demo inputs; demo journeys are themselves synthetic and flagged as such.",
+    "D is circular: the same classifier scores originals and rewrites, so it measures removal of model cues, not consumer impact.",
+    "Stage pressures use the text threshold (clf.b.threshold); below-threshold elements contribute 0 by design (pressure.py).",
+    "All Fibonacci/linear/equal weights and CDI/MCAI weights are design choices (backend/intelligence/config.py), not learned.",
+    "The classifier scores the neutral decline 'No thanks' as misdirection (see D.neutral_decline_score): every dataset row starting 'No thanks' is labelled misdirection. This inflates the MCAI semantic 'guilt' sub-score for neutral declines (B) and keeps counterfactual misdirection rewrites above threshold (D).",
+    "The classifier also flags neutral stock/deadline statements (e.g. '1 in stock.'), i.e. it scores the content, not only the pressure wording; scarcity rewrites therefore rarely fall below threshold (D)."
+  ],
+  "experiments": {
+    "A1_weight_concentration": {
+      "synthetic": false,
+      "kind": "pure maths (positions 1..n, submission order)",
+      "rows": [
+        {
+          "n_stages": 2,
+          "fibonacci": {
+            "final_stage_share": 0.5,
+            "first_stage_share": 0.5,
+            "last_two_share": 1.0,
+            "weights": [
+              0.5,
+              0.5
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.6667,
+            "first_stage_share": 0.3333,
+            "last_two_share": 1.0,
+            "weights": [
+              0.3333,
+              0.6667
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.5,
+            "first_stage_share": 0.5,
+            "last_two_share": 1.0,
+            "weights": [
+              0.5,
+              0.5
+            ]
+          }
+        },
+        {
+          "n_stages": 3,
+          "fibonacci": {
+            "final_stage_share": 0.5,
+            "first_stage_share": 0.25,
+            "last_two_share": 0.75,
+            "weights": [
+              0.25,
+              0.25,
+              0.5
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.5,
+            "first_stage_share": 0.1667,
+            "last_two_share": 0.8333,
+            "weights": [
+              0.1667,
+              0.3333,
+              0.5
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.3333,
+            "first_stage_share": 0.3333,
+            "last_two_share": 0.6667,
+            "weights": [
+              0.3333,
+              0.3333,
+              0.3333
+            ]
+          }
+        },
+        {
+          "n_stages": 4,
+          "fibonacci": {
+            "final_stage_share": 0.4286,
+            "first_stage_share": 0.1429,
+            "last_two_share": 0.7143,
+            "weights": [
+              0.1429,
+              0.1429,
+              0.2857,
+              0.4286
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.4,
+            "first_stage_share": 0.1,
+            "last_two_share": 0.7,
+            "weights": [
+              0.1,
+              0.2,
+              0.3,
+              0.4
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.25,
+            "first_stage_share": 0.25,
+            "last_two_share": 0.5,
+            "weights": [
+              0.25,
+              0.25,
+              0.25,
+              0.25
+            ]
+          }
+        },
+        {
+          "n_stages": 5,
+          "fibonacci": {
+            "final_stage_share": 0.4167,
+            "first_stage_share": 0.0833,
+            "last_two_share": 0.6667,
+            "weights": [
+              0.0833,
+              0.0833,
+              0.1667,
+              0.25,
+              0.4167
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.3333,
+            "first_stage_share": 0.0667,
+            "last_two_share": 0.6,
+            "weights": [
+              0.0667,
+              0.1333,
+              0.2,
+              0.2667,
+              0.3333
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.2,
+            "first_stage_share": 0.2,
+            "last_two_share": 0.4,
+            "weights": [
+              0.2,
+              0.2,
+              0.2,
+              0.2,
+              0.2
+            ]
+          }
+        },
+        {
+          "n_stages": 6,
+          "fibonacci": {
+            "final_stage_share": 0.4,
+            "first_stage_share": 0.05,
+            "last_two_share": 0.65,
+            "weights": [
+              0.05,
+              0.05,
+              0.1,
+              0.15,
+              0.25,
+              0.4
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.2857,
+            "first_stage_share": 0.0476,
+            "last_two_share": 0.5238,
+            "weights": [
+              0.0476,
+              0.0952,
+              0.1429,
+              0.1905,
+              0.2381,
+              0.2857
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.1667,
+            "first_stage_share": 0.1667,
+            "last_two_share": 0.3333,
+            "weights": [
+              0.1667,
+              0.1667,
+              0.1667,
+              0.1667,
+              0.1667,
+              0.1667
+            ]
+          }
+        },
+        {
+          "n_stages": 7,
+          "fibonacci": {
+            "final_stage_share": 0.3939,
+            "first_stage_share": 0.0303,
+            "last_two_share": 0.6364,
+            "weights": [
+              0.0303,
+              0.0303,
+              0.0606,
+              0.0909,
+              0.1515,
+              0.2424,
+              0.3939
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.25,
+            "first_stage_share": 0.0357,
+            "last_two_share": 0.4643,
+            "weights": [
+              0.0357,
+              0.0714,
+              0.1071,
+              0.1429,
+              0.1786,
+              0.2143,
+              0.25
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.1429,
+            "first_stage_share": 0.1429,
+            "last_two_share": 0.2857,
+            "weights": [
+              0.1429,
+              0.1429,
+              0.1429,
+              0.1429,
+              0.1429,
+              0.1429,
+              0.1429
+            ]
+          }
+        },
+        {
+          "n_stages": 8,
+          "fibonacci": {
+            "final_stage_share": 0.3889,
+            "first_stage_share": 0.0185,
+            "last_two_share": 0.6296,
+            "weights": [
+              0.0185,
+              0.0185,
+              0.037,
+              0.0556,
+              0.0926,
+              0.1481,
+              0.2407,
+              0.3889
+            ]
+          },
+          "linear": {
+            "final_stage_share": 0.2222,
+            "first_stage_share": 0.0278,
+            "last_two_share": 0.4167,
+            "weights": [
+              0.0278,
+              0.0556,
+              0.0833,
+              0.1111,
+              0.1389,
+              0.1667,
+              0.1944,
+              0.2222
+            ]
+          },
+          "equal": {
+            "final_stage_share": 0.125,
+            "first_stage_share": 0.125,
+            "last_two_share": 0.25,
+            "weights": [
+              0.125,
+              0.125,
+              0.125,
+              0.125,
+              0.125,
+              0.125,
+              0.125,
+              0.125
+            ]
+          }
+        }
+      ]
+    },
+    "A2_order_sensitivity": {
+      "synthetic": true,
+      "kind": "property/sensitivity experiment (no ground truth)",
+      "design": "500 synthetic 4-stage journeys; each stage = 3 distinct TEST-split strings drawn uniformly at random (any label) and joined with newlines; stage pressure = content_pressure(Auditor.audit(segment_text(stage),'text').findings), i.e. exactly the per-stage quantity the engine uses for a text stage. Positions 1..4 (submission order). Escalating = the journey's 4 pressures sorted ascending; de-escalating = sorted descending.",
+      "n_journeys": 500,
+      "journeys_with_non_constant_pressure": 500,
+      "stage_pressure_summary": {
+        "mean": 0.5544,
+        "median": 0.6249,
+        "share_zero": 0.1665,
+        "share_ge_0_5": 0.796,
+        "n_distinct_values_rounded_3dp": 138
+      },
+      "legacy_noisy_or_stage_pressure_summary": {
+        "mean": 0.8171,
+        "median": 0.9998,
+        "share_ge_0_99": 0.697,
+        "share_zero": 0.1665,
+        "n_distinct_values_rounded_3dp": 59
+      },
+      "per_scheme": {
+        "fibonacci": {
+          "mean_escalating_minus_deescalating": 14.7564,
+          "median": 17.858,
+          "max": 35.6705,
+          "frac_escalating_gt_deescalating": 1.0,
+          "frac_equal": 0.0,
+          "max_abs_diff": 35.670535714286
+        },
+        "linear": {
+          "mean_escalating_minus_deescalating": 14.9017,
+          "median": 18.7506,
+          "max": 33.7082,
+          "frac_escalating_gt_deescalating": 1.0,
+          "frac_equal": 0.0,
+          "max_abs_diff": 33.70825
+        },
+        "equal": {
+          "mean_escalating_minus_deescalating": -0.0,
+          "median": 0.0,
+          "max": 0.0,
+          "frac_escalating_gt_deescalating": 0.0,
+          "frac_equal": 1.0,
+          "max_abs_diff": 0.0
+        }
+      },
+      "note": "Equal weighting is order-invariant by construction (every permutation gives the same score); the measured max |difference| for 'equal' is floating-point noise only. Ties for fibonacci/linear occur only when all four stage pressures are identical."
+    },
+    "A3_single_stage_perturbation": {
+      "synthetic": true,
+      "kind": "property experiment (linearity check)",
+      "design": "Same 500 sampled journeys as A2. For position i, set p_i=0 and p_i=1 (others at their sampled values); marginal = score(p_i=1) - score(p_i=0). Theory: marginal = 100 * w_i exactly.",
+      "per_scheme": {
+        "fibonacci": {
+          "theoretical_100w": [
+            14.285714,
+            14.285714,
+            28.571429,
+            42.857143
+          ],
+          "mean_marginal": [
+            14.285714,
+            14.285714,
+            28.571429,
+            42.857143
+          ],
+          "max_abs_deviation_from_100w": 0.0
+        },
+        "linear": {
+          "theoretical_100w": [
+            10.0,
+            20.0,
+            30.0,
+            40.0
+          ],
+          "mean_marginal": [
+            10.0,
+            20.0,
+            30.0,
+            40.0
+          ],
+          "max_abs_deviation_from_100w": 0.0
+        },
+        "equal": {
+          "theoretical_100w": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ],
+          "mean_marginal": [
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ],
+          "max_abs_deviation_from_100w": 0.0
+        }
+      }
+    },
+    "A4_synthetic_discrimination": {
+      "synthetic": true,
+      "labels_from_construction": true,
+      "kind": "synthetic labelled benchmark - measures whether the weighting behaves as designed, NOT real-world validity",
+      "design": "300 synthetic 4-stage journeys (100 per group). Every stage has 3 real TEST-split strings. 'late': stages 3-4 each contain 1 random dark (label != benign) string + 2 benign strings, stages 1-2 are 3 benign strings; 'early': the mirror image; 'none': benign strings only. Labels come from this construction. Stage pressure as in A2. Benign strings can be false positives of the classifier and dark strings can be missed, so 'none' is not 0 by construction.",
+      "n_per_group": 100,
+      "distinct_dark_rows_used": 149,
+      "stage_pressure_mean_by_group_and_stage": {
+        "late": [
+          0.0176,
+          0.0117,
+          0.5386,
+          0.552
+        ],
+        "early": [
+          0.5617,
+          0.5666,
+          0.0059,
+          0.0117
+        ],
+        "none": [
+          0.0117,
+          0.0176,
+          0.0176,
+          0.0176
+        ]
+      },
+      "share_of_none_journeys_with_any_nonzero_stage": 0.1,
+      "position_sets": {
+        "submission_order_1234": {
+          "positions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "per_scheme": {
+            "fibonacci": {
+              "mean_score": {
+                "late": 39.47,
+                "early": 16.79,
+                "none": 1.67
+              },
+              "sd_score": {
+                "late": 9.17,
+                "early": 5.47,
+                "none": 5.45
+              },
+              "auroc_late_vs_early": 0.9662,
+              "auroc_late_vs_early_ci95": [
+                0.9402,
+                0.9874
+              ],
+              "auroc_late_vs_none": 0.9969,
+              "auroc_late_vs_none_ci95": [
+                0.9921,
+                0.9996
+              ],
+              "auroc_anydark_vs_none": 0.9729,
+              "auroc_anydark_vs_none_ci95": [
+                0.9518,
+                0.991
+              ],
+              "auroc_early_vs_none": 0.9489
+            },
+            "linear": {
+              "mean_score": {
+                "late": 38.65,
+                "early": 17.59,
+                "none": 1.7
+              },
+              "sd_score": {
+                "late": 8.99,
+                "early": 5.5,
+                "none": 5.41
+              },
+              "auroc_late_vs_early": 0.9597,
+              "auroc_late_vs_early_ci95": [
+                0.9292,
+                0.9841
+              ],
+              "auroc_late_vs_none": 0.9969,
+              "auroc_late_vs_none_ci95": [
+                0.9923,
+                0.9996
+              ],
+              "auroc_anydark_vs_none": 0.9725,
+              "auroc_anydark_vs_none_ci95": [
+                0.951,
+                0.9899
+              ],
+              "auroc_early_vs_none": 0.9481
+            },
+            "equal": {
+              "mean_score": {
+                "late": 28.0,
+                "early": 28.64,
+                "none": 1.61
+              },
+              "sd_score": {
+                "late": 7.01,
+                "early": 6.88,
+                "none": 5.05
+              },
+              "auroc_late_vs_early": 0.478,
+              "auroc_late_vs_early_ci95": [
+                0.3999,
+                0.5585
+              ],
+              "auroc_late_vs_none": 0.9949,
+              "auroc_late_vs_none_ci95": [
+                0.9863,
+                1.0
+              ],
+              "auroc_anydark_vs_none": 0.9905,
+              "auroc_anydark_vs_none_ci95": [
+                0.9793,
+                0.9988
+              ],
+              "auroc_early_vs_none": 0.9861
+            }
+          }
+        },
+        "canonical_product_to_payment_2345": {
+          "positions": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "per_scheme": {
+            "fibonacci": {
+              "mean_score": {
+                "late": 40.15,
+                "early": 16.1,
+                "none": 1.7
+              },
+              "sd_score": {
+                "late": 9.42,
+                "early": 5.51,
+                "none": 5.6
+              },
+              "auroc_late_vs_early": 0.9651,
+              "auroc_late_vs_early_ci95": [
+                0.9368,
+                0.9868
+              ],
+              "auroc_late_vs_none": 0.9966,
+              "auroc_late_vs_none_ci95": [
+                0.9917,
+                0.9997
+              ],
+              "auroc_anydark_vs_none": 0.9723,
+              "auroc_anydark_vs_none_ci95": [
+                0.95,
+                0.9903
+              ],
+              "auroc_early_vs_none": 0.9481
+            },
+            "linear": {
+              "mean_score": {
+                "late": 35.61,
+                "early": 20.75,
+                "none": 1.67
+              },
+              "sd_score": {
+                "late": 8.34,
+                "early": 5.78,
+                "none": 5.21
+              },
+              "auroc_late_vs_early": 0.8835,
+              "auroc_late_vs_early_ci95": [
+                0.8238,
+                0.9345
+              ],
+              "auroc_late_vs_none": 0.9958,
+              "auroc_late_vs_none_ci95": [
+                0.9898,
+                0.9993
+              ],
+              "auroc_anydark_vs_none": 0.9845,
+              "auroc_anydark_vs_none_ci95": [
+                0.9728,
+                0.9946
+              ],
+              "auroc_early_vs_none": 0.9733
+            },
+            "equal": {
+              "mean_score": {
+                "late": 28.0,
+                "early": 28.64,
+                "none": 1.61
+              },
+              "sd_score": {
+                "late": 7.01,
+                "early": 6.88,
+                "none": 5.05
+              },
+              "auroc_late_vs_early": 0.478,
+              "auroc_late_vs_early_ci95": [
+                0.4013,
+                0.5607
+              ],
+              "auroc_late_vs_none": 0.9949,
+              "auroc_late_vs_none_ci95": [
+                0.9866,
+                1.0
+              ],
+              "auroc_anydark_vs_none": 0.9905,
+              "auroc_anydark_vs_none_ci95": [
+                0.9787,
+                0.9991
+              ],
+              "auroc_early_vs_none": 0.9861
+            }
+          }
+        }
+      },
+      "bootstrap": "95% percentile CI over 1000 bootstrap resamples of each group (seeded).",
+      "legacy_noisy_or_comparison_submission_order": {
+        "note": "Same journeys, stage pressure = noisy-OR of the same category maxima (the pre-change definition). Comparison only.",
+        "per_scheme": {
+          "fibonacci": {
+            "mean_score": {
+              "late": 63.07,
+              "early": 26.79,
+              "none": 2.68
+            },
+            "auroc_late_vs_early": 0.9678,
+            "auroc_late_vs_none": 0.9969,
+            "auroc_anydark_vs_none": 0.9729
+          },
+          "linear": {
+            "mean_score": {
+              "late": 61.77,
+              "early": 28.08,
+              "none": 2.72
+            },
+            "auroc_late_vs_early": 0.9598,
+            "auroc_late_vs_none": 0.9969,
+            "auroc_anydark_vs_none": 0.9725
+          },
+          "equal": {
+            "mean_score": {
+              "late": 44.75,
+              "early": 45.71,
+              "none": 2.58
+            },
+            "auroc_late_vs_early": 0.4838,
+            "auroc_late_vs_none": 0.9949,
+            "auroc_anydark_vs_none": 0.9905
+          }
+        }
+      }
+    },
+    "B_mcai_synthetic_html": {
+      "synthetic": true,
+      "labels_from_construction": true,
+      "kind": "synthetic labelled benchmark (designed asymmetry level = number of visual asymmetry factors applied)",
+      "design": "All subsets of size 0..5 of 6 visual asymmetry factors {weight: accept 700 vs decline 400; size: 20px vs 13px; fill: accept filled #0f766e/white text vs decline transparent; link: decline is an <a> text link instead of a <button>; grey: decline text #b0b0b0 (low contrast) instead of #111111; opacity: decline opacity 0.55} = 63 designs, each with two decline wordings: the AUTHORED neutral 'No thanks' and a random TEST-split misdirection row that the decline lexicon recognises. Accept label (AUTHORED) is constant. Declared HTML/CSS only (hex colours). Interaction dimension is unavailable (no declared step counts), so MCAI = visual (w 0.4) + semantic (w 0.3), renormalised.",
+      "n_cases": 126,
+      "n_pair_correctly_detected": 126,
+      "eligible_misdirection_decline_rows": 15,
+      "misdirection_rows_used": [
+        114,
+        215,
+        474,
+        612,
+        1034,
+        1096,
+        1163,
+        1412,
+        1514,
+        1515,
+        1725,
+        1803,
+        2082,
+        2145,
+        2343
+      ],
+      "accept_text_authored": "Yes, add protection to my order",
+      "spearman_level_vs_visual": {
+        "rho": 0.9378,
+        "p_value": 8.249225927786933e-59,
+        "n": 126
+      },
+      "spearman_level_vs_visual_neutral": {
+        "rho": 0.9378,
+        "p_value": 1.0260468642753878e-29,
+        "n": 63
+      },
+      "spearman_level_vs_visual_misdirection_test_split": {
+        "rho": 0.9378,
+        "p_value": 1.0260468642753878e-29,
+        "n": 63
+      },
+      "per_level_mean_visual": [
+        0.0,
+        0.1045,
+        0.206,
+        0.3043,
+        0.3994,
+        0.4914
+      ],
+      "per_level_min_max_visual": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0583,
+          0.1667
+        ],
+        [
+          0.1298,
+          0.275
+        ],
+        [
+          0.2048,
+          0.3756
+        ],
+        [
+          0.3131,
+          0.4506
+        ],
+        [
+          0.4606,
+          0.522
+        ]
+      ],
+      "adjacent_level_mean_violations_visual": 0,
+      "discordant_pairs_visual": {
+        "discordant": 148,
+        "pairs_with_different_level": 6092,
+        "share": 0.0243
+      },
+      "subset_monotonicity_visual": {
+        "violations": 0,
+        "edges_checked": 372,
+        "violations_by_added_factor": {},
+        "examples": [],
+        "note": "edge = (design S, design S + one factor), same wording type; for MCAI the decline text must also be identical (misdirection texts are drawn per case, so few MCAI edges exist for that wording)"
+      },
+      "spearman_level_vs_mcai": {
+        "rho": 0.8549,
+        "p_value": 3.7762941732972e-37,
+        "n": 126
+      },
+      "spearman_level_vs_mcai_neutral": {
+        "rho": 0.9378,
+        "p_value": 1.0260468642753878e-29,
+        "n": 63
+      },
+      "spearman_level_vs_mcai_misdirection_test_split": {
+        "rho": 0.892,
+        "p_value": 1.0551357203561787e-22,
+        "n": 63
+      },
+      "per_level_mean_mcai": [
+        36.19,
+        42.4067,
+        48.1637,
+        53.839,
+        58.9343,
+        64.7667
+      ],
+      "per_level_min_max_mcai": [
+        [
+          33.45,
+          38.93
+        ],
+        [
+          35.04,
+          48.45
+        ],
+        [
+          40.86,
+          54.64
+        ],
+        [
+          45.31,
+          60.39
+        ],
+        [
+          51.34,
+          64.68
+        ],
+        [
+          59.77,
+          68.76
+        ]
+      ],
+      "adjacent_level_mean_violations_mcai": 0,
+      "discordant_pairs_mcai": {
+        "discordant": 543,
+        "pairs_with_different_level": 6092,
+        "share": 0.0891
+      },
+      "subset_monotonicity_mcai": {
+        "violations": 0,
+        "edges_checked": 201,
+        "violations_by_added_factor": {},
+        "examples": [],
+        "note": "edge = (design S, design S + one factor), same wording type; for MCAI the decline text must also be identical (misdirection texts are drawn per case, so few MCAI edges exist for that wording)"
+      },
+      "semantic_mean_by_wording": {
+        "neutral": 0.9083,
+        "misdirection_test_split": 0.7891
+      },
+      "mcai_mean_by_wording": {
+        "neutral": 55.927,
+        "misdirection_test_split": 50.8184
+      },
+      "visual_single_factor_neutral": {
+        "weight": 0.0714,
+        "size": 0.0583,
+        "fill": 0.1667,
+        "link": 0.1083,
+        "grey": 0.1475,
+        "opacity": 0.075
+      },
+      "cases": [
+        {
+          "level": 0,
+          "factors": [],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.0,
+          "semantic": 0.9083,
+          "mcai": 38.93,
+          "coverage": 0.7
+        },
+        {
+          "level": 0,
+          "factors": [],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don't like saving money",
+          "decline_row_id": 1163,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.0,
+          "semantic": 0.7804,
+          "mcai": 33.45,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "weight"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.0714,
+          "semantic": 0.9083,
+          "mcai": 43.01,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "weight"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.0714,
+          "semantic": 0.9094,
+          "mcai": 43.05,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "size"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.0583,
+          "semantic": 0.9083,
+          "mcai": 42.26,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "size"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don’t like saving money.",
+          "decline_row_id": 2082,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.0583,
+          "semantic": 0.7804,
+          "mcai": 36.78,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "fill"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1667,
+          "semantic": 0.9083,
+          "mcai": 48.45,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "fill"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "no thanks, I'll save money another day",
+          "decline_row_id": 474,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1667,
+          "semantic": 0.7804,
+          "mcai": 42.97,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1083,
+          "semantic": 0.9083,
+          "mcai": 45.12,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks. I love chaos!",
+          "decline_row_id": 2343,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1083,
+          "semantic": 0.7833,
+          "mcai": 39.76,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1475,
+          "semantic": 0.9083,
+          "mcai": 47.36,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1475,
+          "semantic": 0.7804,
+          "mcai": 41.87,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.075,
+          "semantic": 0.9083,
+          "mcai": 43.21,
+          "coverage": 0.7
+        },
+        {
+          "level": 1,
+          "factors": [
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "I do not want to protect my item",
+          "decline_row_id": 215,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.075,
+          "semantic": 0.7176,
+          "mcai": 35.04,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "size"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1298,
+          "semantic": 0.9083,
+          "mcai": 46.34,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "size"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don’t like saving money.",
+          "decline_row_id": 2082,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1298,
+          "semantic": 0.7804,
+          "mcai": 40.86,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "fill"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2381,
+          "semantic": 0.9083,
+          "mcai": 52.53,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "fill"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don’t like saving money.",
+          "decline_row_id": 2082,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2381,
+          "semantic": 0.7804,
+          "mcai": 47.05,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1798,
+          "semantic": 0.9083,
+          "mcai": 49.2,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "no thanks, I'll save money another day",
+          "decline_row_id": 474,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1798,
+          "semantic": 0.7804,
+          "mcai": 43.72,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.219,
+          "semantic": 0.9083,
+          "mcai": 51.44,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.219,
+          "semantic": 0.7841,
+          "mcai": 46.12,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1464,
+          "semantic": 0.9083,
+          "mcai": 47.29,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "weight",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don't like saving money",
+          "decline_row_id": 1163,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1464,
+          "semantic": 0.7804,
+          "mcai": 41.81,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "fill"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.225,
+          "semantic": 0.9083,
+          "mcai": 51.78,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "fill"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.225,
+          "semantic": 0.7841,
+          "mcai": 46.46,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1667,
+          "semantic": 0.9083,
+          "mcai": 48.45,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1667,
+          "semantic": 0.9094,
+          "mcai": 48.5,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2059,
+          "semantic": 0.9083,
+          "mcai": 50.69,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "no thanks, I'll save money another day",
+          "decline_row_id": 474,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2059,
+          "semantic": 0.7804,
+          "mcai": 45.21,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1333,
+          "semantic": 0.9083,
+          "mcai": 46.54,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "size",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1333,
+          "semantic": 0.7804,
+          "mcai": 41.06,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "fill",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.275,
+          "semantic": 0.9083,
+          "mcai": 54.64,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "fill",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky",
+          "decline_row_id": 1034,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.275,
+          "semantic": 0.784,
+          "mcai": 49.31,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "fill",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2673,
+          "semantic": 0.9083,
+          "mcai": 54.2,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "fill",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2673,
+          "semantic": 0.7841,
+          "mcai": 48.88,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "fill",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2417,
+          "semantic": 0.9083,
+          "mcai": 52.74,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "fill",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky",
+          "decline_row_id": 1034,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2417,
+          "semantic": 0.784,
+          "mcai": 47.41,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2559,
+          "semantic": 0.9083,
+          "mcai": 53.55,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "no thanks, I'll save money another day",
+          "decline_row_id": 474,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2559,
+          "semantic": 0.7804,
+          "mcai": 48.07,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1833,
+          "semantic": 0.9083,
+          "mcai": 49.4,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, free stuff isn't for me.",
+          "decline_row_id": 1412,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.1833,
+          "semantic": 0.7791,
+          "mcai": 43.86,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2225,
+          "semantic": 0.9083,
+          "mcai": 51.64,
+          "coverage": 0.7
+        },
+        {
+          "level": 2,
+          "factors": [
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I'll just pay full price.",
+          "decline_row_id": 1514,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2225,
+          "semantic": 0.7804,
+          "mcai": 46.16,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "fill"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2964,
+          "semantic": 0.9083,
+          "mcai": 55.86,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "fill"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2964,
+          "semantic": 0.9094,
+          "mcai": 55.91,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2381,
+          "semantic": 0.9083,
+          "mcai": 52.53,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky.",
+          "decline_row_id": 1096,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2381,
+          "semantic": 0.7839,
+          "mcai": 47.2,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2773,
+          "semantic": 0.9083,
+          "mcai": 54.77,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don’t like saving money.",
+          "decline_row_id": 2082,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2773,
+          "semantic": 0.7804,
+          "mcai": 49.29,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2048,
+          "semantic": 0.9083,
+          "mcai": 50.63,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "size",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO, I DON'T FEEL LUCKY",
+          "decline_row_id": 612,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2048,
+          "semantic": 0.7842,
+          "mcai": 45.31,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "fill",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3464,
+          "semantic": 0.9083,
+          "mcai": 58.72,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "fill",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3464,
+          "semantic": 0.7841,
+          "mcai": 53.4,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "fill",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3387,
+          "semantic": 0.9083,
+          "mcai": 58.28,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "fill",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3387,
+          "semantic": 0.9094,
+          "mcai": 58.33,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "fill",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3131,
+          "semantic": 0.9083,
+          "mcai": 56.82,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "fill",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "I do not want to protect my item",
+          "decline_row_id": 215,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3131,
+          "semantic": 0.7176,
+          "mcai": 48.65,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3273,
+          "semantic": 0.9083,
+          "mcai": 57.63,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3273,
+          "semantic": 0.9094,
+          "mcai": 57.68,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2548,
+          "semantic": 0.9083,
+          "mcai": 53.49,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I'll just pay full price.",
+          "decline_row_id": 1514,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2548,
+          "semantic": 0.7804,
+          "mcai": 48.01,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.294,
+          "semantic": 0.9083,
+          "mcai": 55.73,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "weight",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I'll rather pay full price.",
+          "decline_row_id": 114,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.294,
+          "semantic": 0.7446,
+          "mcai": 48.71,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "fill",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3333,
+          "semantic": 0.9083,
+          "mcai": 57.97,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "fill",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I'll rather pay full price.",
+          "decline_row_id": 114,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3333,
+          "semantic": 0.7446,
+          "mcai": 50.96,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "fill",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3256,
+          "semantic": 0.9083,
+          "mcai": 57.53,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "fill",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I'd rather do it the hard way...",
+          "decline_row_id": 1515,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3256,
+          "semantic": 0.7933,
+          "mcai": 52.6,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "fill",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3,
+          "semantic": 0.9083,
+          "mcai": 56.07,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "fill",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky",
+          "decline_row_id": 1034,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3,
+          "semantic": 0.784,
+          "mcai": 50.74,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3142,
+          "semantic": 0.9083,
+          "mcai": 56.88,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO, I DON'T FEEL LUCKY",
+          "decline_row_id": 612,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3142,
+          "semantic": 0.7842,
+          "mcai": 51.56,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2417,
+          "semantic": 0.9083,
+          "mcai": 52.74,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I'd rather do it the hard way...",
+          "decline_row_id": 1515,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2417,
+          "semantic": 0.7933,
+          "mcai": 47.81,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2809,
+          "semantic": 0.9083,
+          "mcai": 54.98,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "size",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "I do not want to protect my item",
+          "decline_row_id": 215,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.2809,
+          "semantic": 0.7176,
+          "mcai": 46.81,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3756,
+          "semantic": 0.9083,
+          "mcai": 60.39,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3756,
+          "semantic": 0.7841,
+          "mcai": 55.07,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.35,
+          "semantic": 0.9083,
+          "mcai": 58.93,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky.",
+          "decline_row_id": 1096,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.35,
+          "semantic": 0.7839,
+          "mcai": 53.6,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3423,
+          "semantic": 0.9083,
+          "mcai": 58.49,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks. I love chaos!",
+          "decline_row_id": 2343,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3423,
+          "semantic": 0.7833,
+          "mcai": 53.13,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3309,
+          "semantic": 0.9083,
+          "mcai": 57.84,
+          "coverage": 0.7
+        },
+        {
+          "level": 3,
+          "factors": [
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3309,
+          "semantic": 0.7841,
+          "mcai": 52.51,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "link"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4048,
+          "semantic": 0.9083,
+          "mcai": 62.06,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "link"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4048,
+          "semantic": 0.7804,
+          "mcai": 56.58,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.397,
+          "semantic": 0.9083,
+          "mcai": 61.61,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.397,
+          "semantic": 0.9094,
+          "mcai": 61.66,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3714,
+          "semantic": 0.9083,
+          "mcai": 60.15,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don’t like saving money.",
+          "decline_row_id": 2082,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3714,
+          "semantic": 0.7804,
+          "mcai": 54.67,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3856,
+          "semantic": 0.9083,
+          "mcai": 60.96,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "no thanks, I'll save money another day",
+          "decline_row_id": 474,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3856,
+          "semantic": 0.7804,
+          "mcai": 55.48,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3131,
+          "semantic": 0.9083,
+          "mcai": 56.82,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I'll just pay full price.",
+          "decline_row_id": 1514,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3131,
+          "semantic": 0.7804,
+          "mcai": 51.34,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3523,
+          "semantic": 0.9083,
+          "mcai": 59.06,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "size",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I'll rather pay full price.",
+          "decline_row_id": 114,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3523,
+          "semantic": 0.7446,
+          "mcai": 52.04,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.447,
+          "semantic": 0.9083,
+          "mcai": 64.47,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.447,
+          "semantic": 0.7841,
+          "mcai": 59.15,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4214,
+          "semantic": 0.9083,
+          "mcai": 63.01,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4214,
+          "semantic": 0.7804,
+          "mcai": 57.53,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4137,
+          "semantic": 0.9083,
+          "mcai": 62.57,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky.",
+          "decline_row_id": 1096,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4137,
+          "semantic": 0.7839,
+          "mcai": 57.24,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4023,
+          "semantic": 0.9083,
+          "mcai": 61.92,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "weight",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky",
+          "decline_row_id": 1034,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4023,
+          "semantic": 0.784,
+          "mcai": 56.59,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4339,
+          "semantic": 0.9083,
+          "mcai": 63.72,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky",
+          "decline_row_id": 1034,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4339,
+          "semantic": 0.784,
+          "mcai": 58.39,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4083,
+          "semantic": 0.9083,
+          "mcai": 62.26,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don’t like saving money.",
+          "decline_row_id": 2082,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4083,
+          "semantic": 0.7804,
+          "mcai": 56.78,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4006,
+          "semantic": 0.9083,
+          "mcai": 61.82,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "I do not want to protect my item",
+          "decline_row_id": 215,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4006,
+          "semantic": 0.7176,
+          "mcai": 53.65,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3892,
+          "semantic": 0.9083,
+          "mcai": 61.17,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "size",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "I do not want to protect my item",
+          "decline_row_id": 215,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.3892,
+          "semantic": 0.7176,
+          "mcai": 52.99,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "fill",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4506,
+          "semantic": 0.9083,
+          "mcai": 64.68,
+          "coverage": 0.7
+        },
+        {
+          "level": 4,
+          "factors": [
+            "fill",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I'll rather pay full price.",
+          "decline_row_id": 114,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4506,
+          "semantic": 0.7446,
+          "mcai": 57.66,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.5054,
+          "semantic": 0.9083,
+          "mcai": 67.81,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "link",
+            "grey"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks. I love chaos!",
+          "decline_row_id": 2343,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.5054,
+          "semantic": 0.7833,
+          "mcai": 62.45,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4798,
+          "semantic": 0.9083,
+          "mcai": 66.34,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "link",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I'll just pay full price.",
+          "decline_row_id": 1514,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4798,
+          "semantic": 0.7804,
+          "mcai": 60.86,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.472,
+          "semantic": 0.9083,
+          "mcai": 65.9,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "fill",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No, I don't feel lucky.",
+          "decline_row_id": 1096,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.472,
+          "semantic": 0.7839,
+          "mcai": 60.57,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4606,
+          "semantic": 0.9083,
+          "mcai": 65.25,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "size",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No thanks, I don't like saving money",
+          "decline_row_id": 1163,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.4606,
+          "semantic": 0.7804,
+          "mcai": 59.77,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "fill",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.522,
+          "semantic": 0.9083,
+          "mcai": 68.76,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "weight",
+            "fill",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "No I don't feel lucky",
+          "decline_row_id": 2145,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.522,
+          "semantic": 0.7841,
+          "mcai": 63.43,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "size",
+            "fill",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "neutral",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.5089,
+          "semantic": 0.9083,
+          "mcai": 68.01,
+          "coverage": 0.7
+        },
+        {
+          "level": 5,
+          "factors": [
+            "size",
+            "fill",
+            "link",
+            "grey",
+            "opacity"
+          ],
+          "wording": "misdirection_test_split",
+          "decline_text": "NO THANKS",
+          "decline_row_id": 1803,
+          "detected": true,
+          "n_choice_sets": 1,
+          "visual": 0.5089,
+          "semantic": 0.9094,
+          "mcai": 68.05,
+          "coverage": 0.7
+        }
+      ]
+    },
+    "B_mcai_synthetic_screenshots": {
+      "synthetic": true,
+      "labels_from_construction": true,
+      "design": "6 AUTHORED PIL-rendered screenshots (900x420, Arial): 3 asymmetric (large filled bold accept button vs small grey unboxed decline text) and 3 symmetric (identical styling). Decline wording: AUTHORED 'No thanks'/'Reject all' or TEST-split misdirection rows (ids listed). Run through backend.extractors.ocr_lines + compute_mcai('screenshot_ocr'). Images saved in ml/artifacts/intel_synthetic_screens/.",
+      "cases": [
+        {
+          "id": "S1",
+          "designed": "asymmetric",
+          "supplementary": false,
+          "accept_text": "Yes, add protection",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "ocr_lines": [
+            "Protect your order?",
+            "Yes, add protection"
+          ],
+          "mcai_available": false,
+          "accept_found": false,
+          "decline_found": false,
+          "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured.",
+          "both_options_found": false
+        },
+        {
+          "id": "S2",
+          "designed": "asymmetric",
+          "supplementary": false,
+          "accept_text": "Yes, add protection",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "ocr_lines": [
+            "Protect your order?",
+            "Yes, add protection"
+          ],
+          "mcai_available": false,
+          "accept_found": false,
+          "decline_found": false,
+          "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured.",
+          "both_options_found": false
+        },
+        {
+          "id": "S3",
+          "designed": "asymmetric",
+          "supplementary": false,
+          "accept_text": "Join now and save",
+          "decline_text": "I do not want to protect my item",
+          "decline_row_id": 215,
+          "ocr_lines": [
+            "Join our rewards club",
+            "Join now and save"
+          ],
+          "mcai_available": false,
+          "accept_found": false,
+          "decline_found": false,
+          "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured.",
+          "both_options_found": false
+        },
+        {
+          "id": "S4",
+          "designed": "symmetric",
+          "supplementary": false,
+          "accept_text": "Accept",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "ocr_lines": [
+            "Protect your order?",
+            "Accept",
+            "No thanks"
+          ],
+          "mcai_available": true,
+          "n_choice_sets": 1,
+          "detected_accept": "Accept",
+          "detected_decline": "No thanks",
+          "accept_found": true,
+          "decline_found": true,
+          "exact_ocr_text": true,
+          "visual_available": true,
+          "visual": 0.05,
+          "visual_reason": null,
+          "visual_features": {
+            "text_height_px": {
+              "accept": 20.0,
+              "decline": 16.0,
+              "asym": 0.2
+            },
+            "text_box_area_px": {
+              "accept": 1340.0,
+              "decline": 1520.0,
+              "asym": 0.0
+            },
+            "contrast_ratio": {
+              "accept": 18.883,
+              "decline": 18.883,
+              "asym": 0.0
+            },
+            "background_fill": {
+              "accept": 0.0,
+              "decline": 0.0,
+              "asym": 0.0
+            }
+          },
+          "semantic": 0.6226,
+          "mcai": 29.54,
+          "coverage": 0.7,
+          "both_options_found": true
+        },
+        {
+          "id": "S5",
+          "designed": "symmetric",
+          "supplementary": false,
+          "accept_text": "Accept all",
+          "decline_text": "Reject all",
+          "decline_row_id": null,
+          "ocr_lines": [
+            "Cookie preferences",
+            "Accept all",
+            "Reject all"
+          ],
+          "mcai_available": true,
+          "n_choice_sets": 1,
+          "detected_accept": "Accept all",
+          "detected_decline": "Reject all",
+          "accept_found": true,
+          "decline_found": true,
+          "exact_ocr_text": true,
+          "visual_available": true,
+          "visual": 0.0161,
+          "visual_reason": null,
+          "visual_features": {
+            "text_height_px": {
+              "accept": 20.0,
+              "decline": 20.0,
+              "asym": 0.0
+            },
+            "text_box_area_px": {
+              "accept": 1860.0,
+              "decline": 1740.0,
+              "asym": 0.0645
+            },
+            "contrast_ratio": {
+              "accept": 15.252,
+              "decline": 15.252,
+              "asym": 0.0
+            },
+            "background_fill": {
+              "accept": 0.3387,
+              "decline": 0.3387,
+              "asym": 0.0
+            }
+          },
+          "semantic": 0.0002,
+          "mcai": 0.93,
+          "coverage": 0.7,
+          "both_options_found": true
+        },
+        {
+          "id": "S6",
+          "designed": "symmetric",
+          "supplementary": false,
+          "accept_text": "Yes, add protection",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "ocr_lines": [
+            "Protect your order?",
+            "Yes, add protection",
+            "No Thanks, | Don't Like Saving Money."
+          ],
+          "mcai_available": true,
+          "n_choice_sets": 1,
+          "detected_accept": "Yes, add protection",
+          "detected_decline": "No Thanks, | Don't Like Saving Money.",
+          "accept_found": true,
+          "decline_found": true,
+          "exact_ocr_text": false,
+          "visual_available": true,
+          "visual": 0.0,
+          "visual_reason": null,
+          "visual_features": {
+            "text_height_px": {
+              "accept": 20.0,
+              "decline": 20.0,
+              "asym": 0.0
+            },
+            "text_box_area_px": {
+              "accept": 3700.0,
+              "decline": 7420.0,
+              "asym": 0.0
+            },
+            "contrast_ratio": {
+              "accept": 18.883,
+              "decline": 18.883,
+              "asym": 0.0
+            },
+            "background_fill": {
+              "accept": 0.0,
+              "decline": 0.0,
+              "asym": 0.0
+            }
+          },
+          "semantic": 0.8882,
+          "mcai": 38.07,
+          "coverage": 0.7,
+          "both_options_found": true
+        },
+        {
+          "id": "S7",
+          "designed": "asymmetric",
+          "supplementary": true,
+          "accept_text": "Yes, add protection",
+          "decline_text": "No thanks",
+          "decline_row_id": null,
+          "ocr_lines": [
+            "Protect your order?",
+            "Yes, add protection",
+            "No thanks"
+          ],
+          "mcai_available": true,
+          "n_choice_sets": 1,
+          "detected_accept": "Yes, add protection",
+          "detected_decline": "No thanks",
+          "accept_found": true,
+          "decline_found": true,
+          "exact_ocr_text": true,
+          "visual_available": true,
+          "visual": 0.6493,
+          "visual_reason": null,
+          "visual_features": {
+            "text_height_px": {
+              "accept": 28.0,
+              "decline": 13.0,
+              "asym": 0.5357
+            },
+            "text_box_area_px": {
+              "accept": 7700.0,
+              "decline": 1014.0,
+              "asym": 0.8683
+            },
+            "contrast_ratio": {
+              "accept": 5.473,
+              "decline": 4.415,
+              "asym": 0.1933
+            },
+            "background_fill": {
+              "accept": 1.0,
+              "decline": 0.0,
+              "asym": 1.0
+            }
+          },
+          "semantic": 0.8256,
+          "mcai": 72.49,
+          "coverage": 0.7,
+          "both_options_found": true
+        },
+        {
+          "id": "S8",
+          "designed": "asymmetric",
+          "supplementary": true,
+          "accept_text": "Yes, add protection",
+          "decline_text": "No Thanks, I Don't Like Saving Money.",
+          "decline_row_id": 1725,
+          "ocr_lines": [
+            "Protect your order?",
+            "Yes, add protection",
+            "No Thanks, | Don't Like Saving Money."
+          ],
+          "mcai_available": true,
+          "n_choice_sets": 1,
+          "detected_accept": "Yes, add protection",
+          "detected_decline": "No Thanks, | Don't Like Saving Money.",
+          "accept_found": true,
+          "decline_found": true,
+          "exact_ocr_text": false,
+          "visual_available": true,
+          "visual": 0.4968,
+          "visual_reason": null,
+          "visual_features": {
+            "text_height_px": {
+              "accept": 28.0,
+              "decline": 15.0,
+              "asym": 0.4643
+            },
+            "text_box_area_px": {
+              "accept": 7700.0,
+              "decline": 4095.0,
+              "asym": 0.4682
+            },
+            "contrast_ratio": {
+              "accept": 5.473,
+              "decline": 5.174,
+              "asym": 0.0546
+            },
+            "background_fill": {
+              "accept": 1.0,
+              "decline": 0.0,
+              "asym": 1.0
+            }
+          },
+          "semantic": 0.8882,
+          "mcai": 66.45,
+          "coverage": 0.7,
+          "both_options_found": true
+        }
+      ],
+      "main_6": {
+        "n_both_options_found": 3,
+        "n_asymmetric_with_visual": 0,
+        "n_symmetric_with_visual": 3,
+        "mean_visual_asymmetric": null,
+        "mean_visual_symmetric": 0.022
+      },
+      "supplementary_S7_S8": {
+        "n_both_options_found": 2,
+        "visual": [
+          0.6493,
+          0.4968
+        ]
+      },
+      "match_rule": "an option counts as found if the OCR text matches the rendered text with difflib ratio >= 0.85 after lower-casing and removing non-alphanumerics; exact_ocr_text reports exact matches",
+      "note": "text_height_px / text_box_area_px are OCR word-box measurements: glyph shapes (descenders such as 'p' in 'Accept') and string length change them even for identically styled options, so symmetric pairs need not score exactly 0 on screenshots."
+    },
+    "C_cdi_demo_inputs": {
+      "kind": "description of the real demo inputs through the live API code path (POST endpoints via TestClient)",
+      "synthetic_note": "samples.json and journeys.json are demo inputs; journeys are flagged synthetic (authored order/markup + verbatim TEST-split strings).",
+      "samples": [
+        {
+          "id": "text-deceptive",
+          "input_type": "text",
+          "http_status": 200,
+          "provenance": "Every line is a verbatim row from ec-darkpattern dataset.tsv, held-out TEST split (row_ids 4, 175, 14, 263, 45, 65, 72, 95, 91, 34, 101, 64, 132, 114, 136, 215). Lines chosen by dataset order, not by model output.",
+          "n_findings": 7,
+          "cdi": 99.94,
+          "band": "high",
+          "coverage": 0.55,
+          "components": {
+            "content_pressure": {
+              "available": true,
+              "value": 0.9994,
+              "effective_weight": 1.0,
+              "contribution": 99.94,
+              "provenance": "model"
+            },
+            "choice_asymmetry": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            },
+            "observed_obstruction": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            }
+          },
+          "one_at_a_time": [
+            {
+              "component": "content_pressure",
+              "low": 99.94,
+              "high": 99.94
+            }
+          ],
+          "dirichlet_p05": 99.94,
+          "dirichlet_p95": 99.94,
+          "dirichlet_samples": 0,
+          "mcai": 99.98,
+          "counterfactual": {
+            "original_cdi": 99.94,
+            "redesigned_cdi": 99.87,
+            "risk_reduction_pct": 0.1
+          }
+        },
+        {
+          "id": "text-benign",
+          "input_type": "text",
+          "http_status": 200,
+          "provenance": "Verbatim 'Not Dark Pattern' rows from ec-darkpattern TEST split (row_ids 174, 219, 229, 231, 253, 276, 277, 287, 309, 330, 355, 376, 378, 395).",
+          "n_findings": 0,
+          "cdi": 0.0,
+          "band": "low",
+          "coverage": 0.55,
+          "components": {
+            "content_pressure": {
+              "available": true,
+              "value": 0.0,
+              "effective_weight": 1.0,
+              "contribution": 0.0,
+              "provenance": "model"
+            },
+            "choice_asymmetry": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            },
+            "observed_obstruction": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            }
+          },
+          "one_at_a_time": [
+            {
+              "component": "content_pressure",
+              "low": 0.0,
+              "high": 0.0
+            }
+          ],
+          "dirichlet_p05": 0.0,
+          "dirichlet_p95": 0.0,
+          "dirichlet_samples": 0,
+          "mcai": null,
+          "counterfactual": {
+            "original_cdi": 0.0,
+            "redesigned_cdi": 0.0,
+            "risk_reduction_pct": null
+          }
+        },
+        {
+          "id": "html-checkout",
+          "input_type": "html",
+          "http_status": 200,
+          "provenance": "HTML structure and the two pre-checked checkbox labels are authored by the ClearCart team for the demo. Text marked data-source=\"test-split\" is verbatim from ec-darkpattern TEST split (row_ids 175, 65, 34, 114, 4, 14, 45, 72, 91, 101).",
+          "n_findings": 6,
+          "cdi": 70.14,
+          "band": "elevated",
+          "coverage": 1.0,
+          "components": {
+            "content_pressure": {
+              "available": true,
+              "value": 0.7498,
+              "effective_weight": 0.55,
+              "contribution": 41.24,
+              "provenance": "model"
+            },
+            "choice_asymmetry": {
+              "available": true,
+              "value": 0.3559,
+              "effective_weight": 0.25,
+              "contribution": 8.9,
+              "provenance": "measured"
+            },
+            "observed_obstruction": {
+              "available": true,
+              "value": 1.0,
+              "effective_weight": 0.2,
+              "contribution": 20.0,
+              "provenance": "observed"
+            }
+          },
+          "one_at_a_time": [
+            {
+              "component": "content_pressure",
+              "low": 68.3,
+              "high": 71.18
+            },
+            {
+              "component": "choice_asymmetry",
+              "low": 66.3,
+              "high": 75.07
+            },
+            {
+              "component": "observed_obstruction",
+              "low": 66.82,
+              "high": 72.85
+            }
+          ],
+          "dirichlet_p05": 62.04,
+          "dirichlet_p95": 78.0,
+          "dirichlet_samples": 1000,
+          "mcai": 45.38,
+          "counterfactual": {
+            "original_cdi": 70.14,
+            "redesigned_cdi": 41.2,
+            "risk_reduction_pct": 41.3
+          }
+        },
+        {
+          "id": "html-benign",
+          "input_type": "html",
+          "http_status": 200,
+          "provenance": "Authored markup; paragraph text is verbatim 'Not Dark Pattern' rows from the TEST split (row_ids 421, 426, 437, 440, 448, 449, 459, 463). 'Remember me' and 'Continue' are authored.",
+          "n_findings": 0,
+          "cdi": 0.0,
+          "band": "low",
+          "coverage": 0.75,
+          "components": {
+            "content_pressure": {
+              "available": true,
+              "value": 0.0,
+              "effective_weight": 0.7333,
+              "contribution": 0.0,
+              "provenance": "model"
+            },
+            "choice_asymmetry": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            },
+            "observed_obstruction": {
+              "available": true,
+              "value": 0.0,
+              "effective_weight": 0.2667,
+              "contribution": 0.0,
+              "provenance": "observed"
+            }
+          },
+          "one_at_a_time": [
+            {
+              "component": "content_pressure",
+              "low": 0.0,
+              "high": 0.0
+            },
+            {
+              "component": "observed_obstruction",
+              "low": 0.0,
+              "high": 0.0
+            }
+          ],
+          "dirichlet_p05": 0.0,
+          "dirichlet_p95": 0.0,
+          "dirichlet_samples": 1000,
+          "mcai": null,
+          "counterfactual": {
+            "original_cdi": 0.0,
+            "redesigned_cdi": 0.0,
+            "risk_reduction_pct": null
+          }
+        }
+      ],
+      "journeys": [
+        {
+          "id": "journey-subscription",
+          "synthetic": true,
+          "http_status": 200,
+          "cdi": 76.45,
+          "band": "high",
+          "coverage": 1.0,
+          "components": {
+            "content_pressure": {
+              "available": true,
+              "value": 0.6627,
+              "effective_weight": 0.55,
+              "contribution": 36.45,
+              "provenance": "model+observed"
+            },
+            "choice_asymmetry": {
+              "available": true,
+              "value": 0.8,
+              "effective_weight": 0.25,
+              "contribution": 20.0,
+              "provenance": "declared"
+            },
+            "observed_obstruction": {
+              "available": true,
+              "value": 1.0,
+              "effective_weight": 0.2,
+              "contribution": 20.0,
+              "provenance": "observed"
+            }
+          },
+          "one_at_a_time": [
+            {
+              "component": "content_pressure",
+              "low": 74.25,
+              "high": 80.31
+            },
+            {
+              "component": "choice_asymmetry",
+              "low": 75.94,
+              "high": 76.84
+            },
+            {
+              "component": "observed_obstruction",
+              "low": 73.83,
+              "high": 78.59
+            }
+          ],
+          "dirichlet_p05": 72.29,
+          "dirichlet_p95": 81.34,
+          "dirichlet_samples": 1000,
+          "fspm_scores": {
+            "fibonacci": 66.27,
+            "linear": 69.41,
+            "equal": 71.79
+          },
+          "fspm_positions_mode": "canonical",
+          "stage_pressures": [
+            0.7498,
+            0.7495,
+            0.75,
+            0.6225
+          ],
+          "mcai": 75.16,
+          "counterfactual": {
+            "original_cdi": 76.45,
+            "redesigned_cdi": 36.39,
+            "risk_reduction_pct": 52.4
+          },
+          "temporal_events": 14
+        },
+        {
+          "id": "journey-benign",
+          "synthetic": true,
+          "http_status": 200,
+          "cdi": 0.0,
+          "band": "low",
+          "coverage": 0.55,
+          "components": {
+            "content_pressure": {
+              "available": true,
+              "value": 0.0,
+              "effective_weight": 1.0,
+              "contribution": 0.0,
+              "provenance": "model+observed"
+            },
+            "choice_asymmetry": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            },
+            "observed_obstruction": {
+              "available": false,
+              "value": null,
+              "effective_weight": null,
+              "contribution": null,
+              "provenance": "unavailable"
+            }
+          },
+          "one_at_a_time": [
+            {
+              "component": "content_pressure",
+              "low": 0.0,
+              "high": 0.0
+            }
+          ],
+          "dirichlet_p05": 0.0,
+          "dirichlet_p95": 0.0,
+          "dirichlet_samples": 0,
+          "fspm_scores": {
+            "fibonacci": 0.0,
+            "linear": 0.0,
+            "equal": 0.0
+          },
+          "fspm_positions_mode": "canonical",
+          "stage_pressures": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "mcai": null,
+          "counterfactual": {
+            "original_cdi": 0.0,
+            "redesigned_cdi": 0.0,
+            "risk_reduction_pct": null
+          },
+          "temporal_events": 0
+        }
+      ]
+    },
+    "D_counterfactual_rewrites": {
+      "synthetic": false,
+      "kind": "model-estimated rewrite experiment on real TEST-split rows",
+      "threshold_tau": 0.68,
+      "neutral_decline_text": "No thanks",
+      "neutral_decline_score": {
+        "p_dark": 0.9938,
+        "p_misdirection": 0.9937,
+        "flagged_at_tau": true
+      },
+      "dataset_rows_starting_no_thanks_by_split_label": {
+        "test/misdirection": 8,
+        "train/misdirection": 75,
+        "val/misdirection": 19
+      },
+      "design": "Every TEST-split row with label != benign is audited alone (segment_text -> Auditor.audit(...,'text')); plan_edits(findings, clf.predict) proposes one edit per finding; redesigned texts are re-scored by the same calibrated classifier. Categories below are the FINDING (predicted) categories that select the rewrite rule.",
+      "dark_rows": 162,
+      "dark_rows_with_ml_findings": 147,
+      "dark_rows_without_findings": 15,
+      "per_category": {
+        "misdirection": {
+          "n_findings": 19,
+          "n_rewrite": 14,
+          "pct_safe_rewrite": 73.7,
+          "actions": {
+            "rewrite": 14,
+            "no_safe_rewrite": 5
+          },
+          "n_rewrite_below_threshold": 0,
+          "pct_rewrites_below_threshold": 0.0,
+          "mean_p_dark_before_rewritten": 0.9836,
+          "mean_p_dark_after_rewritten": 0.9938,
+          "facts_preserved_violations": 0,
+          "independent_fact_check_failures": 0
+        },
+        "scarcity": {
+          "n_findings": 45,
+          "n_rewrite": 25,
+          "pct_safe_rewrite": 55.6,
+          "actions": {
+            "rewrite": 25,
+            "no_safe_rewrite": 20
+          },
+          "n_rewrite_below_threshold": 1,
+          "pct_rewrites_below_threshold": 4.0,
+          "mean_p_dark_before_rewritten": 0.9988,
+          "mean_p_dark_after_rewritten": 0.9726,
+          "facts_preserved_violations": 0,
+          "independent_fact_check_failures": 0
+        },
+        "social_proof": {
+          "n_findings": 44,
+          "n_rewrite": 0,
+          "pct_safe_rewrite": 0.0,
+          "actions": {
+            "no_safe_rewrite": 44
+          },
+          "n_rewrite_below_threshold": 0,
+          "pct_rewrites_below_threshold": null,
+          "mean_p_dark_before_rewritten": null,
+          "mean_p_dark_after_rewritten": null,
+          "facts_preserved_violations": 0,
+          "independent_fact_check_failures": 0
+        },
+        "urgency": {
+          "n_findings": 39,
+          "n_rewrite": 21,
+          "pct_safe_rewrite": 53.8,
+          "actions": {
+            "rewrite": 21,
+            "no_safe_rewrite": 18
+          },
+          "n_rewrite_below_threshold": 14,
+          "pct_rewrites_below_threshold": 66.7,
+          "mean_p_dark_before_rewritten": 0.8795,
+          "mean_p_dark_after_rewritten": 0.5397,
+          "facts_preserved_violations": 0,
+          "independent_fact_check_failures": 0
+        },
+        "ALL": {
+          "n_findings": 147,
+          "n_rewrite": 60,
+          "pct_safe_rewrite": 40.8,
+          "actions": {
+            "no_safe_rewrite": 87,
+            "rewrite": 60
+          },
+          "n_rewrite_below_threshold": 15,
+          "pct_rewrites_below_threshold": 25.0,
+          "mean_p_dark_before_rewritten": 0.9535,
+          "mean_p_dark_after_rewritten": 0.8261,
+          "facts_preserved_violations": 0,
+          "independent_fact_check_failures": 0
+        }
+      },
+      "per_gold_label_rewrite_rate": {
+        "misdirection": 70.0,
+        "scarcity": 63.6,
+        "social_proof": 0.0,
+        "urgency": 39.3
+      },
+      "no_safe_rewrite_reason_counts": {
+        "Social proof cannot be rewritten without a verifiable data source; remove it or replace it with verifiable aggregate data (e": 44,
+        "No removable pressure phrase was found (only case or punctuation would change); no safe automatic rewrite": 38,
+        "Up-sell or steering framing": 4,
+        "The decline option is already neutral ('No thanks')": 1
+      },
+      "examples": [
+        {
+          "row_id": 114,
+          "gold_label": "misdirection",
+          "category": "misdirection",
+          "original": "No, I'll rather pay full price.",
+          "redesigned": "No thanks",
+          "before": 0.9998,
+          "after": 0.9938,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 241,
+          "gold_label": "scarcity",
+          "category": "scarcity",
+          "original": "HURRY! ONLY 1 IN STOCK!",
+          "redesigned": "1 in stock.",
+          "before": 1.0,
+          "after": 0.9987,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 474,
+          "gold_label": "misdirection",
+          "category": "misdirection",
+          "original": "no thanks, I'll save money another day",
+          "redesigned": "No thanks",
+          "before": 1.0,
+          "after": 0.9938,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 795,
+          "gold_label": "scarcity",
+          "category": "scarcity",
+          "original": "Only a few left",
+          "redesigned": "A few left in stock",
+          "before": 0.9997,
+          "after": 0.9999,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 853,
+          "gold_label": "scarcity",
+          "category": "urgency",
+          "original": "83% offers claimed. Hurry up!",
+          "redesigned": "83% offers claimed.",
+          "before": 0.7204,
+          "after": 0.2773,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 1412,
+          "gold_label": "misdirection",
+          "category": "misdirection",
+          "original": "No thanks, free stuff isn't for me.",
+          "redesigned": "No thanks",
+          "before": 0.9984,
+          "after": 0.9938,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 1514,
+          "gold_label": "misdirection",
+          "category": "misdirection",
+          "original": "No thanks, I'll just pay full price.",
+          "redesigned": "No thanks",
+          "before": 1.0,
+          "after": 0.9938,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 1725,
+          "gold_label": "misdirection",
+          "category": "misdirection",
+          "original": "No Thanks, I Don't Like Saving Money.",
+          "redesigned": "No thanks",
+          "before": 1.0,
+          "after": 0.9938,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 2070,
+          "gold_label": "scarcity",
+          "category": "scarcity",
+          "original": "Only a few left!",
+          "redesigned": "A few left in stock.",
+          "before": 0.9998,
+          "after": 0.9999,
+          "facts_preserved": true
+        },
+        {
+          "row_id": 2312,
+          "gold_label": "urgency",
+          "category": "urgency",
+          "original": "Act now and save $12.99. Limited time only!",
+          "redesigned": "Save $12.99.",
+          "before": 0.9995,
+          "after": 0.9896,
+          "facts_preserved": true
+        }
+      ],
+      "false_positive_benign_rows": {
+        "benign_rows": 167,
+        "benign_rows_flagged": 1,
+        "per_category": {
+          "misdirection": {
+            "n_findings": 1,
+            "n_rewrite": 0,
+            "pct_safe_rewrite": 0.0,
+            "actions": {
+              "no_safe_rewrite": 1
+            },
+            "n_rewrite_below_threshold": 0,
+            "pct_rewrites_below_threshold": null,
+            "mean_p_dark_before_rewritten": null,
+            "mean_p_dark_after_rewritten": null,
+            "facts_preserved_violations": 0,
+            "independent_fact_check_failures": 0
+          },
+          "ALL": {
+            "n_findings": 1,
+            "n_rewrite": 0,
+            "pct_safe_rewrite": 0.0,
+            "actions": {
+              "no_safe_rewrite": 1
+            },
+            "n_rewrite_below_threshold": 0,
+            "pct_rewrites_below_threshold": null,
+            "mean_p_dark_before_rewritten": null,
+            "mean_p_dark_after_rewritten": null,
+            "facts_preserved_violations": 0,
+            "independent_fact_check_failures": 0
+          }
+        },
+        "edits": [
+          {
+            "row_id": 2308,
+            "category": "misdirection",
+            "action": "no_safe_rewrite",
+            "original": "Don't leave without taking discount",
+            "redesigned": null,
+            "before": 0.9366,
+            "after": null,
+            "facts_preserved": true
+          }
+        ]
+      },
+      "seconds": 1.2,
+      "circularity_caveat": "The same classifier that flagged the original scores the rewrite, so a drop in P(dark) shows that the rewrite removes the cues the model relies on - not that consumers would be less pressured, and not independent validation of the redesign."
+    }
+  },
+  "runtime_seconds": 32.0,
+  "model_load_seconds": 5.2
+}

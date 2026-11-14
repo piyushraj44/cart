@@ -1,0 +1,104 @@
+{
+  "source": "https://github.com/aruneshmathur/dark-patterns",
+  "commit": "f458f19c4814419acd691f2842d7e1123f14097c 2019-08-05 23:42:41 -0400",
+  "licence": "GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007",
+  "columns": [
+    "Pattern String",
+    "Comment",
+    "Pattern Category",
+    "Pattern Type",
+    "Where in website?",
+    "Deceptive?",
+    "Website Page"
+  ],
+  "rows": 1818,
+  "missing_values": {
+    "Pattern String": 306,
+    "Comment": 20,
+    "Pattern Category": 0,
+    "Pattern Type": 0,
+    "Where in website?": 0,
+    "Deceptive?": 0,
+    "Website Page": 0
+  },
+  "pattern_category_counts": {
+    "Scarcity": 679,
+    "Urgency": 481,
+    "Social Proof": 325,
+    "Misdirection": 270,
+    "Obstruction": 31,
+    "Sneaking": 26,
+    "Forced Action": 6
+  },
+  "deceptive_counts": {
+    "No": 1584,
+    "Yes": 208,
+    "Depends": 26
+  },
+  "deceptive_counts_nonempty_text": {
+    "No": 1360,
+    "Yes": 140,
+    "Depends": 12
+  },
+  "unique_domains": 1253,
+  "relationship_to_ec_darkpattern": {
+    "ec_dark_rows": 1178,
+    "ec_dark_rows_text_equal_mathur_pattern_string": 1178,
+    "ec_dark_rows_category_equal": 1178,
+    "ec_benign_rows": 1178,
+    "ec_benign_rows_page_id_is_a_mathur_row": 1178,
+    "clearcart_rows_without_domain": 0
+  },
+  "exclusions": {
+    "mathur_rows": 1818,
+    "flag_counts_all_rows": {
+      "empty_text": 306,
+      "out_of_taxonomy": 63,
+      "already_in_clearcart": 1131,
+      "template_conflict": 5,
+      "valtest_text": 455,
+      "valtest_template": 455,
+      "valtest_page": 344,
+      "valtest_domain": 591
+    },
+    "first_reason_counts": {
+      "already_in_clearcart": 1131,
+      "empty_text": 306,
+      "eligible": 175,
+      "valtest_text": 132,
+      "out_of_taxonomy": 46,
+      "valtest_domain": 18,
+      "template_conflict": 5,
+      "valtest_page": 5
+    },
+    "candidates_not_already_in_clearcart_nonempty": 381,
+    "candidates_excluded_by_valtest_rule": 165,
+    "candidates_excluded_by_valtest_rule_by_kind": {
+      "text": 132,
+      "template": 132,
+      "page": 10,
+      "domain": 66
+    },
+    "in_taxonomy_nonconflict_candidates": 330,
+    "in_taxonomy_nonconflict_candidates_excluded_by_valtest_rule": 155,
+    "eligible_rows": 175,
+    "eligible_by_label": {
+      "scarcity": 144,
+      "urgency": 19,
+      "misdirection": 11,
+      "social_proof": 1
+    },
+    "eligible_unique_texts": 68,
+    "eligible_texts_already_in_clearcart_train": 175,
+    "eligible_unique_texts_not_in_clearcart_train": 0,
+    "eligible_templates_not_in_clearcart_train": 0,
+    "candidate_texts_present_in_raw_ec_tsv": 381
+  },
+  "clearcart_split_domain_overlap": {
+    "test_rows_sharing_domain_with_train": 99,
+    "test_rows": 329,
+    "val_rows_sharing_domain_with_train": 91,
+    "val_rows": 328,
+    "test_rows_sharing_domain_with_val": 33
+  }
+}

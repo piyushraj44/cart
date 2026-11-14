@@ -1,0 +1,85 @@
+{
+  "seed": 42,
+  "cleaning_log": {
+    "raw_rows": 2356,
+    "dropped_empty": 0,
+    "dropped_exact_duplicates": 7,
+    "dropped_exact_duplicate_texts": [
+      "Glow Gear",
+      "All Brands A-Z",
+      "New In",
+      "Diamond Nose Studs",
+      "Shirts & Blouses",
+      "A-Z Luxury Brands",
+      "Read More"
+    ],
+    "excluded_probe_rows": 43,
+    "dropped_conflicting_template_rows": [
+      [
+        "00:15:07:45",
+        "urgency"
+      ],
+      [
+        "LIMITED TIME DEAL!",
+        "urgency"
+      ],
+      [
+        "Limited-time Deal",
+        "scarcity"
+      ],
+      [
+        "$132.90 $99.00",
+        "misdirection"
+      ]
+    ]
+  },
+  "rows_used": 2302,
+  "n_groups": 849,
+  "split_sizes": {
+    "train": 1645,
+    "test": 329,
+    "val": 328
+  },
+  "class_counts_by_split": {
+    "train": {
+      "benign": 837,
+      "urgency": 148,
+      "scarcity": 299,
+      "social_proof": 223,
+      "misdirection": 138
+    },
+    "val": {
+      "benign": 167,
+      "urgency": 30,
+      "scarcity": 59,
+      "social_proof": 44,
+      "misdirection": 28
+    },
+    "test": {
+      "benign": 167,
+      "urgency": 30,
+      "scarcity": 59,
+      "social_proof": 45,
+      "misdirection": 28
+    }
+  },
+  "leakage_checks": {
+    "text_overlap_train_test": 0,
+    "text_overlap_train_val": 0,
+    "text_overlap_val_test": 0,
+    "template_key_overlap_train_test": 0,
+    "template_key_overlap_train_val": 0,
+    "template_key_overlap_val_test": 0,
+    "page_id_overlap_train_test": 0,
+    "page_id_overlap_train_val": 0,
+    "page_id_overlap_val_test": 0,
+    "group_id_overlap_train_test": 0,
+    "group_id_overlap_train_val": 0,
+    "group_id_overlap_val_test": 0
+  },
+  "probe_counts": {
+    "Obstruction": 27,
+    "Sneaking": 12,
+    "Forced Action": 4
+  }
+}

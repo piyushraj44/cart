@@ -1,0 +1,1641 @@
+{
+  "seed": 42,
+  "labels": [
+    "benign",
+    "urgency",
+    "scarcity",
+    "social_proof",
+    "misdirection"
+  ],
+  "created_by": "ml/train_v2.py",
+  "data": {
+    "train_v1_rows": 1645,
+    "train_v2_rows": 1820,
+    "mathur_rows_added": 175,
+    "mathur_rows_added_by_label": {
+      "scarcity": 144,
+      "urgency": 19,
+      "misdirection": 11,
+      "social_proof": 1
+    },
+    "mathur_unique_texts_added": 68,
+    "mathur_texts_not_already_in_train": 0,
+    "val_rows": 328,
+    "test_rows": 329,
+    "mathur_commit": "f458f19c4814419acd691f2842d7e1123f14097c 2019-08-05 23:42:41 -0400",
+    "frozen_inputs": "data/processed/text_dataset.csv split column (unchanged)"
+  },
+  "training": {
+    "ensemble_v2": {
+      "val_member_macro_f1_argmax": {
+        "tfidf_lr": 0.9677,
+        "minilm_xgb": 0.941,
+        "ensemble_lr_xgb": 0.9705
+      },
+      "member_selected": "ensemble_lr_xgb",
+      "weight_lr": 0.7,
+      "lr_C": 1,
+      "xgb_trees": 255,
+      "temperature": 0.4551,
+      "tau": 0.67,
+      "tau_rule": "max VAL F1 s.t. precision>=0.90, near-ties -> higher tau",
+      "grid_val_macro_f1": {
+        "tfidf_lr_C=0.5": 0.9562,
+        "tfidf_lr_C=1": 0.9677,
+        "tfidf_lr_C=2": 0.9677,
+        "tfidf_lr_C=4": 0.9651,
+        "tfidf_lr_C=8": 0.9611,
+        "tfidf_lr_C=16": 0.9565,
+        "ensemble_w_lr=0.0": 0.941,
+        "ensemble_w_lr=0.1": 0.941,
+        "ensemble_w_lr=0.2": 0.944,
+        "ensemble_w_lr=0.3": 0.944,
+        "ensemble_w_lr=0.4": 0.9496,
+        "ensemble_w_lr=0.5": 0.9526,
+        "ensemble_w_lr=0.6": 0.9642,
+        "ensemble_w_lr=0.7": 0.9705,
+        "ensemble_w_lr=0.8": 0.9689,
+        "ensemble_w_lr=0.9": 0.9705,
+        "ensemble_w_lr=1.0": 0.9677
+      }
+    },
+    "transformer_v1data": {
+      "best_epoch": 3,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.9562,
+          "seconds": 31.9,
+          "val_macro_f1_argmax": 0.9531,
+          "best": true
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.1763,
+          "seconds": 27.2,
+          "val_macro_f1_argmax": 0.9309
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0809,
+          "seconds": 26.4,
+          "val_macro_f1_argmax": 0.9567,
+          "best": true
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0482,
+          "seconds": 22.9,
+          "val_macro_f1_argmax": 0.95
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0225,
+          "seconds": 27.7,
+          "val_macro_f1_argmax": 0.9523
+        }
+      ],
+      "temperature": 1.4393,
+      "tau": 0.95,
+      "tau_rule": "max VAL F1 s.t. precision>=0.90, near-ties -> higher tau",
+      "n_train": 1645,
+      "n_train_mathur": 0,
+      "train_seconds": 148.4,
+      "train_device": "mps"
+    },
+    "transformer_v2": {
+      "best_epoch": 3,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.8911,
+          "seconds": 18.8,
+          "val_macro_f1_argmax": 0.9259,
+          "best": true
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.1734,
+          "seconds": 17.7,
+          "val_macro_f1_argmax": 0.929,
+          "best": true
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.0686,
+          "seconds": 18.5,
+          "val_macro_f1_argmax": 0.9567,
+          "best": true
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.0268,
+          "seconds": 16.9,
+          "val_macro_f1_argmax": 0.9523
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.0145,
+          "seconds": 18.6,
+          "val_macro_f1_argmax": 0.9567
+        }
+      ],
+      "temperature": 1.403,
+      "tau": 0.95,
+      "tau_rule": "max VAL F1 s.t. precision>=0.90, near-ties -> higher tau",
+      "n_train": 1820,
+      "n_train_mathur": 175,
+      "train_seconds": 102.3,
+      "train_device": "mps"
+    }
+  },
+  "comparison": {
+    "served_v1": {
+      "temperature": 0.4477,
+      "threshold": 0.68,
+      "val": {
+        "n": 328,
+        "accuracy": 0.9817,
+        "macro_f1": 0.9705,
+        "per_class_f1": {
+          "benign": 0.9911,
+          "urgency": 0.9667,
+          "scarcity": 0.9915,
+          "social_proof": 0.9773,
+          "misdirection": 0.9259
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9824,
+            "recall": 1.0,
+            "f1-score": 0.9911,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.9667,
+            "recall": 0.9667,
+            "f1-score": 0.9667,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 1.0,
+            "recall": 0.9831,
+            "f1-score": 0.9915,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 0.9773,
+            "recall": 0.9773,
+            "f1-score": 0.9773,
+            "support": 44.0
+          },
+          "misdirection": {
+            "precision": 0.9615,
+            "recall": 0.8929,
+            "f1-score": 0.9259,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.68,
+          "precision": 1.0,
+          "recall": 0.9814,
+          "f1": 0.9906,
+          "roc_auc": 0.9952,
+          "tp": 158,
+          "fp": 0,
+          "tn": 167,
+          "fn": 3,
+          "false_positive_rate": 0.0
+        },
+        "benign_false_positive_rate": 0.0,
+        "roc_auc_ovr_macro": 0.9944,
+        "ece_before_calibration": 0.1163,
+        "ece_after_calibration": 0.0142,
+        "log_loss_before": 0.1816,
+        "log_loss_after": 0.0795,
+        "brier_after": 0.0316,
+        "argmax_macro_f1": 0.9705,
+        "confusion_matrix": [
+          [
+            167,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            29,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            58,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            43,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            25
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.9705
+      },
+      "test": {
+        "n": 329,
+        "accuracy": 0.9179,
+        "macro_f1": 0.8823,
+        "per_class_f1": {
+          "benign": 0.954,
+          "urgency": 0.8116,
+          "scarcity": 0.8654,
+          "social_proof": 0.9888,
+          "misdirection": 0.7917
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9171,
+            "recall": 0.994,
+            "f1-score": 0.954,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.7179,
+            "recall": 0.9333,
+            "f1-score": 0.8116,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 1.0,
+            "recall": 0.7627,
+            "f1-score": 0.8654,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 1.0,
+            "recall": 0.9778,
+            "f1-score": 0.9888,
+            "support": 45.0
+          },
+          "misdirection": {
+            "precision": 0.95,
+            "recall": 0.6786,
+            "f1-score": 0.7917,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.68,
+          "precision": 0.9932,
+          "recall": 0.9074,
+          "f1": 0.9484,
+          "roc_auc": 0.9932,
+          "tp": 147,
+          "fp": 1,
+          "tn": 166,
+          "fn": 15,
+          "false_positive_rate": 0.006
+        },
+        "benign_false_positive_rate": 0.006,
+        "roc_auc_ovr_macro": 0.9882,
+        "ece_before_calibration": 0.1348,
+        "ece_after_calibration": 0.0409,
+        "log_loss_before": 0.3334,
+        "log_loss_after": 0.2428,
+        "brier_after": 0.114,
+        "argmax_macro_f1": 0.881,
+        "confusion_matrix": [
+          [
+            166,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            28,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            10,
+            45,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            44,
+            0
+          ],
+          [
+            8,
+            1,
+            0,
+            0,
+            19
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.8823
+      },
+      "test_domain_unseen_subset": {
+        "note": "TEST rows whose website domain has no row in this model's training data",
+        "n": 230,
+        "accuracy": 0.9478,
+        "macro_f1": 0.8986,
+        "per_class_f1": {
+          "benign": 0.9754,
+          "urgency": 0.7742,
+          "scarcity": 0.9315,
+          "social_proof": 0.9787,
+          "misdirection": 0.8333
+        },
+        "dark_vs_benign": {
+          "threshold": 0.68,
+          "precision": 1.0,
+          "recall": 0.9231,
+          "f1": 0.96,
+          "roc_auc": 0.9953,
+          "tp": 84,
+          "fp": 0,
+          "tn": 139,
+          "fn": 7,
+          "false_positive_rate": 0.0
+        },
+        "benign_false_positive_rate": 0.0,
+        "roc_auc_ovr_macro": 0.9846,
+        "ece_before_calibration": 0.1431,
+        "ece_after_calibration": 0.0325,
+        "log_loss_before": 0.2914,
+        "log_loss_after": 0.182,
+        "brier_after": 0.0798,
+        "argmax_macro_f1": 0.8906
+      },
+      "meta": {
+        "embedder": "sentence-transformers/all-MiniLM-L6-v2",
+        "trained_on": "ec-darkpattern dataset.tsv TRAIN split only",
+        "n_train": 1645,
+        "selected_model": "ensemble_lr_xgb",
+        "lr_C": 1,
+        "xgb_trees": 279,
+        "trained_at": "2026-11-11 17:45:06"
+      },
+      "reference_metrics_json_test_macro_f1": 0.8823,
+      "recomputed_matches_reference": true
+    },
+    "ensemble_v2": {
+      "temperature": 0.4551,
+      "threshold": 0.67,
+      "val": {
+        "n": 328,
+        "accuracy": 0.9817,
+        "macro_f1": 0.9705,
+        "per_class_f1": {
+          "benign": 0.9911,
+          "urgency": 0.9667,
+          "scarcity": 0.9915,
+          "social_proof": 0.9773,
+          "misdirection": 0.9259
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9824,
+            "recall": 1.0,
+            "f1-score": 0.9911,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.9667,
+            "recall": 0.9667,
+            "f1-score": 0.9667,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 1.0,
+            "recall": 0.9831,
+            "f1-score": 0.9915,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 0.9773,
+            "recall": 0.9773,
+            "f1-score": 0.9773,
+            "support": 44.0
+          },
+          "misdirection": {
+            "precision": 0.9615,
+            "recall": 0.8929,
+            "f1-score": 0.9259,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.67,
+          "precision": 1.0,
+          "recall": 0.9814,
+          "f1": 0.9906,
+          "roc_auc": 0.9951,
+          "tp": 158,
+          "fp": 0,
+          "tn": 167,
+          "fn": 3,
+          "false_positive_rate": 0.0
+        },
+        "benign_false_positive_rate": 0.0,
+        "roc_auc_ovr_macro": 0.9945,
+        "ece_before_calibration": 0.112,
+        "ece_after_calibration": 0.0059,
+        "log_loss_before": 0.1767,
+        "log_loss_after": 0.0798,
+        "brier_after": 0.0327,
+        "argmax_macro_f1": 0.9705,
+        "confusion_matrix": [
+          [
+            167,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            29,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            58,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            43,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            25
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.9705
+      },
+      "test": {
+        "n": 329,
+        "accuracy": 0.9179,
+        "macro_f1": 0.8823,
+        "per_class_f1": {
+          "benign": 0.954,
+          "urgency": 0.8116,
+          "scarcity": 0.8654,
+          "social_proof": 0.9888,
+          "misdirection": 0.7917
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9171,
+            "recall": 0.994,
+            "f1-score": 0.954,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.7179,
+            "recall": 0.9333,
+            "f1-score": 0.8116,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 1.0,
+            "recall": 0.7627,
+            "f1-score": 0.8654,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 1.0,
+            "recall": 0.9778,
+            "f1-score": 0.9888,
+            "support": 45.0
+          },
+          "misdirection": {
+            "precision": 0.95,
+            "recall": 0.6786,
+            "f1-score": 0.7917,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.67,
+          "precision": 0.9932,
+          "recall": 0.9074,
+          "f1": 0.9484,
+          "roc_auc": 0.9927,
+          "tp": 147,
+          "fp": 1,
+          "tn": 166,
+          "fn": 15,
+          "false_positive_rate": 0.006
+        },
+        "benign_false_positive_rate": 0.006,
+        "roc_auc_ovr_macro": 0.9882,
+        "ece_before_calibration": 0.1405,
+        "ece_after_calibration": 0.0432,
+        "log_loss_before": 0.3293,
+        "log_loss_after": 0.2426,
+        "brier_after": 0.1138,
+        "argmax_macro_f1": 0.8822,
+        "confusion_matrix": [
+          [
+            166,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            2,
+            28,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            10,
+            45,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            44,
+            0
+          ],
+          [
+            8,
+            1,
+            0,
+            0,
+            19
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.8823
+      },
+      "test_domain_unseen_subset": {
+        "note": "TEST rows whose website domain has no row in this model's training data",
+        "n": 230,
+        "accuracy": 0.9478,
+        "macro_f1": 0.8986,
+        "per_class_f1": {
+          "benign": 0.9754,
+          "urgency": 0.7742,
+          "scarcity": 0.9315,
+          "social_proof": 0.9787,
+          "misdirection": 0.8333
+        },
+        "dark_vs_benign": {
+          "threshold": 0.67,
+          "precision": 1.0,
+          "recall": 0.9231,
+          "f1": 0.96,
+          "roc_auc": 0.9947,
+          "tp": 84,
+          "fp": 0,
+          "tn": 139,
+          "fn": 7,
+          "false_positive_rate": 0.0
+        },
+        "benign_false_positive_rate": 0.0,
+        "roc_auc_ovr_macro": 0.9845,
+        "ece_before_calibration": 0.1462,
+        "ece_after_calibration": 0.0194,
+        "log_loss_before": 0.2848,
+        "log_loss_after": 0.1786,
+        "brier_after": 0.0772,
+        "argmax_macro_f1": 0.898
+      },
+      "meta": {
+        "embedder": "sentence-transformers/all-MiniLM-L6-v2",
+        "selected_model": "ensemble_v2",
+        "trained_on": "ec-darkpattern TRAIN split + eligible Mathur et al. 2019 rows (see data/processed/mathur_inspection.md)",
+        "n_train": 1820,
+        "n_train_mathur": 175,
+        "member_selected_on_val": "ensemble_lr_xgb",
+        "lr_C": 1,
+        "xgb_trees": 255,
+        "trained_at": "2026-11-14 11:53:40",
+        "version": "v2"
+      }
+    },
+    "transformer_v1data": {
+      "temperature": 1.4393,
+      "threshold": 0.95,
+      "val": {
+        "n": 328,
+        "accuracy": 0.9726,
+        "macro_f1": 0.9592,
+        "per_class_f1": {
+          "benign": 0.979,
+          "urgency": 0.9667,
+          "scarcity": 1.0,
+          "social_proof": 0.9885,
+          "misdirection": 0.8621
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9819,
+            "recall": 0.976,
+            "f1-score": 0.979,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.9667,
+            "recall": 0.9667,
+            "f1-score": 0.9667,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 1.0,
+            "recall": 0.9773,
+            "f1-score": 0.9885,
+            "support": 44.0
+          },
+          "misdirection": {
+            "precision": 0.8333,
+            "recall": 0.8929,
+            "f1-score": 0.8621,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.95,
+          "precision": 0.9753,
+          "recall": 0.9814,
+          "f1": 0.9783,
+          "roc_auc": 0.9961,
+          "tp": 158,
+          "fp": 4,
+          "tn": 163,
+          "fn": 3,
+          "false_positive_rate": 0.024
+        },
+        "benign_false_positive_rate": 0.024,
+        "roc_auc_ovr_macro": 0.9916,
+        "ece_before_calibration": 0.0272,
+        "ece_after_calibration": 0.0075,
+        "log_loss_before": 0.1729,
+        "log_loss_after": 0.1442,
+        "brier_after": 0.0576,
+        "argmax_macro_f1": 0.9567,
+        "confusion_matrix": [
+          [
+            163,
+            0,
+            0,
+            0,
+            4
+          ],
+          [
+            0,
+            29,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            59,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            43,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            25
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.9592
+      },
+      "test": {
+        "n": 329,
+        "accuracy": 0.9301,
+        "macro_f1": 0.9024,
+        "per_class_f1": {
+          "benign": 0.9558,
+          "urgency": 0.9524,
+          "scarcity": 0.9009,
+          "social_proof": 0.9888,
+          "misdirection": 0.7143
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9419,
+            "recall": 0.9701,
+            "f1-score": 0.9558,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.9091,
+            "recall": 1.0,
+            "f1-score": 0.9524,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 0.9615,
+            "recall": 0.8475,
+            "f1-score": 0.9009,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 1.0,
+            "recall": 0.9778,
+            "f1-score": 0.9888,
+            "support": 45.0
+          },
+          "misdirection": {
+            "precision": 0.7143,
+            "recall": 0.7143,
+            "f1-score": 0.7143,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.95,
+          "precision": 0.9682,
+          "recall": 0.9383,
+          "f1": 0.953,
+          "roc_auc": 0.994,
+          "tp": 152,
+          "fp": 5,
+          "tn": 162,
+          "fn": 10,
+          "false_positive_rate": 0.0299
+        },
+        "benign_false_positive_rate": 0.0299,
+        "roc_auc_ovr_macro": 0.9904,
+        "ece_before_calibration": 0.0408,
+        "ece_after_calibration": 0.015,
+        "log_loss_before": 0.2272,
+        "log_loss_after": 0.2037,
+        "brier_after": 0.0946,
+        "argmax_macro_f1": 0.9054,
+        "confusion_matrix": [
+          [
+            162,
+            1,
+            2,
+            0,
+            2
+          ],
+          [
+            0,
+            30,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            50,
+            0,
+            6
+          ],
+          [
+            0,
+            1,
+            0,
+            44,
+            0
+          ],
+          [
+            7,
+            1,
+            0,
+            0,
+            20
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.9024
+      },
+      "test_domain_unseen_subset": {
+        "note": "TEST rows whose website domain has no row in this model's training data",
+        "n": 230,
+        "accuracy": 0.9435,
+        "macro_f1": 0.9015,
+        "per_class_f1": {
+          "benign": 0.9749,
+          "urgency": 0.9032,
+          "scarcity": 0.8919,
+          "social_proof": 0.9787,
+          "misdirection": 0.7586
+        },
+        "dark_vs_benign": {
+          "threshold": 0.95,
+          "precision": 0.9667,
+          "recall": 0.956,
+          "f1": 0.9613,
+          "roc_auc": 0.9968,
+          "tp": 87,
+          "fp": 3,
+          "tn": 136,
+          "fn": 4,
+          "false_positive_rate": 0.0216
+        },
+        "benign_false_positive_rate": 0.0216,
+        "roc_auc_ovr_macro": 0.9862,
+        "ece_before_calibration": 0.0405,
+        "ece_after_calibration": 0.0171,
+        "log_loss_before": 0.2262,
+        "log_loss_after": 0.1966,
+        "brier_after": 0.0889,
+        "argmax_macro_f1": 0.8853
+      },
+      "meta": {
+        "selected_model": "transformer_v1data",
+        "version": "v2",
+        "base_model": "distilroberta-base",
+        "hyperparameters": {
+          "lr": 3e-05,
+          "batch_size": 16,
+          "weight_decay": 0.01,
+          "warmup_ratio": 0.1,
+          "max_epochs": 5,
+          "patience": 2,
+          "max_length": 128,
+          "grad_clip": 1.0,
+          "loss": "class-weighted cross-entropy (sklearn 'balanced' weights)"
+        },
+        "seed": 42,
+        "train_device": "mps",
+        "best_epoch": 3,
+        "n_train": 1645,
+        "n_train_mathur": 0,
+        "trained_on": "ec-darkpattern TRAIN split only",
+        "train_seconds": 148.4,
+        "trained_at": "2026-11-14 11:50:18",
+        "embedder": "distilroberta-base (fine-tuned)",
+        "inference_device": "cpu",
+        "tau_rule": "max VAL F1 s.t. precision>=0.90, near-ties -> higher tau"
+      }
+    },
+    "transformer_v2": {
+      "temperature": 1.403,
+      "threshold": 0.95,
+      "val": {
+        "n": 328,
+        "accuracy": 0.9756,
+        "macro_f1": 0.9629,
+        "per_class_f1": {
+          "benign": 0.982,
+          "urgency": 0.9667,
+          "scarcity": 1.0,
+          "social_proof": 0.9885,
+          "misdirection": 0.8772
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.982,
+            "recall": 0.982,
+            "f1-score": 0.982,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.9667,
+            "recall": 0.9667,
+            "f1-score": 0.9667,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 1.0,
+            "recall": 0.9773,
+            "f1-score": 0.9885,
+            "support": 44.0
+          },
+          "misdirection": {
+            "precision": 0.8621,
+            "recall": 0.8929,
+            "f1-score": 0.8772,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.95,
+          "precision": 0.9814,
+          "recall": 0.9814,
+          "f1": 0.9814,
+          "roc_auc": 0.9932,
+          "tp": 158,
+          "fp": 3,
+          "tn": 164,
+          "fn": 3,
+          "false_positive_rate": 0.018
+        },
+        "benign_false_positive_rate": 0.018,
+        "roc_auc_ovr_macro": 0.9913,
+        "ece_before_calibration": 0.0286,
+        "ece_after_calibration": 0.0138,
+        "log_loss_before": 0.156,
+        "log_loss_after": 0.1334,
+        "brier_after": 0.056,
+        "argmax_macro_f1": 0.9567,
+        "confusion_matrix": [
+          [
+            164,
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            0,
+            29,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            59,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            43,
+            0
+          ],
+          [
+            2,
+            1,
+            0,
+            0,
+            25
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.9629
+      },
+      "test": {
+        "n": 329,
+        "accuracy": 0.9362,
+        "macro_f1": 0.9111,
+        "per_class_f1": {
+          "benign": 0.9496,
+          "urgency": 0.9091,
+          "scarcity": 0.9483,
+          "social_proof": 0.9888,
+          "misdirection": 0.76
+        },
+        "per_class": {
+          "benign": {
+            "precision": 0.9412,
+            "recall": 0.9581,
+            "f1-score": 0.9496,
+            "support": 167.0
+          },
+          "urgency": {
+            "precision": 0.8333,
+            "recall": 1.0,
+            "f1-score": 0.9091,
+            "support": 30.0
+          },
+          "scarcity": {
+            "precision": 0.9649,
+            "recall": 0.9322,
+            "f1-score": 0.9483,
+            "support": 59.0
+          },
+          "social_proof": {
+            "precision": 1.0,
+            "recall": 0.9778,
+            "f1-score": 0.9888,
+            "support": 45.0
+          },
+          "misdirection": {
+            "precision": 0.8636,
+            "recall": 0.6786,
+            "f1-score": 0.76,
+            "support": 28.0
+          }
+        },
+        "dark_vs_benign": {
+          "threshold": 0.95,
+          "precision": 0.956,
+          "recall": 0.9383,
+          "f1": 0.947,
+          "roc_auc": 0.9905,
+          "tp": 152,
+          "fp": 7,
+          "tn": 160,
+          "fn": 10,
+          "false_positive_rate": 0.0419
+        },
+        "benign_false_positive_rate": 0.0419,
+        "roc_auc_ovr_macro": 0.9894,
+        "ece_before_calibration": 0.0567,
+        "ece_after_calibration": 0.0326,
+        "log_loss_before": 0.3162,
+        "log_loss_after": 0.261,
+        "brier_after": 0.1249,
+        "argmax_macro_f1": 0.8979,
+        "confusion_matrix": [
+          [
+            160,
+            2,
+            2,
+            0,
+            3
+          ],
+          [
+            0,
+            30,
+            0,
+            0,
+            0
+          ],
+          [
+            4,
+            0,
+            55,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            44,
+            0
+          ],
+          [
+            6,
+            3,
+            0,
+            0,
+            19
+          ]
+        ],
+        "macro_f1_with_abstention_gate": 0.9111
+      },
+      "test_domain_unseen_subset": {
+        "note": "TEST rows whose website domain has no row in this model's training data",
+        "n": 230,
+        "accuracy": 0.9391,
+        "macro_f1": 0.8869,
+        "per_class_f1": {
+          "benign": 0.9638,
+          "urgency": 0.8235,
+          "scarcity": 0.9487,
+          "social_proof": 0.9787,
+          "misdirection": 0.72
+        },
+        "dark_vs_benign": {
+          "threshold": 0.95,
+          "precision": 0.9355,
+          "recall": 0.956,
+          "f1": 0.9457,
+          "roc_auc": 0.996,
+          "tp": 87,
+          "fp": 6,
+          "tn": 133,
+          "fn": 4,
+          "false_positive_rate": 0.0432
+        },
+        "benign_false_positive_rate": 0.0432,
+        "roc_auc_ovr_macro": 0.9846,
+        "ece_before_calibration": 0.0643,
+        "ece_after_calibration": 0.0425,
+        "log_loss_before": 0.325,
+        "log_loss_after": 0.2655,
+        "brier_after": 0.1274,
+        "argmax_macro_f1": 0.8689
+      },
+      "meta": {
+        "selected_model": "transformer_v2",
+        "version": "v2",
+        "base_model": "distilroberta-base",
+        "hyperparameters": {
+          "lr": 3e-05,
+          "batch_size": 16,
+          "weight_decay": 0.01,
+          "warmup_ratio": 0.1,
+          "max_epochs": 5,
+          "patience": 2,
+          "max_length": 128,
+          "grad_clip": 1.0,
+          "loss": "class-weighted cross-entropy (sklearn 'balanced' weights)"
+        },
+        "seed": 42,
+        "train_device": "mps",
+        "best_epoch": 3,
+        "n_train": 1820,
+        "n_train_mathur": 175,
+        "trained_on": "ec-darkpattern TRAIN split + eligible Mathur et al. 2019 rows",
+        "train_seconds": 102.3,
+        "trained_at": "2026-11-14 11:52:17",
+        "embedder": "distilroberta-base (fine-tuned)",
+        "inference_device": "cpu",
+        "tau_rule": "max VAL F1 s.t. precision>=0.90, near-ties -> higher tau"
+      }
+    }
+  },
+  "selection": {
+    "rule": "highest VAL macro-F1 (application decision: calibrated P(dark)>=tau, argmax dark category); TEST not consulted",
+    "val_macro_f1": {
+      "served_v1": 0.9705,
+      "ensemble_v2": 0.9705,
+      "transformer_v1data": 0.9592,
+      "transformer_v2": 0.9629
+    },
+    "selected_v2_model": "ensemble_v2",
+    "winner_beats_served_v1_on_val": false,
+    "ranking_by_val": [
+      "served_v1",
+      "ensemble_v2",
+      "transformer_v2",
+      "transformer_v1data"
+    ]
+  },
+  "cv_models": {
+    "top2_by_val": [
+      "served_v1",
+      "ensemble_v2"
+    ],
+    "evaluated": [
+      "served_v1",
+      "ensemble_v2",
+      "transformer_v1data",
+      "transformer_v2"
+    ]
+  },
+  "repeated_grouped_cv": {
+    "served_v1": {
+      "mean_macro_f1": 0.9529,
+      "std": 0.0159,
+      "n_folds": 15,
+      "fold_scores": [
+        0.9783,
+        0.9601,
+        0.9591,
+        0.9409,
+        0.9099,
+        0.961,
+        0.94,
+        0.9657,
+        0.9503,
+        0.9501,
+        0.9614,
+        0.966,
+        0.9568,
+        0.9596,
+        0.9347
+      ],
+      "protocol": "StratifiedGroupKFold(5) x seeds [0, 1, 2] on ec-darkpattern TRAIN+VAL (frozen group_id); argmax macro-F1 on held-out ec rows; no Mathur rows",
+      "params": {
+        "lr_C": 1,
+        "weight_lr": 0.7,
+        "xgb_trees": 279
+      }
+    },
+    "ensemble_v2": {
+      "mean_macro_f1": 0.9523,
+      "std": 0.0141,
+      "n_folds": 15,
+      "fold_scores": [
+        0.9783,
+        0.9601,
+        0.9647,
+        0.9409,
+        0.9144,
+        0.9576,
+        0.9459,
+        0.9598,
+        0.9538,
+        0.9501,
+        0.9558,
+        0.9575,
+        0.9516,
+        0.9596,
+        0.9347
+      ],
+      "protocol": "StratifiedGroupKFold(5) x seeds [0, 1, 2] on ec-darkpattern TRAIN+VAL (frozen group_id); argmax macro-F1 on held-out ec rows; eligible Mathur rows added to the training folds only, minus any sharing text/template/domain with the held-out fold",
+      "params": {
+        "lr_C": 1,
+        "weight_lr": 0.7,
+        "xgb_trees": 255
+      }
+    },
+    "transformer_v1data": {
+      "mean_macro_f1": 0.9499,
+      "std": 0.013,
+      "n_folds": 15,
+      "fold_scores": [
+        0.9639,
+        0.9691,
+        0.9623,
+        0.9476,
+        0.9212,
+        0.961,
+        0.942,
+        0.9668,
+        0.94,
+        0.9407,
+        0.9459,
+        0.9445,
+        0.9509,
+        0.9575,
+        0.9345
+      ],
+      "protocol": "StratifiedGroupKFold(5) x seeds [0, 1, 2] on ec-darkpattern TRAIN+VAL (frozen group_id); argmax macro-F1 on held-out ec rows; no Mathur rows",
+      "params": {
+        "epochs": 3,
+        "lr": 3e-05,
+        "batch_size": 16,
+        "max_length": 128
+      }
+    },
+    "transformer_v2": {
+      "mean_macro_f1": 0.952,
+      "std": 0.0132,
+      "n_folds": 15,
+      "fold_scores": [
+        0.9646,
+        0.9693,
+        0.9755,
+        0.9403,
+        0.9266,
+        0.9634,
+        0.9388,
+        0.9536,
+        0.9522,
+        0.9609,
+        0.9341,
+        0.9553,
+        0.9534,
+        0.9505,
+        0.9421
+      ],
+      "protocol": "StratifiedGroupKFold(5) x seeds [0, 1, 2] on ec-darkpattern TRAIN+VAL (frozen group_id); argmax macro-F1 on held-out ec rows; eligible Mathur rows added to the training folds only, minus any sharing text/template/domain with the held-out fold",
+      "params": {
+        "epochs": 3,
+        "lr": 3e-05,
+        "batch_size": 16,
+        "max_length": 128
+      }
+    }
+  },
+  "v1_reference_cv_from_ml_artifacts_metrics_json": {
+    "tfidf_lr": {
+      "mean_macro_f1": 0.9352,
+      "std": 0.0164,
+      "n_folds": 25
+    },
+    "minilm_xgb": {
+      "mean_macro_f1": 0.9244,
+      "std": 0.0157,
+      "n_folds": 25
+    },
+    "ensemble": {
+      "mean_macro_f1": 0.9526,
+      "std": 0.0138,
+      "n_folds": 25
+    }
+  },
+  "deceptive_model": {
+    "task": "Among Mathur dark patterns with text: predict Deceptive?=Yes (verified fake) vs No (real pressure, not proven fake)",
+    "n": 1500,
+    "n_yes": 140,
+    "prevalence_yes": 0.0933,
+    "n_groups": 461,
+    "n_countdown_timer": 149,
+    "n_yes_countdown_timer": 93,
+    "excluded": "Deceptive?=Depends (26 rows, all in the Sneaking category) and rows without Pattern String",
+    "model": "TF-IDF (word 1-2g + char_wb 2-5g) + Logistic Regression (C=1, balanced)",
+    "protocol": "StratifiedGroupKFold(5) x 3 seeds; groups = union of website domain and template key",
+    "baseline": "pattern_type_prior: in-fold Yes-rate of the row's Mathur Pattern Type (uses a label the product does not observe)",
+    "grouped_cv": {
+      "auroc": {
+        "mean": 0.8522,
+        "std": 0.0022
+      },
+      "average_precision": {
+        "mean": 0.3535,
+        "std": 0.0068
+      },
+      "precision_at_0.5": {
+        "mean": 0.4204,
+        "std": 0.0047
+      },
+      "recall_at_0.5": {
+        "mean": 0.5714,
+        "std": 0.0058
+      },
+      "f1_at_0.5": {
+        "mean": 0.4844,
+        "std": 0.0018
+      },
+      "pattern_type_prior_auroc": {
+        "mean": 0.8678,
+        "std": 0.0003
+      },
+      "auroc_within_countdown_timer": {
+        "mean": 0.4443,
+        "std": 0.0202
+      },
+      "auroc_excluding_countdown_timer": {
+        "mean": 0.7072,
+        "std": 0.0073
+      }
+    }
+  },
+  "error_analysis": {
+    "deadline_regex": "\\b(ends?|ending|left|hours?|hrs?|minutes?|mins?|today|tonight|tomorrow|limited|time|until|expires?|deadline|sale|offer|days?|week|sunday|monday|tuesday|wednesday|thursday|friday|saturday)\\b|\\d{1,2}\\s*:\\s*\\d{2}",
+    "test_benign_rows": 167,
+    "test_benign_deadline_like_rows": 5,
+    "per_model": {
+      "served_v1": {
+        "benign_fp": 1,
+        "benign_fp_deadline_like": 0,
+        "fp_texts": [
+          "Don't leave without taking discount"
+        ],
+        "deadline_like_fp_texts": []
+      },
+      "ensemble_v2": {
+        "benign_fp": 1,
+        "benign_fp_deadline_like": 0,
+        "fp_texts": [
+          "Don't leave without taking discount"
+        ],
+        "deadline_like_fp_texts": [],
+        "fp_fixed_vs_served_v1": [],
+        "fp_introduced_vs_served_v1": []
+      },
+      "transformer_v1data": {
+        "benign_fp": 5,
+        "benign_fp_deadline_like": 1,
+        "fp_texts": [
+          "Don't leave without taking discount",
+          "STAY IN THE LOOP!",
+          "SUBSCRIPTION SUCCESSFUL. THANK YOU!",
+          "Take time to pay.",
+          "You have no items in your basket."
+        ],
+        "deadline_like_fp_texts": [
+          "Take time to pay."
+        ],
+        "fp_fixed_vs_served_v1": [],
+        "fp_introduced_vs_served_v1": [
+          "STAY IN THE LOOP!",
+          "SUBSCRIPTION SUCCESSFUL. THANK YOU!",
+          "Take time to pay.",
+          "You have no items in your basket."
+        ]
+      },
+      "transformer_v2": {
+        "benign_fp": 7,
+        "benign_fp_deadline_like": 2,
+        "fp_texts": [
+          "Contract free",
+          "Don't leave without taking discount",
+          "Resend One time Pin",
+          "STAY IN THE LOOP!",
+          "Take time to pay.",
+          "This site uses cookies to provide and improve your shopping experience. If you want to benefit from this improved service, please opt-in.",
+          "You have no items in your basket."
+        ],
+        "deadline_like_fp_texts": [
+          "Resend One time Pin",
+          "Take time to pay."
+        ],
+        "fp_fixed_vs_served_v1": [],
+        "fp_introduced_vs_served_v1": [
+          "Contract free",
+          "Resend One time Pin",
+          "STAY IN THE LOOP!",
+          "Take time to pay.",
+          "This site uses cookies to provide and improve your shopping experience. If you want to benefit from this improved service, please opt-in.",
+          "You have no items in your basket."
+        ]
+      }
+    },
+    "probes_note": "User-reported strings. Qualitative probes only: NOT test data, no ground-truth label, not in any metric.",
+    "probes": {
+      "served_v1": [
+        {
+          "text": "@ Time left 11h 01m",
+          "p_dark": 0.9997,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "time"
+          ]
+        },
+        {
+          "text": "FREE SHIPPING FOR A LIMITED PERIOD +",
+          "p_dark": 0.9764,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "limited",
+            "for",
+            "free",
+            "for a"
+          ]
+        },
+        {
+          "text": "Sale ends Sunday 23:59 GMT",
+          "p_dark": 0.9979,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "ends",
+            "sale",
+            "sale ends",
+            "59"
+          ]
+        }
+      ],
+      "ensemble_v2": [
+        {
+          "text": "@ Time left 11h 01m",
+          "p_dark": 0.9996,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "time"
+          ]
+        },
+        {
+          "text": "FREE SHIPPING FOR A LIMITED PERIOD +",
+          "p_dark": 0.9779,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "limited",
+            "for",
+            "free",
+            "for a"
+          ]
+        },
+        {
+          "text": "Sale ends Sunday 23:59 GMT",
+          "p_dark": 0.9975,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "ends",
+            "sale",
+            "sale ends",
+            "59"
+          ]
+        }
+      ],
+      "transformer_v1data": [
+        {
+          "text": "@ Time left 11h 01m",
+          "p_dark": 0.996,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "01m",
+            "Time",
+            "left",
+            "11h"
+          ]
+        },
+        {
+          "text": "FREE SHIPPING FOR A LIMITED PERIOD +",
+          "p_dark": 0.9971,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "LIMITED",
+            "SHIPPING",
+            "PERIOD",
+            "FOR"
+          ]
+        },
+        {
+          "text": "Sale ends Sunday 23:59 GMT",
+          "p_dark": 0.996,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "Sale",
+            "ends"
+          ]
+        }
+      ],
+      "transformer_v2": [
+        {
+          "text": "@ Time left 11h 01m",
+          "p_dark": 0.997,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "01m",
+            "Time",
+            "11h",
+            "left"
+          ]
+        },
+        {
+          "text": "FREE SHIPPING FOR A LIMITED PERIOD +",
+          "p_dark": 0.9963,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "LIMITED",
+            "SHIPPING",
+            "PERIOD",
+            "A"
+          ]
+        },
+        {
+          "text": "Sale ends Sunday 23:59 GMT",
+          "p_dark": 0.9965,
+          "flagged": true,
+          "category_if_flagged": "urgency",
+          "abstained": false,
+          "key_terms": [
+            "Sale",
+            "ends"
+          ]
+        }
+      ]
+    },
+    "deadline_like_benign_texts": [
+      "Resend One time Pin",
+      "Sale By Category",
+      "Sorry, we could not process your request at the moment. Please try again in a few minutes.",
+      "Take time to pay.",
+      "Your first payment will be due on the day of your purchase.*"
+    ]
+  },
+  "runtime_seconds": 1852.7
+}

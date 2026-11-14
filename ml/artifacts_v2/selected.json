@@ -1,0 +1,6 @@
+{
+  "selected_model": "ensemble_v2",
+  "val_macro_f1": 0.9705,
+  "rule": "highest VAL macro-F1 (application decision: calibrated P(dark)>=tau, argmax dark category); TEST not consulted",
+  "created_at": "2026-11-14 11:54:16"
+}

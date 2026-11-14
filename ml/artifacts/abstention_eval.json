@@ -1,0 +1,146 @@
+{
+  "definition": "abstain when the text has no alphabetic word of >= 2 letters (currency codes like Rs/INR/USD do not count)",
+  "threshold_tau": 0.68,
+  "rows_without_words_all_splits": {
+    "benign": 9,
+    "urgency": 1
+  },
+  "rows_without_words_all_splits_examples": [
+    "__________",
+    "*",
+    "___",
+    ".",
+    "Rs INR",
+    "- +",
+    "✕",
+    "",
+    "★ ★ ★ ★ ★",
+    "0:44:56"
+  ],
+  "test_rows_gated": [
+    {
+      "text": "__________",
+      "label": "benign",
+      "p_dark": 0.0039,
+      "was_flagged_before": false
+    },
+    {
+      "text": "*",
+      "label": "benign",
+      "p_dark": 0.0053,
+      "was_flagged_before": false
+    },
+    {
+      "text": ".",
+      "label": "benign",
+      "p_dark": 0.0055,
+      "was_flagged_before": false
+    },
+    {
+      "text": "- +",
+      "label": "benign",
+      "p_dark": 0.0052,
+      "was_flagged_before": false
+    },
+    {
+      "text": "✕",
+      "label": "benign",
+      "p_dark": 0.0049,
+      "was_flagged_before": false
+    },
+    {
+      "text": "",
+      "label": "benign",
+      "p_dark": 0.005,
+      "was_flagged_before": false
+    },
+    {
+      "text": "★ ★ ★ ★ ★",
+      "label": "benign",
+      "p_dark": 0.0049,
+      "was_flagged_before": false
+    }
+  ],
+  "test_without_gate": {
+    "macro_f1": 0.8823,
+    "dark_vs_benign_precision": 0.9932,
+    "dark_vs_benign_recall": 0.9074,
+    "dark_vs_benign_f1": 0.9484,
+    "benign_false_positives": 1,
+    "missed_dark": 15
+  },
+  "test_with_gate": {
+    "macro_f1": 0.8823,
+    "dark_vs_benign_precision": 0.9932,
+    "dark_vs_benign_recall": 0.9074,
+    "dark_vs_benign_f1": 0.9484,
+    "benign_false_positives": 1,
+    "missed_dark": 15
+  },
+  "probes": [
+    {
+      "text": "₹ 3,950.00",
+      "p_dark": 0.8068,
+      "category": "urgency",
+      "abstained": true,
+      "flagged_now": false
+    },
+    {
+      "text": "₹ 2,990.00 ₹ 3,950.00",
+      "p_dark": 0.9474,
+      "category": "urgency",
+      "abstained": true,
+      "flagged_now": false
+    },
+    {
+      "text": "£3.950.00 £39500 +2.980.00 +2.95000 +395000 +3:950.00",
+      "p_dark": 0.9305,
+      "category": "urgency",
+      "abstained": true,
+      "flagged_now": false
+    },
+    {
+      "text": "$49.99",
+      "p_dark": 0.8512,
+      "category": "misdirection",
+      "abstained": true,
+      "flagged_now": false
+    },
+    {
+      "text": "4.6 (12,842 reviews)",
+      "p_dark": 0.4015,
+      "category": "social_proof",
+      "abstained": false,
+      "flagged_now": false
+    },
+    {
+      "text": "00:12:47",
+      "p_dark": 0.9858,
+      "category": "urgency",
+      "abstained": true,
+      "flagged_now": false
+    },
+    {
+      "text": "OFFER ENDS 00:54:59",
+      "p_dark": 1.0,
+      "category": "urgency",
+      "abstained": false,
+      "flagged_now": true
+    },
+    {
+      "text": "1 day 08:15:25",
+      "p_dark": 0.9274,
+      "category": "urgency",
+      "abstained": false,
+      "flagged_now": true
+    },
+    {
+      "text": "62% OFF",
+      "p_dark": 0.6498,
+      "category": "urgency",
+      "abstained": false,
+      "flagged_now": false
+    }
+  ],
+  "note": "The original evaluation (metrics.json) is unchanged; this file reports the effect of the post-hoc gate."
+}

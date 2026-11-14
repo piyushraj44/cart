@@ -1,0 +1,5186 @@
+{
+  "description": "Second OCR engine (EasyOCR) vs Tesseract v4_psm3 on the ContextRico-DP DEV/TEST split of ml/eval_screenshots.py, with the current text model and the same image-level decision rule. Operating points are picked on DEV only; TEST is reported.",
+  "provenance": {
+    "easyocr": {
+      "version": "1.7.2",
+      "license": "Apache License 2.0",
+      "source": "https://github.com/JaidedAI/EasyOCR (pip: easyocr)",
+      "weights": {
+        "craft_mlt_25k.pth": {
+          "role": "CRAFT text detector (Clova AI, MIT-licensed code/model, redistributed by EasyOCR)",
+          "bytes": 83152330,
+          "sha256": "4a5efbfb48b4081100544e75e1e2b57f8de3d84f213004b14b85fd4b3748db17"
+        },
+        "english_g2.pth": {
+          "role": "EasyOCR English recogniser (generation 2, CRNN)",
+          "bytes": 15143997,
+          "sha256": "e2272681d9d67a04e2dff396b6e95077bc19001f8f6d3593c307b9852e1c29e8"
+        }
+      },
+      "cache_path": "~/.EasyOCR/model/ (downloaded on first Reader construction)",
+      "added_dependencies": {
+        "torchvision": "0.29.2",
+        "opencv-python-headless": "5.0.0.93",
+        "scikit-image": "0.26.0",
+        "pyclipper": "1.4.0",
+        "python-bidi": "0.6.12",
+        "shapely": "2.2.0",
+        "ninja": "1.13.2",
+        "imageio": "2.38.1",
+        "tifffile": "2026.11.12",
+        "lazy-loader": "0.6"
+      },
+      "unchanged": {
+        "torch": "2.15.0",
+        "numpy": "2.5.4"
+      }
+    },
+    "tesseract": "pytesseract + system Tesseract (unchanged); OCR cache from ml/eval_screenshots.py (v4_psm3)"
+  },
+  "dataset": {
+    "name": "ContextRico-DP",
+    "license": "CC-BY-4.0",
+    "split_sizes": {
+      "dev": {
+        "positives": 42,
+        "negatives": 125,
+        "urgency": 29,
+        "scarcity": 12,
+        "social_proof": 6
+      },
+      "test": {
+        "positives": 41,
+        "negatives": 125,
+        "urgency": 30,
+        "scarcity": 12,
+        "social_proof": 5
+      }
+    },
+    "negatives_note": "Negatives are ContextRico images with NO text-observable label. They are still dark-pattern UIs of visual types (Hard to Close, Nagging, Default Choice, False Hierarchy, ...) and some may contain unlabelled urgency/scarcity/social-proof or confirmshaming text, so the 'flag rate on negatives' (and hence image-level false positives / precision) is an UPPER bound on true false alarms."
+  },
+  "split": "reused from ml/eval_screenshots.build_eval_set (identical DEV/TEST images)",
+  "decision_rule": "ml/eval_screenshots.metrics: image flagged if any candidate has p_dark >= tau",
+  "selection_rule": "On DEV only, evaluate every (config, tau) with tau in {text-model threshold} U {0.3..0.9 step 0.05}. Admissible points have negative-image flag rate <= 0.15. Choose the admissible point with the highest image-level F1; points within 0.01 F1 of the best are tied and broken by higher category-correct recall, then by the text model's own threshold, then by lower OCR s/image. If an admissible point at the text model's own threshold is within 0.02 F1 of the best, it is preferred (no OCR-specific threshold unless it clearly helps). If no point is admissible, the lowest neg flag rate wins.",
+  "engines": {
+    "tesseract": {
+      "engine": "tesseract",
+      "upscale": true,
+      "merge_blocks": true,
+      "psm": 3
+    },
+    "easyocr": {
+      "engine": "easyocr",
+      "lang": [
+        "en"
+      ],
+      "merge_blocks": true,
+      "canvas_size": 2560,
+      "mag_ratio": 1.0
+    },
+    "union": {
+      "engine": "union",
+      "iou": 0.5,
+      "containment": 0.8
+    }
+  },
+  "eval_device_easyocr": "mps",
+  "text_model_threshold": 0.68,
+  "dev": {
+    "metrics": {
+      "tesseract": {
+        "0.68": {
+          "tau": 0.68,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.881,
+          "detection_recall_ci95": [
+            0.75,
+            0.9481
+          ],
+          "tp": 37,
+          "category_correct_recall": 0.881,
+          "category_correct_recall_ci95": [
+            0.75,
+            0.9481
+          ],
+          "category_correct_hits": 37,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8621,
+              "hit": 25,
+              "n": 29,
+              "ci95": [
+                0.6944,
+                0.945
+              ]
+            },
+            "scarcity": {
+              "recall": 0.8333,
+              "hit": 10,
+              "n": 12,
+              "ci95": [
+                0.552,
+                0.953
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.392,
+          "neg_flag_rate_ci95": [
+            0.3109,
+            0.4796
+          ],
+          "fp": 49,
+          "neg_flagged_by_category": {
+            "urgency": 42,
+            "scarcity": 0,
+            "social_proof": 10,
+            "misdirection": 12
+          },
+          "precision": 0.4302,
+          "f1": 0.5781,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        "0.9": {
+          "tau": 0.9,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.8333,
+          "detection_recall_ci95": [
+            0.694,
+            0.9168
+          ],
+          "tp": 35,
+          "category_correct_recall": 0.8333,
+          "category_correct_recall_ci95": [
+            0.694,
+            0.9168
+          ],
+          "category_correct_hits": 35,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8276,
+              "hit": 24,
+              "n": 29,
+              "ci95": [
+                0.6545,
+                0.924
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.136,
+          "neg_flag_rate_ci95": [
+            0.0867,
+            0.207
+          ],
+          "fp": 17,
+          "neg_flagged_by_category": {
+            "urgency": 10,
+            "scarcity": 0,
+            "social_proof": 2,
+            "misdirection": 5
+          },
+          "precision": 0.6731,
+          "f1": 0.7447,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        }
+      },
+      "easyocr": {
+        "0.68": {
+          "tau": 0.68,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.464,
+          "neg_flag_rate_ci95": [
+            0.379,
+            0.5512
+          ],
+          "fp": 58,
+          "neg_flagged_by_category": {
+            "urgency": 45,
+            "scarcity": 2,
+            "social_proof": 11,
+            "misdirection": 14
+          },
+          "precision": 0.4082,
+          "f1": 0.5714,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        "0.9": {
+          "tau": 0.9,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.176,
+          "neg_flag_rate_ci95": [
+            0.1192,
+            0.2521
+          ],
+          "fp": 22,
+          "neg_flagged_by_category": {
+            "urgency": 13,
+            "scarcity": 0,
+            "social_proof": 1,
+            "misdirection": 9
+          },
+          "precision": 0.6452,
+          "f1": 0.7692,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        }
+      },
+      "union": {
+        "0.68": {
+          "tau": 0.68,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9762,
+          "category_correct_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "category_correct_hits": 41,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.9655,
+              "hit": 28,
+              "n": 29,
+              "ci95": [
+                0.8282,
+                0.9939
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.512,
+          "neg_flag_rate_ci95": [
+            0.4253,
+            0.598
+          ],
+          "fp": 64,
+          "neg_flagged_by_category": {
+            "urgency": 54,
+            "scarcity": 1,
+            "social_proof": 14,
+            "misdirection": 16
+          },
+          "precision": 0.3905,
+          "f1": 0.5578,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        "0.9": {
+          "tau": 0.9,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9286,
+          "detection_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "tp": 39,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.184,
+          "neg_flag_rate_ci95": [
+            0.1259,
+            0.261
+          ],
+          "fp": 23,
+          "neg_flagged_by_category": {
+            "urgency": 14,
+            "scarcity": 0,
+            "social_proof": 2,
+            "misdirection": 8
+          },
+          "precision": 0.629,
+          "f1": 0.75,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        }
+      }
+    },
+    "threshold_sweep": {
+      "tesseract": [
+        {
+          "tau": 0.3,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.768,
+          "neg_flag_rate_ci95": [
+            0.6867,
+            0.8333
+          ],
+          "fp": 96,
+          "neg_flagged_by_category": {
+            "urgency": 76,
+            "scarcity": 6,
+            "social_proof": 42,
+            "misdirection": 25
+          },
+          "precision": 0.3043,
+          "f1": 0.4667,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.35,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.72,
+          "neg_flag_rate_ci95": [
+            0.6356,
+            0.7912
+          ],
+          "fp": 90,
+          "neg_flagged_by_category": {
+            "urgency": 73,
+            "scarcity": 5,
+            "social_proof": 37,
+            "misdirection": 19
+          },
+          "precision": 0.3182,
+          "f1": 0.4828,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.4,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.64,
+          "neg_flag_rate_ci95": [
+            0.5528,
+            0.7188
+          ],
+          "fp": 80,
+          "neg_flagged_by_category": {
+            "urgency": 67,
+            "scarcity": 3,
+            "social_proof": 32,
+            "misdirection": 17
+          },
+          "precision": 0.3443,
+          "f1": 0.5122,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.45,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.584,
+          "neg_flag_rate_ci95": [
+            0.4963,
+            0.6666
+          ],
+          "fp": 73,
+          "neg_flagged_by_category": {
+            "urgency": 62,
+            "scarcity": 3,
+            "social_proof": 25,
+            "misdirection": 15
+          },
+          "precision": 0.3652,
+          "f1": 0.535,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.5,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.544,
+          "neg_flag_rate_ci95": [
+            0.4567,
+            0.6287
+          ],
+          "fp": 68,
+          "neg_flagged_by_category": {
+            "urgency": 59,
+            "scarcity": 2,
+            "social_proof": 18,
+            "misdirection": 14
+          },
+          "precision": 0.3818,
+          "f1": 0.5526,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.55,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.8333,
+              "hit": 10,
+              "n": 12,
+              "ci95": [
+                0.552,
+                0.953
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.464,
+          "neg_flag_rate_ci95": [
+            0.379,
+            0.5512
+          ],
+          "fp": 58,
+          "neg_flagged_by_category": {
+            "urgency": 51,
+            "scarcity": 1,
+            "social_proof": 14,
+            "misdirection": 14
+          },
+          "precision": 0.42,
+          "f1": 0.5915,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.6,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9048,
+          "category_correct_recall_ci95": [
+            0.7793,
+            0.9623
+          ],
+          "category_correct_hits": 38,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.8333,
+              "hit": 10,
+              "n": 12,
+              "ci95": [
+                0.552,
+                0.953
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.424,
+          "neg_flag_rate_ci95": [
+            0.3409,
+            0.5116
+          ],
+          "fp": 53,
+          "neg_flagged_by_category": {
+            "urgency": 45,
+            "scarcity": 0,
+            "social_proof": 12,
+            "misdirection": 14
+          },
+          "precision": 0.4362,
+          "f1": 0.6029,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.65,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9048,
+          "category_correct_recall_ci95": [
+            0.7793,
+            0.9623
+          ],
+          "category_correct_hits": 38,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.8333,
+              "hit": 10,
+              "n": 12,
+              "ci95": [
+                0.552,
+                0.953
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.392,
+          "neg_flag_rate_ci95": [
+            0.3109,
+            0.4796
+          ],
+          "fp": 49,
+          "neg_flagged_by_category": {
+            "urgency": 42,
+            "scarcity": 0,
+            "social_proof": 10,
+            "misdirection": 12
+          },
+          "precision": 0.4494,
+          "f1": 0.6107,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.7,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.881,
+          "detection_recall_ci95": [
+            0.75,
+            0.9481
+          ],
+          "tp": 37,
+          "category_correct_recall": 0.8571,
+          "category_correct_recall_ci95": [
+            0.7216,
+            0.9328
+          ],
+          "category_correct_hits": 36,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8621,
+              "hit": 25,
+              "n": 29,
+              "ci95": [
+                0.6944,
+                0.945
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.392,
+          "neg_flag_rate_ci95": [
+            0.3109,
+            0.4796
+          ],
+          "fp": 49,
+          "neg_flagged_by_category": {
+            "urgency": 41,
+            "scarcity": 0,
+            "social_proof": 9,
+            "misdirection": 12
+          },
+          "precision": 0.4302,
+          "f1": 0.5781,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.75,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.8571,
+          "detection_recall_ci95": [
+            0.7216,
+            0.9328
+          ],
+          "tp": 36,
+          "category_correct_recall": 0.8571,
+          "category_correct_recall_ci95": [
+            0.7216,
+            0.9328
+          ],
+          "category_correct_hits": 36,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8621,
+              "hit": 25,
+              "n": 29,
+              "ci95": [
+                0.6944,
+                0.945
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.384,
+          "neg_flag_rate_ci95": [
+            0.3034,
+            0.4715
+          ],
+          "fp": 48,
+          "neg_flagged_by_category": {
+            "urgency": 40,
+            "scarcity": 0,
+            "social_proof": 8,
+            "misdirection": 11
+          },
+          "precision": 0.4286,
+          "f1": 0.5714,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.8,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.8571,
+          "detection_recall_ci95": [
+            0.7216,
+            0.9328
+          ],
+          "tp": 36,
+          "category_correct_recall": 0.8571,
+          "category_correct_recall_ci95": [
+            0.7216,
+            0.9328
+          ],
+          "category_correct_hits": 36,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8621,
+              "hit": 25,
+              "n": 29,
+              "ci95": [
+                0.6944,
+                0.945
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.32,
+          "neg_flag_rate_ci95": [
+            0.2446,
+            0.4061
+          ],
+          "fp": 40,
+          "neg_flagged_by_category": {
+            "urgency": 30,
+            "scarcity": 0,
+            "social_proof": 6,
+            "misdirection": 10
+          },
+          "precision": 0.4737,
+          "f1": 0.6102,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.85,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.8333,
+          "detection_recall_ci95": [
+            0.694,
+            0.9168
+          ],
+          "tp": 35,
+          "category_correct_recall": 0.8333,
+          "category_correct_recall_ci95": [
+            0.694,
+            0.9168
+          ],
+          "category_correct_hits": 35,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8276,
+              "hit": 24,
+              "n": 29,
+              "ci95": [
+                0.6545,
+                0.924
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.248,
+          "neg_flag_rate_ci95": [
+            0.1806,
+            0.3305
+          ],
+          "fp": 31,
+          "neg_flagged_by_category": {
+            "urgency": 22,
+            "scarcity": 0,
+            "social_proof": 4,
+            "misdirection": 8
+          },
+          "precision": 0.5303,
+          "f1": 0.6481,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        },
+        {
+          "tau": 0.9,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.8333,
+          "detection_recall_ci95": [
+            0.694,
+            0.9168
+          ],
+          "tp": 35,
+          "category_correct_recall": 0.8333,
+          "category_correct_recall_ci95": [
+            0.694,
+            0.9168
+          ],
+          "category_correct_hits": 35,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8276,
+              "hit": 24,
+              "n": 29,
+              "ci95": [
+                0.6545,
+                0.924
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.136,
+          "neg_flag_rate_ci95": [
+            0.0867,
+            0.207
+          ],
+          "fp": 17,
+          "neg_flagged_by_category": {
+            "urgency": 10,
+            "scarcity": 0,
+            "social_proof": 2,
+            "misdirection": 5
+          },
+          "precision": 0.6731,
+          "f1": 0.7447,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92,
+          "images_with_no_ocr_text": 4
+        }
+      ],
+      "easyocr": [
+        {
+          "tau": 0.3,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.744,
+          "neg_flag_rate_ci95": [
+            0.661,
+            0.8124
+          ],
+          "fp": 93,
+          "neg_flagged_by_category": {
+            "urgency": 67,
+            "scarcity": 9,
+            "social_proof": 40,
+            "misdirection": 31
+          },
+          "precision": 0.3111,
+          "f1": 0.4746,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.35,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.72,
+          "neg_flag_rate_ci95": [
+            0.6356,
+            0.7912
+          ],
+          "fp": 90,
+          "neg_flagged_by_category": {
+            "urgency": 64,
+            "scarcity": 8,
+            "social_proof": 36,
+            "misdirection": 28
+          },
+          "precision": 0.3182,
+          "f1": 0.4828,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.4,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.68,
+          "neg_flag_rate_ci95": [
+            0.5939,
+            0.7554
+          ],
+          "fp": 85,
+          "neg_flagged_by_category": {
+            "urgency": 63,
+            "scarcity": 6,
+            "social_proof": 32,
+            "misdirection": 24
+          },
+          "precision": 0.3307,
+          "f1": 0.497,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.45,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.616,
+          "neg_flag_rate_ci95": [
+            0.5285,
+            0.6966
+          ],
+          "fp": 77,
+          "neg_flagged_by_category": {
+            "urgency": 57,
+            "scarcity": 5,
+            "social_proof": 28,
+            "misdirection": 22
+          },
+          "precision": 0.3529,
+          "f1": 0.5217,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.5,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9762,
+          "category_correct_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "category_correct_hits": 41,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.9655,
+              "hit": 28,
+              "n": 29,
+              "ci95": [
+                0.8282,
+                0.9939
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.584,
+          "neg_flag_rate_ci95": [
+            0.4963,
+            0.6666
+          ],
+          "fp": 73,
+          "neg_flagged_by_category": {
+            "urgency": 53,
+            "scarcity": 5,
+            "social_proof": 23,
+            "misdirection": 22
+          },
+          "precision": 0.3596,
+          "f1": 0.5256,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.55,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9762,
+          "category_correct_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "category_correct_hits": 41,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.9655,
+              "hit": 28,
+              "n": 29,
+              "ci95": [
+                0.8282,
+                0.9939
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.544,
+          "neg_flag_rate_ci95": [
+            0.4567,
+            0.6287
+          ],
+          "fp": 68,
+          "neg_flagged_by_category": {
+            "urgency": 51,
+            "scarcity": 3,
+            "social_proof": 17,
+            "misdirection": 22
+          },
+          "precision": 0.3761,
+          "f1": 0.543,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.6,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.512,
+          "neg_flag_rate_ci95": [
+            0.4253,
+            0.598
+          ],
+          "fp": 64,
+          "neg_flagged_by_category": {
+            "urgency": 49,
+            "scarcity": 3,
+            "social_proof": 14,
+            "misdirection": 20
+          },
+          "precision": 0.3846,
+          "f1": 0.5479,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.65,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.488,
+          "neg_flag_rate_ci95": [
+            0.402,
+            0.5747
+          ],
+          "fp": 61,
+          "neg_flagged_by_category": {
+            "urgency": 46,
+            "scarcity": 3,
+            "social_proof": 11,
+            "misdirection": 17
+          },
+          "precision": 0.396,
+          "f1": 0.5594,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.7,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.464,
+          "neg_flag_rate_ci95": [
+            0.379,
+            0.5512
+          ],
+          "fp": 58,
+          "neg_flagged_by_category": {
+            "urgency": 45,
+            "scarcity": 2,
+            "social_proof": 11,
+            "misdirection": 13
+          },
+          "precision": 0.4082,
+          "f1": 0.5714,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.75,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.44,
+          "neg_flag_rate_ci95": [
+            0.3561,
+            0.5275
+          ],
+          "fp": 55,
+          "neg_flagged_by_category": {
+            "urgency": 43,
+            "scarcity": 2,
+            "social_proof": 7,
+            "misdirection": 12
+          },
+          "precision": 0.4211,
+          "f1": 0.5839,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.8,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.328,
+          "neg_flag_rate_ci95": [
+            0.2519,
+            0.4144
+          ],
+          "fp": 41,
+          "neg_flagged_by_category": {
+            "urgency": 29,
+            "scarcity": 1,
+            "social_proof": 6,
+            "misdirection": 11
+          },
+          "precision": 0.4938,
+          "f1": 0.6504,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.85,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.256,
+          "neg_flag_rate_ci95": [
+            0.1876,
+            0.339
+          ],
+          "fp": 32,
+          "neg_flagged_by_category": {
+            "urgency": 20,
+            "scarcity": 1,
+            "social_proof": 3,
+            "misdirection": 9
+          },
+          "precision": 0.5556,
+          "f1": 0.7018,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.9,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.176,
+          "neg_flag_rate_ci95": [
+            0.1192,
+            0.2521
+          ],
+          "fp": 22,
+          "neg_flagged_by_category": {
+            "urgency": 13,
+            "scarcity": 0,
+            "social_proof": 1,
+            "misdirection": 9
+          },
+          "precision": 0.6452,
+          "f1": 0.7692,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02,
+          "images_with_no_ocr_text": 0
+        }
+      ],
+      "union": [
+        {
+          "tau": 0.3,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.872,
+          "neg_flag_rate_ci95": [
+            0.8022,
+            0.9197
+          ],
+          "fp": 109,
+          "neg_flagged_by_category": {
+            "urgency": 89,
+            "scarcity": 8,
+            "social_proof": 53,
+            "misdirection": 36
+          },
+          "precision": 0.2781,
+          "f1": 0.4352,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.35,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.832,
+          "neg_flag_rate_ci95": [
+            0.7568,
+            0.8874
+          ],
+          "fp": 104,
+          "neg_flagged_by_category": {
+            "urgency": 85,
+            "scarcity": 6,
+            "social_proof": 46,
+            "misdirection": 29
+          },
+          "precision": 0.2877,
+          "f1": 0.4468,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.4,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.76,
+          "neg_flag_rate_ci95": [
+            0.6781,
+            0.8264
+          ],
+          "fp": 95,
+          "neg_flagged_by_category": {
+            "urgency": 80,
+            "scarcity": 4,
+            "social_proof": 39,
+            "misdirection": 26
+          },
+          "precision": 0.3066,
+          "f1": 0.4693,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.45,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.72,
+          "neg_flag_rate_ci95": [
+            0.6356,
+            0.7912
+          ],
+          "fp": 90,
+          "neg_flagged_by_category": {
+            "urgency": 75,
+            "scarcity": 4,
+            "social_proof": 32,
+            "misdirection": 25
+          },
+          "precision": 0.3182,
+          "f1": 0.4828,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.5,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 1.0,
+              "hit": 12,
+              "n": 12,
+              "ci95": [
+                0.7575,
+                1.0
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.688,
+          "neg_flag_rate_ci95": [
+            0.6022,
+            0.7626
+          ],
+          "fp": 86,
+          "neg_flagged_by_category": {
+            "urgency": 71,
+            "scarcity": 3,
+            "social_proof": 25,
+            "misdirection": 24
+          },
+          "precision": 0.3281,
+          "f1": 0.4941,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.55,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.624,
+          "neg_flag_rate_ci95": [
+            0.5366,
+            0.704
+          ],
+          "fp": 78,
+          "neg_flagged_by_category": {
+            "urgency": 64,
+            "scarcity": 2,
+            "social_proof": 21,
+            "misdirection": 24
+          },
+          "precision": 0.35,
+          "f1": 0.5185,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.6,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.576,
+          "neg_flag_rate_ci95": [
+            0.4884,
+            0.6591
+          ],
+          "fp": 72,
+          "neg_flagged_by_category": {
+            "urgency": 58,
+            "scarcity": 1,
+            "social_proof": 18,
+            "misdirection": 23
+          },
+          "precision": 0.3684,
+          "f1": 0.5385,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.65,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 1.0,
+          "detection_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "tp": 42,
+          "category_correct_recall": 1.0,
+          "category_correct_recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "category_correct_hits": 42,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 1.0,
+              "hit": 29,
+              "n": 29,
+              "ci95": [
+                0.883,
+                1.0
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.528,
+          "neg_flag_rate_ci95": [
+            0.441,
+            0.6134
+          ],
+          "fp": 66,
+          "neg_flagged_by_category": {
+            "urgency": 55,
+            "scarcity": 1,
+            "social_proof": 14,
+            "misdirection": 19
+          },
+          "precision": 0.3889,
+          "f1": 0.56,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.7,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9762,
+          "category_correct_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "category_correct_hits": 41,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.9655,
+              "hit": 28,
+              "n": 29,
+              "ci95": [
+                0.8282,
+                0.9939
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 6,
+              "n": 6,
+              "ci95": [
+                0.6097,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.504,
+          "neg_flag_rate_ci95": [
+            0.4175,
+            0.5902
+          ],
+          "fp": 63,
+          "neg_flagged_by_category": {
+            "urgency": 53,
+            "scarcity": 1,
+            "social_proof": 13,
+            "misdirection": 15
+          },
+          "precision": 0.3942,
+          "f1": 0.5616,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.75,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9762,
+          "category_correct_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "category_correct_hits": 41,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.9655,
+              "hit": 28,
+              "n": 29,
+              "ci95": [
+                0.8282,
+                0.9939
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.496,
+          "neg_flag_rate_ci95": [
+            0.4098,
+            0.5825
+          ],
+          "fp": 62,
+          "neg_flagged_by_category": {
+            "urgency": 53,
+            "scarcity": 1,
+            "social_proof": 11,
+            "misdirection": 14
+          },
+          "precision": 0.3981,
+          "f1": 0.5655,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.8,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9762,
+          "detection_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "tp": 41,
+          "category_correct_recall": 0.9762,
+          "category_correct_recall_ci95": [
+            0.8768,
+            0.9958
+          ],
+          "category_correct_hits": 41,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.9655,
+              "hit": 28,
+              "n": 29,
+              "ci95": [
+                0.8282,
+                0.9939
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.416,
+          "neg_flag_rate_ci95": [
+            0.3334,
+            0.5037
+          ],
+          "fp": 52,
+          "neg_flagged_by_category": {
+            "urgency": 40,
+            "scarcity": 1,
+            "social_proof": 9,
+            "misdirection": 13
+          },
+          "precision": 0.4409,
+          "f1": 0.6074,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.85,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9524,
+          "detection_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "tp": 40,
+          "category_correct_recall": 0.9524,
+          "category_correct_recall_ci95": [
+            0.8421,
+            0.9868
+          ],
+          "category_correct_hits": 40,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.931,
+              "hit": 27,
+              "n": 29,
+              "ci95": [
+                0.7804,
+                0.9809
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.328,
+          "neg_flag_rate_ci95": [
+            0.2519,
+            0.4144
+          ],
+          "fp": 41,
+          "neg_flagged_by_category": {
+            "urgency": 29,
+            "scarcity": 1,
+            "social_proof": 5,
+            "misdirection": 11
+          },
+          "precision": 0.4938,
+          "f1": 0.6504,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        },
+        {
+          "tau": 0.9,
+          "n_pos": 42,
+          "n_neg": 125,
+          "detection_recall": 0.9286,
+          "detection_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "tp": 39,
+          "category_correct_recall": 0.9286,
+          "category_correct_recall_ci95": [
+            0.8099,
+            0.9754
+          ],
+          "category_correct_hits": 39,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8966,
+              "hit": 26,
+              "n": 29,
+              "ci95": [
+                0.7361,
+                0.9642
+              ]
+            },
+            "scarcity": {
+              "recall": 0.9167,
+              "hit": 11,
+              "n": 12,
+              "ci95": [
+                0.6461,
+                0.9851
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8333,
+              "hit": 5,
+              "n": 6,
+              "ci95": [
+                0.4365,
+                0.9699
+              ]
+            }
+          },
+          "neg_flag_rate": 0.184,
+          "neg_flag_rate_ci95": [
+            0.1259,
+            0.261
+          ],
+          "fp": 23,
+          "neg_flagged_by_category": {
+            "urgency": 14,
+            "scarcity": 0,
+            "social_proof": 2,
+            "misdirection": 8
+          },
+          "precision": 0.629,
+          "f1": 0.75,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56,
+          "images_with_no_ocr_text": 0
+        }
+      ]
+    }
+  },
+  "dev_picks_per_engine": {
+    "tesseract": {
+      "config": "tesseract",
+      "params": {
+        "engine": "tesseract",
+        "upscale": true,
+        "merge_blocks": true,
+        "psm": 3
+      },
+      "tau": 0.9,
+      "tau_is_default": false,
+      "dev_point": {
+        "tau": 0.9,
+        "n_pos": 42,
+        "n_neg": 125,
+        "detection_recall": 0.8333,
+        "detection_recall_ci95": [
+          0.694,
+          0.9168
+        ],
+        "tp": 35,
+        "category_correct_recall": 0.8333,
+        "category_correct_recall_ci95": [
+          0.694,
+          0.9168
+        ],
+        "category_correct_hits": 35,
+        "per_category_recall": {
+          "urgency": {
+            "recall": 0.8276,
+            "hit": 24,
+            "n": 29,
+            "ci95": [
+              0.6545,
+              0.924
+            ]
+          },
+          "scarcity": {
+            "recall": 0.75,
+            "hit": 9,
+            "n": 12,
+            "ci95": [
+              0.4677,
+              0.9111
+            ]
+          },
+          "social_proof": {
+            "recall": 0.8333,
+            "hit": 5,
+            "n": 6,
+            "ci95": [
+              0.4365,
+              0.9699
+            ]
+          }
+        },
+        "neg_flag_rate": 0.136,
+        "neg_flag_rate_ci95": [
+          0.0867,
+          0.207
+        ],
+        "fp": 17,
+        "neg_flagged_by_category": {
+          "urgency": 10,
+          "scarcity": 0,
+          "social_proof": 2,
+          "misdirection": 5
+        },
+        "precision": 0.6731,
+        "f1": 0.7447,
+        "auroc_max_p_dark": 0.9147,
+        "mean_ocr_seconds_per_image": 0.762,
+        "mean_candidates_per_image": 14.92,
+        "images_with_no_ocr_text": 4
+      },
+      "reason": "1 of 14 DEV (config, tau) points meet neg flag rate <= 0.15; best admissible F1 0.7447. Chosen tesseract@0.9: F1 0.7447, cat-correct recall 0.8333, neg flag rate 0.136. Tie set: ['tesseract@0.9']. No admissible point at the text model's threshold.",
+      "admissible_ranking": [
+        {
+          "config": "tesseract",
+          "tau": 0.9,
+          "f1": 0.7447,
+          "neg_flag_rate": 0.136,
+          "category_correct_recall": 0.8333
+        }
+      ]
+    },
+    "easyocr": {
+      "config": "easyocr",
+      "params": {
+        "engine": "easyocr",
+        "lang": [
+          "en"
+        ],
+        "merge_blocks": true,
+        "canvas_size": 2560,
+        "mag_ratio": 1.0
+      },
+      "tau": 0.9,
+      "tau_is_default": false,
+      "dev_point": {
+        "tau": 0.9,
+        "n_pos": 42,
+        "n_neg": 125,
+        "detection_recall": 0.9524,
+        "detection_recall_ci95": [
+          0.8421,
+          0.9868
+        ],
+        "tp": 40,
+        "category_correct_recall": 0.9286,
+        "category_correct_recall_ci95": [
+          0.8099,
+          0.9754
+        ],
+        "category_correct_hits": 39,
+        "per_category_recall": {
+          "urgency": {
+            "recall": 0.8966,
+            "hit": 26,
+            "n": 29,
+            "ci95": [
+              0.7361,
+              0.9642
+            ]
+          },
+          "scarcity": {
+            "recall": 0.9167,
+            "hit": 11,
+            "n": 12,
+            "ci95": [
+              0.6461,
+              0.9851
+            ]
+          },
+          "social_proof": {
+            "recall": 0.8333,
+            "hit": 5,
+            "n": 6,
+            "ci95": [
+              0.4365,
+              0.9699
+            ]
+          }
+        },
+        "neg_flag_rate": 0.176,
+        "neg_flag_rate_ci95": [
+          0.1192,
+          0.2521
+        ],
+        "fp": 22,
+        "neg_flagged_by_category": {
+          "urgency": 13,
+          "scarcity": 0,
+          "social_proof": 1,
+          "misdirection": 9
+        },
+        "precision": 0.6452,
+        "f1": 0.7692,
+        "auroc_max_p_dark": 0.9331,
+        "mean_ocr_seconds_per_image": 1.015,
+        "mean_candidates_per_image": 27.02,
+        "images_with_no_ocr_text": 0
+      },
+      "reason": "no point meets neg flag rate <= 0.15; lowest neg rate chosen"
+    },
+    "union": {
+      "config": "union",
+      "params": {
+        "engine": "union",
+        "iou": 0.5,
+        "containment": 0.8
+      },
+      "tau": 0.9,
+      "tau_is_default": false,
+      "dev_point": {
+        "tau": 0.9,
+        "n_pos": 42,
+        "n_neg": 125,
+        "detection_recall": 0.9286,
+        "detection_recall_ci95": [
+          0.8099,
+          0.9754
+        ],
+        "tp": 39,
+        "category_correct_recall": 0.9286,
+        "category_correct_recall_ci95": [
+          0.8099,
+          0.9754
+        ],
+        "category_correct_hits": 39,
+        "per_category_recall": {
+          "urgency": {
+            "recall": 0.8966,
+            "hit": 26,
+            "n": 29,
+            "ci95": [
+              0.7361,
+              0.9642
+            ]
+          },
+          "scarcity": {
+            "recall": 0.9167,
+            "hit": 11,
+            "n": 12,
+            "ci95": [
+              0.6461,
+              0.9851
+            ]
+          },
+          "social_proof": {
+            "recall": 0.8333,
+            "hit": 5,
+            "n": 6,
+            "ci95": [
+              0.4365,
+              0.9699
+            ]
+          }
+        },
+        "neg_flag_rate": 0.184,
+        "neg_flag_rate_ci95": [
+          0.1259,
+          0.261
+        ],
+        "fp": 23,
+        "neg_flagged_by_category": {
+          "urgency": 14,
+          "scarcity": 0,
+          "social_proof": 2,
+          "misdirection": 8
+        },
+        "precision": 0.629,
+        "f1": 0.75,
+        "auroc_max_p_dark": 0.9335,
+        "mean_ocr_seconds_per_image": 1.777,
+        "mean_candidates_per_image": 26.56,
+        "images_with_no_ocr_text": 0
+      },
+      "reason": "no point meets neg flag rate <= 0.15; lowest neg rate chosen"
+    }
+  },
+  "dev_pick_joint_across_engines": {
+    "config": "tesseract",
+    "params": {
+      "engine": "tesseract",
+      "upscale": true,
+      "merge_blocks": true,
+      "psm": 3
+    },
+    "tau": 0.9,
+    "tau_is_default": false,
+    "dev_point": {
+      "tau": 0.9,
+      "n_pos": 42,
+      "n_neg": 125,
+      "detection_recall": 0.8333,
+      "detection_recall_ci95": [
+        0.694,
+        0.9168
+      ],
+      "tp": 35,
+      "category_correct_recall": 0.8333,
+      "category_correct_recall_ci95": [
+        0.694,
+        0.9168
+      ],
+      "category_correct_hits": 35,
+      "per_category_recall": {
+        "urgency": {
+          "recall": 0.8276,
+          "hit": 24,
+          "n": 29,
+          "ci95": [
+            0.6545,
+            0.924
+          ]
+        },
+        "scarcity": {
+          "recall": 0.75,
+          "hit": 9,
+          "n": 12,
+          "ci95": [
+            0.4677,
+            0.9111
+          ]
+        },
+        "social_proof": {
+          "recall": 0.8333,
+          "hit": 5,
+          "n": 6,
+          "ci95": [
+            0.4365,
+            0.9699
+          ]
+        }
+      },
+      "neg_flag_rate": 0.136,
+      "neg_flag_rate_ci95": [
+        0.0867,
+        0.207
+      ],
+      "fp": 17,
+      "neg_flagged_by_category": {
+        "urgency": 10,
+        "scarcity": 0,
+        "social_proof": 2,
+        "misdirection": 5
+      },
+      "precision": 0.6731,
+      "f1": 0.7447,
+      "auroc_max_p_dark": 0.9147,
+      "mean_ocr_seconds_per_image": 0.762,
+      "mean_candidates_per_image": 14.92,
+      "images_with_no_ocr_text": 4
+    },
+    "reason": "1 of 42 DEV (config, tau) points meet neg flag rate <= 0.15; best admissible F1 0.7447. Chosen tesseract@0.9: F1 0.7447, cat-correct recall 0.8333, neg flag rate 0.136. Tie set: ['tesseract@0.9']. No admissible point at the text model's threshold.",
+    "admissible_ranking": [
+      {
+        "config": "tesseract",
+        "tau": 0.9,
+        "f1": 0.7447,
+        "neg_flag_rate": 0.136,
+        "category_correct_recall": 0.8333
+      }
+    ]
+  },
+  "test": {
+    "metrics": {
+      "tesseract": {
+        "0.68": {
+          "tau": 0.68,
+          "n_pos": 41,
+          "n_neg": 125,
+          "detection_recall": 0.8293,
+          "detection_recall_ci95": [
+            0.6874,
+            0.9147
+          ],
+          "tp": 34,
+          "category_correct_recall": 0.7317,
+          "category_correct_recall_ci95": [
+            0.5807,
+            0.8431
+          ],
+          "category_correct_hits": 30,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.7,
+              "hit": 21,
+              "n": 30,
+              "ci95": [
+                0.5212,
+                0.8334
+              ]
+            },
+            "scarcity": {
+              "recall": 0.6667,
+              "hit": 8,
+              "n": 12,
+              "ci95": [
+                0.3906,
+                0.8619
+              ]
+            },
+            "social_proof": {
+              "recall": 0.6,
+              "hit": 3,
+              "n": 5,
+              "ci95": [
+                0.2307,
+                0.8824
+              ]
+            }
+          },
+          "neg_flag_rate": 0.384,
+          "neg_flag_rate_ci95": [
+            0.3034,
+            0.4715
+          ],
+          "fp": 48,
+          "neg_flagged_by_category": {
+            "urgency": 42,
+            "scarcity": 0,
+            "social_proof": 6,
+            "misdirection": 7
+          },
+          "precision": 0.4146,
+          "f1": 0.5528,
+          "auroc_max_p_dark": 0.8433,
+          "mean_ocr_seconds_per_image": 0.723,
+          "mean_candidates_per_image": 12.96,
+          "images_with_no_ocr_text": 9
+        },
+        "0.9": {
+          "tau": 0.9,
+          "n_pos": 41,
+          "n_neg": 125,
+          "detection_recall": 0.6341,
+          "detection_recall_ci95": [
+            0.4812,
+            0.7641
+          ],
+          "tp": 26,
+          "category_correct_recall": 0.561,
+          "category_correct_recall_ci95": [
+            0.4104,
+            0.7011
+          ],
+          "category_correct_hits": 23,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.4667,
+              "hit": 14,
+              "n": 30,
+              "ci95": [
+                0.3023,
+                0.6386
+              ]
+            },
+            "scarcity": {
+              "recall": 0.6667,
+              "hit": 8,
+              "n": 12,
+              "ci95": [
+                0.3906,
+                0.8619
+              ]
+            },
+            "social_proof": {
+              "recall": 0.6,
+              "hit": 3,
+              "n": 5,
+              "ci95": [
+                0.2307,
+                0.8824
+              ]
+            }
+          },
+          "neg_flag_rate": 0.144,
+          "neg_flag_rate_ci95": [
+            0.0931,
+            0.2162
+          ],
+          "fp": 18,
+          "neg_flagged_by_category": {
+            "urgency": 15,
+            "scarcity": 0,
+            "social_proof": 1,
+            "misdirection": 3
+          },
+          "precision": 0.5909,
+          "f1": 0.6118,
+          "auroc_max_p_dark": 0.8433,
+          "mean_ocr_seconds_per_image": 0.723,
+          "mean_candidates_per_image": 12.96,
+          "images_with_no_ocr_text": 9
+        }
+      },
+      "easyocr": {
+        "0.68": {
+          "tau": 0.68,
+          "n_pos": 41,
+          "n_neg": 125,
+          "detection_recall": 0.8537,
+          "detection_recall_ci95": [
+            0.7156,
+            0.9312
+          ],
+          "tp": 35,
+          "category_correct_recall": 0.8293,
+          "category_correct_recall_ci95": [
+            0.6874,
+            0.9147
+          ],
+          "category_correct_hits": 34,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8,
+              "hit": 24,
+              "n": 30,
+              "ci95": [
+                0.6269,
+                0.905
+              ]
+            },
+            "scarcity": {
+              "recall": 0.75,
+              "hit": 9,
+              "n": 12,
+              "ci95": [
+                0.4677,
+                0.9111
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 5,
+              "n": 5,
+              "ci95": [
+                0.5655,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.536,
+          "neg_flag_rate_ci95": [
+            0.4488,
+            0.621
+          ],
+          "fp": 67,
+          "neg_flagged_by_category": {
+            "urgency": 55,
+            "scarcity": 4,
+            "social_proof": 7,
+            "misdirection": 12
+          },
+          "precision": 0.3431,
+          "f1": 0.4895,
+          "auroc_max_p_dark": 0.8361,
+          "mean_ocr_seconds_per_image": 0.978,
+          "mean_candidates_per_image": 24.0,
+          "images_with_no_ocr_text": 0
+        },
+        "0.9": {
+          "tau": 0.9,
+          "n_pos": 41,
+          "n_neg": 125,
+          "detection_recall": 0.7561,
+          "detection_recall_ci95": [
+            0.6066,
+            0.8618
+          ],
+          "tp": 31,
+          "category_correct_recall": 0.6829,
+          "category_correct_recall_ci95": [
+            0.5302,
+            0.8044
+          ],
+          "category_correct_hits": 28,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.6667,
+              "hit": 20,
+              "n": 30,
+              "ci95": [
+                0.4878,
+                0.8077
+              ]
+            },
+            "scarcity": {
+              "recall": 0.6667,
+              "hit": 8,
+              "n": 12,
+              "ci95": [
+                0.3906,
+                0.8619
+              ]
+            },
+            "social_proof": {
+              "recall": 0.8,
+              "hit": 4,
+              "n": 5,
+              "ci95": [
+                0.3755,
+                0.9638
+              ]
+            }
+          },
+          "neg_flag_rate": 0.208,
+          "neg_flag_rate_ci95": [
+            0.1461,
+            0.2873
+          ],
+          "fp": 26,
+          "neg_flagged_by_category": {
+            "urgency": 17,
+            "scarcity": 2,
+            "social_proof": 0,
+            "misdirection": 7
+          },
+          "precision": 0.5439,
+          "f1": 0.6327,
+          "auroc_max_p_dark": 0.8361,
+          "mean_ocr_seconds_per_image": 0.978,
+          "mean_candidates_per_image": 24.0,
+          "images_with_no_ocr_text": 0
+        }
+      },
+      "union": {
+        "0.68": {
+          "tau": 0.68,
+          "n_pos": 41,
+          "n_neg": 125,
+          "detection_recall": 0.878,
+          "detection_recall_ci95": [
+            0.7446,
+            0.9468
+          ],
+          "tp": 36,
+          "category_correct_recall": 0.8537,
+          "category_correct_recall_ci95": [
+            0.7156,
+            0.9312
+          ],
+          "category_correct_hits": 35,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.8333,
+              "hit": 25,
+              "n": 30,
+              "ci95": [
+                0.6644,
+                0.9266
+              ]
+            },
+            "scarcity": {
+              "recall": 0.8333,
+              "hit": 10,
+              "n": 12,
+              "ci95": [
+                0.552,
+                0.953
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 5,
+              "n": 5,
+              "ci95": [
+                0.5655,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.544,
+          "neg_flag_rate_ci95": [
+            0.4567,
+            0.6287
+          ],
+          "fp": 68,
+          "neg_flagged_by_category": {
+            "urgency": 56,
+            "scarcity": 2,
+            "social_proof": 10,
+            "misdirection": 14
+          },
+          "precision": 0.3462,
+          "f1": 0.4966,
+          "auroc_max_p_dark": 0.8375,
+          "mean_ocr_seconds_per_image": 1.701,
+          "mean_candidates_per_image": 23.94,
+          "images_with_no_ocr_text": 0
+        },
+        "0.9": {
+          "tau": 0.9,
+          "n_pos": 41,
+          "n_neg": 125,
+          "detection_recall": 0.7317,
+          "detection_recall_ci95": [
+            0.5807,
+            0.8431
+          ],
+          "tp": 30,
+          "category_correct_recall": 0.7073,
+          "category_correct_recall_ci95": [
+            0.5552,
+            0.8239
+          ],
+          "category_correct_hits": 29,
+          "per_category_recall": {
+            "urgency": {
+              "recall": 0.6333,
+              "hit": 19,
+              "n": 30,
+              "ci95": [
+                0.4551,
+                0.7813
+              ]
+            },
+            "scarcity": {
+              "recall": 0.8333,
+              "hit": 10,
+              "n": 12,
+              "ci95": [
+                0.552,
+                0.953
+              ]
+            },
+            "social_proof": {
+              "recall": 1.0,
+              "hit": 5,
+              "n": 5,
+              "ci95": [
+                0.5655,
+                1.0
+              ]
+            }
+          },
+          "neg_flag_rate": 0.232,
+          "neg_flag_rate_ci95": [
+            0.1667,
+            0.3133
+          ],
+          "fp": 29,
+          "neg_flagged_by_category": {
+            "urgency": 21,
+            "scarcity": 2,
+            "social_proof": 1,
+            "misdirection": 8
+          },
+          "precision": 0.5085,
+          "f1": 0.6,
+          "auroc_max_p_dark": 0.8375,
+          "mean_ocr_seconds_per_image": 1.701,
+          "mean_candidates_per_image": 23.94,
+          "images_with_no_ocr_text": 0
+        }
+      }
+    },
+    "at_dev_pick": {
+      "tesseract": {
+        "tau": 0.9,
+        "n_pos": 41,
+        "n_neg": 125,
+        "detection_recall": 0.6341,
+        "detection_recall_ci95": [
+          0.4812,
+          0.7641
+        ],
+        "tp": 26,
+        "category_correct_recall": 0.561,
+        "category_correct_recall_ci95": [
+          0.4104,
+          0.7011
+        ],
+        "category_correct_hits": 23,
+        "per_category_recall": {
+          "urgency": {
+            "recall": 0.4667,
+            "hit": 14,
+            "n": 30,
+            "ci95": [
+              0.3023,
+              0.6386
+            ]
+          },
+          "scarcity": {
+            "recall": 0.6667,
+            "hit": 8,
+            "n": 12,
+            "ci95": [
+              0.3906,
+              0.8619
+            ]
+          },
+          "social_proof": {
+            "recall": 0.6,
+            "hit": 3,
+            "n": 5,
+            "ci95": [
+              0.2307,
+              0.8824
+            ]
+          }
+        },
+        "neg_flag_rate": 0.144,
+        "neg_flag_rate_ci95": [
+          0.0931,
+          0.2162
+        ],
+        "fp": 18,
+        "neg_flagged_by_category": {
+          "urgency": 15,
+          "scarcity": 0,
+          "social_proof": 1,
+          "misdirection": 3
+        },
+        "precision": 0.5909,
+        "f1": 0.6118,
+        "auroc_max_p_dark": 0.8433,
+        "mean_ocr_seconds_per_image": 0.723,
+        "mean_candidates_per_image": 12.96,
+        "images_with_no_ocr_text": 9
+      },
+      "easyocr": {
+        "tau": 0.9,
+        "n_pos": 41,
+        "n_neg": 125,
+        "detection_recall": 0.7561,
+        "detection_recall_ci95": [
+          0.6066,
+          0.8618
+        ],
+        "tp": 31,
+        "category_correct_recall": 0.6829,
+        "category_correct_recall_ci95": [
+          0.5302,
+          0.8044
+        ],
+        "category_correct_hits": 28,
+        "per_category_recall": {
+          "urgency": {
+            "recall": 0.6667,
+            "hit": 20,
+            "n": 30,
+            "ci95": [
+              0.4878,
+              0.8077
+            ]
+          },
+          "scarcity": {
+            "recall": 0.6667,
+            "hit": 8,
+            "n": 12,
+            "ci95": [
+              0.3906,
+              0.8619
+            ]
+          },
+          "social_proof": {
+            "recall": 0.8,
+            "hit": 4,
+            "n": 5,
+            "ci95": [
+              0.3755,
+              0.9638
+            ]
+          }
+        },
+        "neg_flag_rate": 0.208,
+        "neg_flag_rate_ci95": [
+          0.1461,
+          0.2873
+        ],
+        "fp": 26,
+        "neg_flagged_by_category": {
+          "urgency": 17,
+          "scarcity": 2,
+          "social_proof": 0,
+          "misdirection": 7
+        },
+        "precision": 0.5439,
+        "f1": 0.6327,
+        "auroc_max_p_dark": 0.8361,
+        "mean_ocr_seconds_per_image": 0.978,
+        "mean_candidates_per_image": 24.0,
+        "images_with_no_ocr_text": 0
+      },
+      "union": {
+        "tau": 0.9,
+        "n_pos": 41,
+        "n_neg": 125,
+        "detection_recall": 0.7317,
+        "detection_recall_ci95": [
+          0.5807,
+          0.8431
+        ],
+        "tp": 30,
+        "category_correct_recall": 0.7073,
+        "category_correct_recall_ci95": [
+          0.5552,
+          0.8239
+        ],
+        "category_correct_hits": 29,
+        "per_category_recall": {
+          "urgency": {
+            "recall": 0.6333,
+            "hit": 19,
+            "n": 30,
+            "ci95": [
+              0.4551,
+              0.7813
+            ]
+          },
+          "scarcity": {
+            "recall": 0.8333,
+            "hit": 10,
+            "n": 12,
+            "ci95": [
+              0.552,
+              0.953
+            ]
+          },
+          "social_proof": {
+            "recall": 1.0,
+            "hit": 5,
+            "n": 5,
+            "ci95": [
+              0.5655,
+              1.0
+            ]
+          }
+        },
+        "neg_flag_rate": 0.232,
+        "neg_flag_rate_ci95": [
+          0.1667,
+          0.3133
+        ],
+        "fp": 29,
+        "neg_flagged_by_category": {
+          "urgency": 21,
+          "scarcity": 2,
+          "social_proof": 1,
+          "misdirection": 8
+        },
+        "precision": 0.5085,
+        "f1": 0.6,
+        "auroc_max_p_dark": 0.8375,
+        "mean_ocr_seconds_per_image": 1.701,
+        "mean_candidates_per_image": 23.94,
+        "images_with_no_ocr_text": 0
+      }
+    },
+    "paired_vs_served_tesseract_at_0.9": {
+      "easyocr@0.9": {
+        "positives_category_correct": {
+          "before_only": 3,
+          "after_only": 8,
+          "both": 20,
+          "neither": 10,
+          "mcnemar_exact_p": 0.2266
+        },
+        "positives_detected": {
+          "before_only": 1,
+          "after_only": 6,
+          "both": 25,
+          "neither": 9,
+          "mcnemar_exact_p": 0.125
+        },
+        "negatives_flagged": {
+          "before_only": 7,
+          "after_only": 15,
+          "both": 11,
+          "neither": 92,
+          "mcnemar_exact_p": 0.1338
+        }
+      },
+      "union@0.9": {
+        "positives_category_correct": {
+          "before_only": 0,
+          "after_only": 6,
+          "both": 23,
+          "neither": 12,
+          "mcnemar_exact_p": 0.0312
+        },
+        "positives_detected": {
+          "before_only": 0,
+          "after_only": 4,
+          "both": 26,
+          "neither": 11,
+          "mcnemar_exact_p": 0.125
+        },
+        "negatives_flagged": {
+          "before_only": 0,
+          "after_only": 11,
+          "both": 18,
+          "neither": 96,
+          "mcnemar_exact_p": 0.001
+        }
+      }
+    },
+    "positives_category_correct_with_only_one_engine_at_0.9": [
+      {
+        "image": "(253)eyedictive.com_5778.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "tesseract",
+        "flagging_text": [
+          "00:34:29"
+        ]
+      },
+      {
+        "image": "(299)www.autogeek.net_249b.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "0 ITEMS) $0.00"
+        ]
+      },
+      {
+        "image": "(305)www.bellamihair.com_5eea.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "FREE FAUX PONYTAIL WITH PURCHASE OF EXTENSIONSI! CODE: PONY SALE ENDS IN: 6D"
+        ]
+      },
+      {
+        "image": "(360)www.jjshouse.com_7293.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "10% OFF SITEWIDE"
+        ]
+      },
+      {
+        "image": "(539)www.homewetbar.com_3dec.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "LIMITED TIME: $5 OFF Orders $70+ code: SAVES"
+        ]
+      },
+      {
+        "image": "(894)www.templeandwebster.com.au_02e7.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "THIS SALE ENDED ON 7/2/2019",
+          "Limited Time Collections"
+        ]
+      },
+      {
+        "image": "(963)www.smokecartel.com_6342.jpg",
+        "gt_cats": [
+          "urgency"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "4 hrs 35 mins"
+        ]
+      },
+      {
+        "image": "Boost_ecommerce_sales_with_urgency_tactics_13_-_Sales.png",
+        "gt_cats": [
+          "scarcity"
+        ],
+        "only_correct_with": "tesseract",
+        "flagging_text": [
+          "Hurry, low quantity!"
+        ]
+      },
+      {
+        "image": "droom.in.png",
+        "gt_cats": [
+          "social_proof"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "people are looking at this listing now"
+        ]
+      },
+      {
+        "image": "knockaround.com.png",
+        "gt_cats": [
+          "scarcity",
+          "social_proof"
+        ],
+        "only_correct_with": "tesseract",
+        "flagging_text": [
+          "Limited stock! ¢) 1 person is viewing this, 2 recently purchased it, and 1 has this in their cart.",
+          "Limited stock! ¢) 1 person is viewing this, 2 recently purchased it, and 1 has this in"
+        ]
+      },
+      {
+        "image": "www.stealthangelsurvival.com.png",
+        "gt_cats": [
+          "scarcity",
+          "social_proof"
+        ],
+        "only_correct_with": "easyocr",
+        "flagging_text": [
+          "HURRYI ONLY 47",
+          "LEFT IN STOCKI"
+        ]
+      }
+    ]
+  },
+  "summary_table": {
+    "dev": {
+      "tesseract": {
+        "0.68": {
+          "tau": 0.68,
+          "detection_recall": 0.881,
+          "category_correct_recall": 0.881,
+          "neg_flag_rate": 0.392,
+          "precision": 0.4302,
+          "f1": 0.5781,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92
+        },
+        "0.9": {
+          "tau": 0.9,
+          "detection_recall": 0.8333,
+          "category_correct_recall": 0.8333,
+          "neg_flag_rate": 0.136,
+          "precision": 0.6731,
+          "f1": 0.7447,
+          "auroc_max_p_dark": 0.9147,
+          "mean_ocr_seconds_per_image": 0.762,
+          "mean_candidates_per_image": 14.92
+        }
+      },
+      "easyocr": {
+        "0.68": {
+          "tau": 0.68,
+          "detection_recall": 0.9524,
+          "category_correct_recall": 0.9286,
+          "neg_flag_rate": 0.464,
+          "precision": 0.4082,
+          "f1": 0.5714,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02
+        },
+        "0.9": {
+          "tau": 0.9,
+          "detection_recall": 0.9524,
+          "category_correct_recall": 0.9286,
+          "neg_flag_rate": 0.176,
+          "precision": 0.6452,
+          "f1": 0.7692,
+          "auroc_max_p_dark": 0.9331,
+          "mean_ocr_seconds_per_image": 1.015,
+          "mean_candidates_per_image": 27.02
+        }
+      },
+      "union": {
+        "0.68": {
+          "tau": 0.68,
+          "detection_recall": 0.9762,
+          "category_correct_recall": 0.9762,
+          "neg_flag_rate": 0.512,
+          "precision": 0.3905,
+          "f1": 0.5578,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56
+        },
+        "0.9": {
+          "tau": 0.9,
+          "detection_recall": 0.9286,
+          "category_correct_recall": 0.9286,
+          "neg_flag_rate": 0.184,
+          "precision": 0.629,
+          "f1": 0.75,
+          "auroc_max_p_dark": 0.9335,
+          "mean_ocr_seconds_per_image": 1.777,
+          "mean_candidates_per_image": 26.56
+        }
+      }
+    },
+    "test": {
+      "tesseract": {
+        "0.68": {
+          "tau": 0.68,
+          "detection_recall": 0.8293,
+          "category_correct_recall": 0.7317,
+          "neg_flag_rate": 0.384,
+          "precision": 0.4146,
+          "f1": 0.5528,
+          "auroc_max_p_dark": 0.8433,
+          "mean_ocr_seconds_per_image": 0.723,
+          "mean_candidates_per_image": 12.96
+        },
+        "0.9": {
+          "tau": 0.9,
+          "detection_recall": 0.6341,
+          "category_correct_recall": 0.561,
+          "neg_flag_rate": 0.144,
+          "precision": 0.5909,
+          "f1": 0.6118,
+          "auroc_max_p_dark": 0.8433,
+          "mean_ocr_seconds_per_image": 0.723,
+          "mean_candidates_per_image": 12.96
+        }
+      },
+      "easyocr": {
+        "0.68": {
+          "tau": 0.68,
+          "detection_recall": 0.8537,
+          "category_correct_recall": 0.8293,
+          "neg_flag_rate": 0.536,
+          "precision": 0.3431,
+          "f1": 0.4895,
+          "auroc_max_p_dark": 0.8361,
+          "mean_ocr_seconds_per_image": 0.978,
+          "mean_candidates_per_image": 24.0
+        },
+        "0.9": {
+          "tau": 0.9,
+          "detection_recall": 0.7561,
+          "category_correct_recall": 0.6829,
+          "neg_flag_rate": 0.208,
+          "precision": 0.5439,
+          "f1": 0.6327,
+          "auroc_max_p_dark": 0.8361,
+          "mean_ocr_seconds_per_image": 0.978,
+          "mean_candidates_per_image": 24.0
+        }
+      },
+      "union": {
+        "0.68": {
+          "tau": 0.68,
+          "detection_recall": 0.878,
+          "category_correct_recall": 0.8537,
+          "neg_flag_rate": 0.544,
+          "precision": 0.3462,
+          "f1": 0.4966,
+          "auroc_max_p_dark": 0.8375,
+          "mean_ocr_seconds_per_image": 1.701,
+          "mean_candidates_per_image": 23.94
+        },
+        "0.9": {
+          "tau": 0.9,
+          "detection_recall": 0.7317,
+          "category_correct_recall": 0.7073,
+          "neg_flag_rate": 0.232,
+          "precision": 0.5085,
+          "f1": 0.6,
+          "auroc_max_p_dark": 0.8375,
+          "mean_ocr_seconds_per_image": 1.701,
+          "mean_candidates_per_image": 23.94
+        }
+      }
+    }
+  },
+  "dev_negative_flag_diagnostic_easyocr_at_0.9": {
+    "flagged": 22,
+    "only_top5pct_band": 3,
+    "only_clock_or_number_strings": 0,
+    "only_band_or_clockish": 3,
+    "flag_category_counts": {
+      "misdirection": 9,
+      "urgency": 13,
+      "social_proof": 1
+    }
+  },
+  "dev_negative_flag_diagnostic_tesseract_at_0.9": {
+    "flagged": 17,
+    "only_top5pct_band": 3,
+    "only_clock_or_number_strings": 2,
+    "only_band_or_clockish": 4,
+    "flag_category_counts": {
+      "social_proof": 2,
+      "urgency": 10,
+      "misdirection": 5
+    }
+  },
+  "union_added_easyocr_candidates_per_image": 11.31,
+  "timing_controlled_subsample": {
+    "n_images": 20,
+    "images": [
+      "(159)www.victorianplumbing.co.uk_62cc.jpg",
+      "(170)shapermint.com_fcf2.jpg",
+      "(23)nutrabay.com_5665.jpg",
+      "(269)pages.daraz.lk_115d.jpg",
+      "(27)puffy.com_f607.jpg",
+      "(273)shapermint.com_35e5.jpg",
+      "(274)shapermint.com_ddea.jpg",
+      "(334)www.fanatics.com_cceb.jpg",
+      "(337)www.floryday.com_3f1c.jpg",
+      "(340)www.forzieri.com_0192.jpg",
+      "(345)www.harveynorman.com.sg_3146.jpg",
+      "(359)www.jjshouse.com_30a7.jpg",
+      "(449)www.victorianplumbing.co.uk_7777.jpg",
+      "(511)www.yesstyle.com_86d6.jpg",
+      "(657)www.ashleystewart.com_8285.jpg",
+      "(688)www.chicwish.com_4cb6.jpg",
+      "(708)www.ebay.ca_d3e8.jpg",
+      "(723)www.faithful-to-nature.co.za_9b6f.jpg",
+      "(728)www.finditparts.com_f582.jpg",
+      "(782)www.levenger.com_33f7.jpg"
+    ],
+    "median_image_size": [
+      2400.0,
+      1300.0
+    ],
+    "note": "sequential, one image at a time, warm models, OMP_NUM_THREADS=1 (set by ml/__init__ for the torch+xgboost segfault), so EasyOCR-CPU uses one intra-op thread",
+    "tesseract_v4_psm3_s_per_image": 0.567,
+    "easyocr_cpu_s_per_image": 11.934,
+    "easyocr_mps_s_per_image": 3.031,
+    "union_cpu_s_per_image": 12.501,
+    "union_mps_s_per_image": 3.598,
+    "easyocr_cpu_vs_mps_identical_outputs": "20/20"
+  },
+  "synthetic_screens": {
+    "synthetic": true,
+    "labels_from_construction": true,
+    "source": "PNG files saved by ml/benchmark_intelligence.py (exp_B_screenshots); texts from intelligence_benchmark.json",
+    "match_rule": "read = some OCR candidate matches the rendered text with difflib ratio >= 0.85 after lower-casing and removing non-alphanumerics (same rule as benchmark B)",
+    "S1_S3_decline_style": "S1/S2: 15px rgb(170,170,170) on white; S3: 13px rgb(190,190,190) on white",
+    "summary": {
+      "tesseract": {
+        "decline_read": 5,
+        "accept_read": 8,
+        "both_options_found": 5,
+        "mcai_visual_available": 5,
+        "faint_grey_decline_S1_S3_read": 0,
+        "mean_visual_main_asymmetric_S1_S3": null,
+        "mean_visual_symmetric_S4_S6": 0.022,
+        "n": 8
+      },
+      "easyocr": {
+        "decline_read": 5,
+        "accept_read": 8,
+        "both_options_found": 4,
+        "mcai_visual_available": 7,
+        "faint_grey_decline_S1_S3_read": 2,
+        "mean_visual_main_asymmetric_S1_S3": 0.546,
+        "mean_visual_symmetric_S4_S6": 0.0754,
+        "n": 8
+      },
+      "union": {
+        "decline_read": 7,
+        "accept_read": 8,
+        "both_options_found": 5,
+        "mcai_visual_available": 7,
+        "faint_grey_decline_S1_S3_read": 2,
+        "mean_visual_main_asymmetric_S1_S3": 0.7266,
+        "mean_visual_symmetric_S4_S6": 0.022,
+        "n": 8
+      }
+    },
+    "cases": [
+      {
+        "id": "S1",
+        "designed": "asymmetric",
+        "supplementary": false,
+        "accept_text": "Yes, add protection",
+        "decline_text": "No thanks",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": false,
+            "both_options_found": false,
+            "visual_available": false,
+            "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured."
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.5469,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 45.0,
+                "decline": 16.0,
+                "asym": 0.6444
+              },
+              "text_box_area_px": {
+                "accept": 12960.0,
+                "decline": 1120.0,
+                "asym": 0.9136
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 2.028,
+                "asym": 0.6295
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 66.63
+          },
+          "union": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.7281,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 16.0,
+                "asym": 0.4286
+              },
+              "text_box_area_px": {
+                "accept": 7700.0,
+                "decline": 1120.0,
+                "asym": 0.8545
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 2.028,
+                "asym": 0.6295
+              },
+              "background_fill": {
+                "accept": 1.0,
+                "decline": 0.0,
+                "asym": 1.0
+              }
+            },
+            "mcai": 76.99
+          }
+        }
+      },
+      {
+        "id": "S2",
+        "designed": "asymmetric",
+        "supplementary": false,
+        "accept_text": "Yes, add protection",
+        "decline_text": "No Thanks, I Don't Like Saving Money.",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": false,
+            "both_options_found": false,
+            "visual_available": false,
+            "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured."
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "Don't Like Saving Money.",
+              "No Thanks;"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks;",
+            "both_options_found": false,
+            "visual_available": true,
+            "visual": 0.545,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 45.0,
+                "decline": 16.0,
+                "asym": 0.6444
+              },
+              "text_box_area_px": {
+                "accept": 12960.0,
+                "decline": 1216.0,
+                "asym": 0.9062
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 2.028,
+                "asym": 0.6295
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 66.64
+          },
+          "union": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "Don't Like Saving Money.",
+              "No Thanks;"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks;",
+            "both_options_found": false,
+            "visual_available": true,
+            "visual": 0.725,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 16.0,
+                "asym": 0.4286
+              },
+              "text_box_area_px": {
+                "accept": 7700.0,
+                "decline": 1216.0,
+                "asym": 0.8421
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 2.028,
+                "asym": 0.6295
+              },
+              "background_fill": {
+                "accept": 1.0,
+                "decline": 0.0,
+                "asym": 1.0
+              }
+            },
+            "mcai": 76.93
+          }
+        }
+      },
+      {
+        "id": "S3",
+        "designed": "asymmetric",
+        "supplementary": false,
+        "accept_text": "Join now and save",
+        "decline_text": "I do not want to protect my item",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Join our rewards club",
+              "Join now and save"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": false,
+            "both_options_found": false,
+            "visual_available": false,
+            "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured."
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Join our rewards club",
+              "Join now and save",
+              "do not want to protect my item"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": false,
+            "both_options_found": false,
+            "visual_available": false,
+            "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured."
+          },
+          "union": {
+            "ocr_lines": [
+              "Join our rewards club",
+              "Join now and save",
+              "do not want to protect my item"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": false,
+            "both_options_found": false,
+            "visual_available": false,
+            "reason": "OCR found an accept-like option but no decline option. Low-contrast or very small decline text is often unreadable by OCR, so a hidden decline cannot be ruled out; choice asymmetry was not measured."
+          }
+        }
+      },
+      {
+        "id": "S4",
+        "designed": "symmetric",
+        "supplementary": false,
+        "accept_text": "Accept",
+        "decline_text": "No thanks",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Accept",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Accept",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.05,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 20.0,
+                "decline": 16.0,
+                "asym": 0.2
+              },
+              "text_box_area_px": {
+                "accept": 1340.0,
+                "decline": 1520.0,
+                "asym": 0.0
+              },
+              "contrast_ratio": {
+                "accept": 18.883,
+                "decline": 18.883,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 29.54
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Accept",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Accept",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.0192,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 26.0,
+                "decline": 24.0,
+                "asym": 0.0769
+              },
+              "text_box_area_px": {
+                "accept": 1924.0,
+                "decline": 2496.0,
+                "asym": 0.0
+              },
+              "contrast_ratio": {
+                "accept": 18.096,
+                "decline": 18.261,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 27.78
+          },
+          "union": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Accept",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Accept",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.05,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 20.0,
+                "decline": 16.0,
+                "asym": 0.2
+              },
+              "text_box_area_px": {
+                "accept": 1340.0,
+                "decline": 1520.0,
+                "asym": 0.0
+              },
+              "contrast_ratio": {
+                "accept": 18.883,
+                "decline": 18.883,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 29.54
+          }
+        }
+      },
+      {
+        "id": "S5",
+        "designed": "symmetric",
+        "supplementary": false,
+        "accept_text": "Accept all",
+        "decline_text": "Reject all",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Cookie preferences",
+              "Accept all",
+              "Reject all"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Accept all",
+            "detected_decline": "Reject all",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.0161,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 20.0,
+                "decline": 20.0,
+                "asym": 0.0
+              },
+              "text_box_area_px": {
+                "accept": 1860.0,
+                "decline": 1740.0,
+                "asym": 0.0645
+              },
+              "contrast_ratio": {
+                "accept": 15.252,
+                "decline": 15.252,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.3387,
+                "decline": 0.3387,
+                "asym": 0.0
+              }
+            },
+            "mcai": 0.93
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Cookie preferences",
+              "Accept all",
+              "Reject all"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Accept all",
+            "detected_decline": "Reject all",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.045,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 26.0,
+                "asym": 0.0714
+              },
+              "text_box_area_px": {
+                "accept": 2800.0,
+                "decline": 2496.0,
+                "asym": 0.1086
+              },
+              "contrast_ratio": {
+                "accept": 14.342,
+                "decline": 15.252,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.3387,
+                "decline": 0.3387,
+                "asym": 0.0
+              }
+            },
+            "mcai": 2.58
+          },
+          "union": {
+            "ocr_lines": [
+              "Cookie preferences",
+              "Accept all",
+              "Reject all"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Accept all",
+            "detected_decline": "Reject all",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.0161,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 20.0,
+                "decline": 20.0,
+                "asym": 0.0
+              },
+              "text_box_area_px": {
+                "accept": 1860.0,
+                "decline": 1740.0,
+                "asym": 0.0645
+              },
+              "contrast_ratio": {
+                "accept": 15.252,
+                "decline": 15.252,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.3387,
+                "decline": 0.3387,
+                "asym": 0.0
+              }
+            },
+            "mcai": 0.93
+          }
+        }
+      },
+      {
+        "id": "S6",
+        "designed": "symmetric",
+        "supplementary": false,
+        "accept_text": "Yes, add protection",
+        "decline_text": "No Thanks, I Don't Like Saving Money.",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No Thanks, | Don't Like Saving Money."
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks, | Don't Like Saving Money.",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.0,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 20.0,
+                "decline": 20.0,
+                "asym": 0.0
+              },
+              "text_box_area_px": {
+                "accept": 3700.0,
+                "decline": 7420.0,
+                "asym": 0.0
+              },
+              "contrast_ratio": {
+                "accept": 18.883,
+                "decline": 18.883,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 38.07
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "Dontt Like Saving Money.",
+              "No Thanks,"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks,",
+            "both_options_found": false,
+            "visual_available": true,
+            "visual": 0.162,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 24.0,
+                "asym": 0.1429
+              },
+              "text_box_area_px": {
+                "accept": 5432.0,
+                "decline": 2688.0,
+                "asym": 0.5052
+              },
+              "contrast_ratio": {
+                "accept": 15.91,
+                "decline": 18.423,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 44.77
+          },
+          "union": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No Thanks, | Don't Like Saving Money.",
+              "Dontt Like Saving Money."
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks, | Don't Like Saving Money.",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.0,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 20.0,
+                "decline": 20.0,
+                "asym": 0.0
+              },
+              "text_box_area_px": {
+                "accept": 3700.0,
+                "decline": 7420.0,
+                "asym": 0.0
+              },
+              "contrast_ratio": {
+                "accept": 18.883,
+                "decline": 18.883,
+                "asym": 0.0
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 38.07
+          }
+        }
+      },
+      {
+        "id": "S7",
+        "designed": "asymmetric",
+        "supplementary": true,
+        "accept_text": "Yes, add protection",
+        "decline_text": "No thanks",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.6493,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 13.0,
+                "asym": 0.5357
+              },
+              "text_box_area_px": {
+                "accept": 7700.0,
+                "decline": 1014.0,
+                "asym": 0.8683
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 4.415,
+                "asym": 0.1933
+              },
+              "background_fill": {
+                "accept": 1.0,
+                "decline": 0.0,
+                "asym": 1.0
+              }
+            },
+            "mcai": 72.49
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.4333,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 45.0,
+                "decline": 20.0,
+                "asym": 0.5556
+              },
+              "text_box_area_px": {
+                "accept": 12960.0,
+                "decline": 1680.0,
+                "asym": 0.8704
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 3.791,
+                "asym": 0.3073
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 60.14
+          },
+          "union": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No thanks",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.6493,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 13.0,
+                "asym": 0.5357
+              },
+              "text_box_area_px": {
+                "accept": 7700.0,
+                "decline": 1014.0,
+                "asym": 0.8683
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 4.415,
+                "asym": 0.1933
+              },
+              "background_fill": {
+                "accept": 1.0,
+                "decline": 0.0,
+                "asym": 1.0
+              }
+            },
+            "mcai": 72.49
+          }
+        }
+      },
+      {
+        "id": "S8",
+        "designed": "asymmetric",
+        "supplementary": true,
+        "accept_text": "Yes, add protection",
+        "decline_text": "No Thanks, I Don't Like Saving Money.",
+        "engines": {
+          "tesseract": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No Thanks, | Don't Like Saving Money."
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks, | Don't Like Saving Money.",
+            "both_options_found": true,
+            "visual_available": true,
+            "visual": 0.4968,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 15.0,
+                "asym": 0.4643
+              },
+              "text_box_area_px": {
+                "accept": 7700.0,
+                "decline": 4095.0,
+                "asym": 0.4682
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 5.174,
+                "asym": 0.0546
+              },
+              "background_fill": {
+                "accept": 1.0,
+                "decline": 0.0,
+                "asym": 1.0
+              }
+            },
+            "mcai": 66.45
+          },
+          "easyocr": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "Dont Like Saving Money:",
+              "No Thanks"
+            ],
+            "accept_read": true,
+            "decline_read": false,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks",
+            "both_options_found": false,
+            "visual_available": true,
+            "visual": 0.421,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 45.0,
+                "decline": 20.0,
+                "asym": 0.5556
+              },
+              "text_box_area_px": {
+                "accept": 12960.0,
+                "decline": 1680.0,
+                "asym": 0.8704
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 4.06,
+                "asym": 0.2582
+              },
+              "background_fill": {
+                "accept": 0.0,
+                "decline": 0.0,
+                "asym": 0.0
+              }
+            },
+            "mcai": 59.44
+          },
+          "union": {
+            "ocr_lines": [
+              "Protect your order?",
+              "Yes, add protection",
+              "No Thanks, | Don't Like Saving Money.",
+              "Dont Like Saving Money:",
+              "No Thanks"
+            ],
+            "accept_read": true,
+            "decline_read": true,
+            "mcai_available": true,
+            "detected_accept": "Yes, add protection",
+            "detected_decline": "No Thanks",
+            "both_options_found": false,
+            "visual_available": true,
+            "visual": 0.5814,
+            "visual_features": {
+              "text_height_px": {
+                "accept": 28.0,
+                "decline": 20.0,
+                "asym": 0.2857
+              },
+              "text_box_area_px": {
+                "accept": 7700.0,
+                "decline": 1680.0,
+                "asym": 0.7818
+              },
+              "contrast_ratio": {
+                "accept": 5.473,
+                "decline": 4.06,
+                "asym": 0.2582
+              },
+              "background_fill": {
+                "accept": 1.0,
+                "decline": 0.0,
+                "asym": 1.0
+              }
+            },
+            "mcai": 68.6
+          }
+        }
+      }
+    ]
+  },
+  "caveats": [
+    "mean_ocr_seconds_per_image in the metric blocks is NOT comparable across engines: Tesseract times come from the eval_screenshots cache (6 concurrent processes), EasyOCR times are sequential on mps, union = sum. Use timing_controlled_subsample for speed. (The selection rule only uses s/image as the last tie-break.)",
+    "ocr_confidence is not calibrated across engines (Tesseract: mean word confidence; EasyOCR: recogniser confidence). Nothing in the decision rule uses it.",
+    "Negatives are ContextRico images with NO text-observable label. They are still dark-pattern UIs of visual types (Hard to Close, Nagging, Default Choice, False Hierarchy, ...) and some may contain unlabelled urgency/scarcity/social-proof or confirmshaming text, so the 'flag rate on negatives' (and hence image-level false positives / precision) is an UPPER bound on true false alarms.",
+    "Small positive sets (DEV 42 / TEST 41 images); see Wilson CIs and paired McNemar p-values.",
+    "EasyOCR on the ContextRico set was run on mps; timing_controlled_subsample reports whether CPU and MPS outputs were identical on its images."
+  ],
+  "runtime_seconds": 354.3
+}

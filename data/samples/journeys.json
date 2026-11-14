@@ -1,0 +1,78 @@
+[
+  {
+    "id": "journey-subscription",
+    "title": "Subscription checkout journey (synthetic)",
+    "description": "Product → cart → checkout → exit with scarcity, social proof, a countdown observed to increase between snapshots, a pre-ticked add-on and a hard-to-cancel exit.",
+    "synthetic": true,
+    "provenance": "SYNTHETIC journey: stage order and timestamps are authored. Verbatim TEST-split rows: #511 (benign), #129 (scarcity), #69 (social_proof), #547 (benign), #565 (benign), #64 (social_proof), #651 (urgency), #525 (benign), #650 (benign), #474 (misdirection), #612 (misdirection). AUTHORED: checkout markup/CSS, the second countdown reading 'OFFER ENDS 00:58:40' (to demonstrate reset detection against the cart reading 00:54:59 taken 9 minutes earlier), the pre-ticked 'Add shipping protection for $4.99', the accept labels 'Claim discount and continue' and 'Yes, keep my membership', and the declared 1-vs-5 step cancellation path.",
+    "stages": [
+      {
+        "name": "Product page",
+        "stage_type": "product",
+        "input_type": "text",
+        "synthetic": true,
+        "captured_at": "2026-11-12T10:00:00+00:00",
+        "content": "Mystic Topaz: Rings, Earrings, Necklaces and Bracelets\nOnly 5 item(s) left.\n19 people viewed this product per day\nShipping and Duties"
+      },
+      {
+        "name": "Cart",
+        "stage_type": "cart",
+        "input_type": "text",
+        "synthetic": true,
+        "captured_at": "2026-11-12T10:04:00+00:00",
+        "content": "My Account\n45 ADDED TO BAG IN THE PAST 24 HOURS\nOFFER ENDS 00:54:59\nPay weekly"
+      },
+      {
+        "name": "Checkout",
+        "stage_type": "checkout",
+        "input_type": "html",
+        "synthetic": true,
+        "captured_at": "2026-11-12T10:13:00+00:00",
+        "content": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Checkout</title>\n<!-- AUTHORED demo markup. data-source=\"test-split\" = verbatim ec-darkpattern TEST row; data-source=\"authored\" = written for this demo. -->\n<style>\n.timer{color:#b91c1c;font-weight:700}\n.btn-primary{background:#0f766e;color:#ffffff;font-size:20px;font-weight:700;padding:14px 28px;border-radius:8px}\n.decline{color:#9ca3af;font-size:11px}\n</style></head><body><main>\n<p class=\"timer\" data-source=\"authored\">OFFER ENDS 00:58:40</p>\n<p data-source=\"test-split\">Take time to pay.</p>\n<form id=\"checkout\">\n  <label data-source=\"authored\"><input type=\"checkbox\" name=\"protection\" checked> Add shipping protection for $4.99</label>\n  <button type=\"submit\" class=\"btn-primary\" data-source=\"authored\">Claim discount and continue</button>\n  <a href=\"#\" class=\"decline\" data-source=\"test-split\">no thanks, I&#x27;ll save money another day</a>\n</form></main></body></html>"
+      },
+      {
+        "name": "Cancellation / exit",
+        "stage_type": "exit",
+        "input_type": "text",
+        "synthetic": true,
+        "captured_at": "2026-11-12T10:20:00+00:00",
+        "content": "Yes, keep my membership\nNO, I DON'T FEEL LUCKY",
+        "choice_path": {
+          "label": "Keep membership vs cancel membership (declared)",
+          "accept_steps": 1,
+          "decline_steps": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "journey-benign",
+    "title": "Benign three-step journey (synthetic order, real strings)",
+    "description": "Product → cart → checkout using only 'Not Dark Pattern' TEST-split strings.",
+    "synthetic": true,
+    "provenance": "SYNTHETIC journey: stage order authored; every line is a verbatim TEST-split 'Not Dark Pattern' row: #552, #648, #636, #565, #547, #525, #650, #632, #661. No authored text.",
+    "stages": [
+      {
+        "name": "Product page",
+        "stage_type": "product",
+        "input_type": "text",
+        "synthetic": true,
+        "content": "Women's Bags\nCoffee\nSunflower"
+      },
+      {
+        "name": "Cart",
+        "stage_type": "cart",
+        "input_type": "text",
+        "synthetic": true,
+        "content": "My Account\nShipping and Duties\nPay weekly"
+      },
+      {
+        "name": "Checkout",
+        "stage_type": "checkout",
+        "input_type": "text",
+        "synthetic": true,
+        "content": "Take time to pay.\nProduct Recycling\nMy Project Lists"
+      }
+    ]
+  }
+]

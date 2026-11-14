@@ -1,0 +1,23 @@
+{
+  "fixed_at": "2026-11-14T11:08:30+00:00",
+  "selection": "highest VAL macro average precision over the required labels among the fine-tuned candidates",
+  "a": "the selected model beats BOTH baselines (label prior, frozen CLIP linear probe) on VAL macro-AP (required labels)",
+  "b": "for every required label, VAL AP > VAL prevalence + 0.1",
+  "c": "TEST is evaluated exactly once, after selection, by `finalize`, and reported whatever it shows",
+  "optional_labels": "Privacy Zuckering, Pay to Avoid Ad are shown only if VAL AP > prevalence + 0.1 and a threshold with VAL precision >= 0.7 exists",
+  "thresholds": "per label, highest-F1 VAL threshold with VAL precision >= 0.7; otherwise the label is 'not reliable' and never shown",
+  "required_labels": [
+    "Hard to Close",
+    "Default Choice",
+    "False Hierarchy",
+    "Nagging"
+  ],
+  "all_labels": [
+    "Hard to Close",
+    "Default Choice",
+    "False Hierarchy",
+    "Nagging",
+    "Privacy Zuckering",
+    "Pay to Avoid Ad"
+  ]
+}

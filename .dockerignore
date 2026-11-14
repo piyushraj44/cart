@@ -1,0 +1,16 @@
+.git
+.venv
+frontend/node_modules
+frontend/dist
+data/raw
+data/probes
+data/processed/ocr_cache
+ml/artifacts_v2
+report
+tests
+docs
+*.log
+__pycache__
+.pytest_cache
+ml/artifacts_visual/cache
+new data

@@ -1,0 +1,2425 @@
+{
+ "journey_id": "ec906f4c8e01",
+ "created_at": "2026-11-13T18:41:52+00:00",
+ "processing_ms": 29,
+ "stages": [
+  {
+   "index": 0,
+   "name": "Product page",
+   "stage_type": "product",
+   "position": 2,
+   "input_type": "text",
+   "captured_at": "2026-11-12T10:00:00+00:00",
+   "synthetic": true,
+   "content": "Mystic Topaz: Rings, Earrings, Necklaces and Bracelets\nOnly 5 item(s) left.\n19 people viewed this product per day\nShipping and Duties",
+   "audit": {
+    "audit_id": "3e3540f4dc24",
+    "input_type": "text",
+    "created_at": "2026-11-13T18:41:52+00:00",
+    "processing_ms": 6,
+    "summary": {
+     "elements_analysed": 4,
+     "suspicious_findings": 2,
+     "categories_detected": [
+      {
+       "category": "social_proof",
+       "category_label": "Social proof pressure",
+       "count": 1,
+       "max_score": 0.9998
+      },
+      {
+       "category": "scarcity",
+       "category_label": "Misleading scarcity",
+       "count": 1,
+       "max_score": 0.9991
+      }
+     ],
+     "overall_risk": "high",
+     "overall_score": 0.9998,
+     "overall_confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Social proof pressure.",
+     "no_concern": false,
+     "summary_text": "2 potentially deceptive element(s) found among 4 analysed: Social proof pressure (1), Misleading scarcity (1). Overall risk is high. Review each finding's evidence before drawing conclusions.",
+     "risk_score": 99,
+     "threshold": 0.68
+    },
+    "findings": [
+     {
+      "id": "f2",
+      "category": "social_proof",
+      "category_label": "Social proof pressure",
+      "evidence": "19 people viewed this product per day",
+      "explanation": "The text uses other shoppers' activity (views, purchases, 'people are looking') to pressure the decision. Such messages are often unverifiable, generic or automatically generated. Words in this element that most increased the model's score: “people”, “this”, “viewed”.",
+      "detection_method": "ml_classifier",
+      "model_score": 0.9998,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Social proof pressure.",
+      "category_probabilities": {
+       "benign": 0.0002,
+       "urgency": 0.0,
+       "scarcity": 0.0,
+       "social_proof": 0.9998,
+       "misdirection": 0.0
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "people",
+       "this",
+       "viewed",
+       "this product"
+      ],
+      "similar_examples": [
+       {
+        "text": "127 People viewed this product this week",
+        "label": "social_proof",
+        "similarity": 0.789
+       },
+       {
+        "text": "104 people viewed this product recently!",
+        "label": "social_proof",
+        "similarity": 0.753
+       }
+      ],
+      "source_location": {
+       "source_type": "text",
+       "char_start": 76,
+       "char_end": 113,
+       "line": 3,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Use verifiable, aggregated information (e.g. rating and number of reviews with a link to them). Avoid real-time 'X people are viewing' or 'Y just bought' pop-ups unless they are accurate and auditable.",
+      "suggested_rewrite": null,
+      "short_reason": "Other shoppers' activity used as pressure"
+     },
+     {
+      "id": "f1",
+      "category": "scarcity",
+      "category_label": "Misleading scarcity",
+      "evidence": "Only 5 item(s) left.",
+      "explanation": "The text signals limited stock or high demand. Unverified scarcity claims raise the perceived value of an item and pressure an immediate purchase. Words in this element that most increased the model's score: “left”, “only”, “5”.",
+      "detection_method": "ml_classifier",
+      "model_score": 0.9991,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misleading scarcity.",
+      "category_probabilities": {
+       "benign": 0.0009,
+       "urgency": 0.0001,
+       "scarcity": 0.9989,
+       "social_proof": 0.0001,
+       "misdirection": 0.0001
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "left",
+       "only",
+       "5",
+       "s"
+      ],
+      "similar_examples": [
+       {
+        "text": "5 items left",
+        "label": "scarcity",
+        "similarity": 0.837
+       },
+       {
+        "text": "Only 1 item left",
+        "label": "scarcity",
+        "similarity": 0.79
+       }
+      ],
+      "source_location": {
+       "source_type": "text",
+       "char_start": 55,
+       "char_end": 75,
+       "line": 2,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Show stock levels only when they come from live inventory, as a neutral fact (e.g. 'In stock: 3'). Drop 'Hurry' / 'Almost gone' framing and never display fabricated low-stock messages.",
+      "suggested_rewrite": "Only 5 item(s) left",
+      "short_reason": "Low-stock or high-demand claim pressures an immediate buy"
+     }
+    ],
+    "benign_elements": [
+     {
+      "text": "Mystic Topaz: Rings, Earrings, Necklaces and Bracelets",
+      "p_dark": 0.0027,
+      "flagged": false,
+      "source_location": {
+       "source_type": "text",
+       "char_start": 0,
+       "char_end": 54,
+       "line": 1,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     },
+     {
+      "text": "Shipping and Duties",
+      "p_dark": 0.005,
+      "flagged": false,
+      "source_location": {
+       "source_type": "text",
+       "char_start": 114,
+       "char_end": 133,
+       "line": 4,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     }
+    ],
+    "disclaimer": "ClearCart is an assistive screening tool. Scores are calibrated model estimates that an element matches a dark-pattern category learned from the ec-darkpattern dataset - they are indications of potentially deceptive design, not proof of fraud or a legal finding. A human reviewer should verify every finding.",
+    "image_size": null,
+    "warnings": [],
+    "intelligence": null,
+    "versions": null
+   },
+   "pressure": 0.7498,
+   "fused_into": null
+  },
+  {
+   "index": 1,
+   "name": "Cart",
+   "stage_type": "cart",
+   "position": 3,
+   "input_type": "text",
+   "captured_at": "2026-11-12T10:04:00+00:00",
+   "synthetic": true,
+   "content": "My Account\n45 ADDED TO BAG IN THE PAST 24 HOURS\nOFFER ENDS 00:54:59\nPay weekly",
+   "audit": {
+    "audit_id": "25fe929e8315",
+    "input_type": "text",
+    "created_at": "2026-11-13T18:41:52+00:00",
+    "processing_ms": 5,
+    "summary": {
+     "elements_analysed": 4,
+     "suspicious_findings": 2,
+     "categories_detected": [
+      {
+       "category": "urgency",
+       "category_label": "Misleading urgency",
+       "count": 1,
+       "max_score": 1.0
+      },
+      {
+       "category": "social_proof",
+       "category_label": "Social proof pressure",
+       "count": 1,
+       "max_score": 0.9958
+      }
+     ],
+     "overall_risk": "high",
+     "overall_score": 1.0,
+     "overall_confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misleading urgency.",
+     "no_concern": false,
+     "summary_text": "2 potentially deceptive element(s) found among 4 analysed: Misleading urgency (1), Social proof pressure (1). Overall risk is high. Review each finding's evidence before drawing conclusions.",
+     "risk_score": 99,
+     "threshold": 0.68
+    },
+    "findings": [
+     {
+      "id": "f2",
+      "category": "urgency",
+      "category_label": "Misleading urgency",
+      "evidence": "OFFER ENDS 00:54:59",
+      "explanation": "The wording creates time pressure (a deadline, countdown or 'ends soon' claim). When the deadline is not genuine or not verifiable, it pushes shoppers to decide before comparing options. Words in this element that most increased the model's score: “ends”, “00”, “offer”.",
+      "detection_method": "ml_classifier",
+      "model_score": 1.0,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misleading urgency.",
+      "category_probabilities": {
+       "benign": 0.0,
+       "urgency": 0.9999,
+       "scarcity": 0.0,
+       "social_proof": 0.0,
+       "misdirection": 0.0
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "ends",
+       "00",
+       "offer",
+       "59"
+      ],
+      "similar_examples": [
+       {
+        "text": "OFFER ENDS: 09h: 09m: 55s: 0",
+        "label": "urgency",
+        "similarity": 0.868
+       },
+       {
+        "text": "Days left until the offer ends: 00 Days 04:43:35",
+        "label": "urgency",
+        "similarity": 0.803
+       }
+      ],
+      "source_location": {
+       "source_type": "text",
+       "char_start": 48,
+       "char_end": 67,
+       "line": 3,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Only show a deadline if it is real, and state the exact end date/time and time zone. Remove countdowns that reset, and avoid pressure words such as 'Hurry' or 'Last chance'.",
+      "suggested_rewrite": null,
+      "short_reason": "Deadline or countdown pressure pushes a rushed decision"
+     },
+     {
+      "id": "f1",
+      "category": "social_proof",
+      "category_label": "Social proof pressure",
+      "evidence": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+      "explanation": "The text uses other shoppers' activity (views, purchases, 'people are looking') to pressure the decision. Such messages are often unverifiable, generic or automatically generated. Words in this element that most increased the model's score: “24”, “in”, “added”.",
+      "detection_method": "ml_classifier",
+      "model_score": 0.9958,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Social proof pressure.",
+      "category_probabilities": {
+       "benign": 0.0042,
+       "urgency": 0.0005,
+       "scarcity": 0.0001,
+       "social_proof": 0.9948,
+       "misdirection": 0.0004
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "24",
+       "in",
+       "added",
+       "in the"
+      ],
+      "similar_examples": [
+       {
+        "text": "52 people have added this product to bag in the last 72 hours",
+        "label": "social_proof",
+        "similarity": 0.634
+       },
+       {
+        "text": "Selling fast! Add to bag 7 times in the last 48 hours.",
+        "label": "social_proof",
+        "similarity": 0.554
+       }
+      ],
+      "source_location": {
+       "source_type": "text",
+       "char_start": 11,
+       "char_end": 47,
+       "line": 2,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Use verifiable, aggregated information (e.g. rating and number of reviews with a link to them). Avoid real-time 'X people are viewing' or 'Y just bought' pop-ups unless they are accurate and auditable.",
+      "suggested_rewrite": null,
+      "short_reason": "Other shoppers' activity used as pressure"
+     }
+    ],
+    "benign_elements": [
+     {
+      "text": "My Account",
+      "p_dark": 0.0022,
+      "flagged": false,
+      "source_location": {
+       "source_type": "text",
+       "char_start": 0,
+       "char_end": 10,
+       "line": 1,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     },
+     {
+      "text": "Pay weekly",
+      "p_dark": 0.0186,
+      "flagged": false,
+      "source_location": {
+       "source_type": "text",
+       "char_start": 68,
+       "char_end": 78,
+       "line": 4,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     }
+    ],
+    "disclaimer": "ClearCart is an assistive screening tool. Scores are calibrated model estimates that an element matches a dark-pattern category learned from the ec-darkpattern dataset - they are indications of potentially deceptive design, not proof of fraud or a legal finding. A human reviewer should verify every finding.",
+    "image_size": null,
+    "warnings": [],
+    "intelligence": null,
+    "versions": null
+   },
+   "pressure": 0.7495,
+   "fused_into": null
+  },
+  {
+   "index": 2,
+   "name": "Checkout",
+   "stage_type": "checkout",
+   "position": 4,
+   "input_type": "html",
+   "captured_at": "2026-11-12T10:13:00+00:00",
+   "synthetic": true,
+   "content": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Checkout</title>\n<!-- AUTHORED demo markup. data-source=\"test-split\" = verbatim ec-darkpattern TEST row; data-source=\"authored\" = written for this demo. -->\n<style>\n.timer{color:#b91c1c;font-weight:700}\n.btn-primary{background:#0f766e;color:#ffffff;font-size:20px;font-weight:700;padding:14px 28px;border-radius:8px}\n.decline{color:#9ca3af;font-size:11px}\n</style></head><body><main>\n<p class=\"timer\" data-source=\"authored\">OFFER ENDS 00:58:40</p>\n<p data-source=\"test-split\">Take time to pay.</p>\n<form id=\"checkout\">\n  <label data-source=\"authored\"><input type=\"checkbox\" name=\"protection\" checked> Add shipping protection for $4.99</label>\n  <button type=\"submit\" class=\"btn-primary\" data-source=\"authored\">Claim discount and continue</button>\n  <a href=\"#\" class=\"decline\" data-source=\"test-split\">no thanks, I&#x27;ll save money another day</a>\n</form></main></body></html>",
+   "audit": {
+    "audit_id": "1107e03b8c98",
+    "input_type": "html",
+    "created_at": "2026-11-13T18:41:52+00:00",
+    "processing_ms": 5,
+    "summary": {
+     "elements_analysed": 5,
+     "suspicious_findings": 4,
+     "categories_detected": [
+      {
+       "category": "misdirection",
+       "category_label": "Misdirection / confirmshaming",
+       "count": 2,
+       "max_score": 1.0
+      },
+      {
+       "category": "urgency",
+       "category_label": "Misleading urgency",
+       "count": 1,
+       "max_score": 1.0
+      },
+      {
+       "category": "preselected_option",
+       "category_label": "Preselected option",
+       "count": 1,
+       "max_score": null
+      }
+     ],
+     "overall_risk": "high",
+     "overall_score": 1.0,
+     "overall_confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misleading urgency.",
+     "no_concern": false,
+     "summary_text": "4 potentially deceptive element(s) found among 5 analysed: Misdirection / confirmshaming (2), Misleading urgency (1), Preselected option (1). Overall risk is high. Review each finding's evidence before drawing conclusions.",
+     "risk_score": 99,
+     "threshold": 0.68
+    },
+    "findings": [
+     {
+      "id": "f3",
+      "category": "urgency",
+      "category_label": "Misleading urgency",
+      "evidence": "OFFER ENDS 00:58:40",
+      "explanation": "The wording creates time pressure (a deadline, countdown or 'ends soon' claim). When the deadline is not genuine or not verifiable, it pushes shoppers to decide before comparing options. Words in this element that most increased the model's score: “ends”, “00”, “58”.",
+      "detection_method": "ml_classifier",
+      "model_score": 1.0,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misleading urgency.",
+      "category_probabilities": {
+       "benign": 0.0,
+       "urgency": 1.0,
+       "scarcity": 0.0,
+       "social_proof": 0.0,
+       "misdirection": 0.0
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "ends",
+       "00",
+       "58",
+       "offer"
+      ],
+      "similar_examples": [
+       {
+        "text": "OFFER ENDS: 09h: 09m: 55s: 0",
+        "label": "urgency",
+        "similarity": 0.851
+       },
+       {
+        "text": "Offer ends 0Hours:04Minutes:46Seconds",
+        "label": "urgency",
+        "similarity": 0.793
+       }
+      ],
+      "source_location": {
+       "source_type": "html",
+       "char_start": null,
+       "char_end": null,
+       "line": null,
+       "css_selector": "body > main > p.timer:nth-of-type(1)",
+       "html_tag": "p",
+       "html_snippet": "<p class=\"timer\" data-source=\"authored\">OFFER ENDS 00:58:40</p>",
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Only show a deadline if it is real, and state the exact end date/time and time zone. Remove countdowns that reset, and avoid pressure words such as 'Hurry' or 'Last chance'.",
+      "suggested_rewrite": null,
+      "short_reason": "Deadline or countdown pressure pushes a rushed decision"
+     },
+     {
+      "id": "f4",
+      "category": "misdirection",
+      "category_label": "Misdirection / confirmshaming",
+      "evidence": "no thanks, I'll save money another day",
+      "explanation": "The wording steers the choice through framing rather than information - e.g. a decline option that shames the user ('No thanks, I don't want to save money') or an upsell framed as the default path. Words in this element that most increased the model's score: “i”, “save”, “no”.",
+      "detection_method": "ml_classifier",
+      "model_score": 1.0,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misdirection / confirmshaming.",
+      "category_probabilities": {
+       "benign": 0.0,
+       "urgency": 0.0,
+       "scarcity": 0.0,
+       "social_proof": 0.0,
+       "misdirection": 1.0
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "i",
+       "save",
+       "no",
+       "no thanks"
+      ],
+      "similar_examples": [
+       {
+        "text": "No thanks, I hate saving money",
+        "label": "misdirection",
+        "similarity": 0.775
+       },
+       {
+        "text": "No thanks, I'm not interested in saving money.",
+        "label": "misdirection",
+        "similarity": 0.763
+       }
+      ],
+      "source_location": {
+       "source_type": "html",
+       "char_start": null,
+       "char_end": null,
+       "line": null,
+       "css_selector": "form#checkout > a.decline",
+       "html_tag": "a",
+       "html_snippet": "<a class=\"decline\" data-source=\"test-split\" href=\"#\">no thanks, I'll save money another day</a>",
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Give accept and decline options equal visual weight and neutral wording. A decline option should simply say what it does, e.g. 'No thanks' or 'Continue without the discount'.",
+      "suggested_rewrite": "No thanks",
+      "short_reason": "Guilt-tripping or steering wording instead of a neutral choice"
+     },
+     {
+      "id": "f1",
+      "category": "misdirection",
+      "category_label": "Misdirection / confirmshaming",
+      "evidence": "Add shipping protection for $4.99",
+      "explanation": "The wording steers the choice through framing rather than information - e.g. a decline option that shames the user ('No thanks, I don't want to save money') or an upsell framed as the default path. Words in this element that most increased the model's score: “add”, “99”, “protection”.",
+      "detection_method": "ml_classifier",
+      "model_score": 0.9867,
+      "confidence_pct": 98,
+      "confidence_statement": "ClearCart is 98% sure this is a fraud/scam (dark pattern) tactic: Misdirection / confirmshaming.",
+      "category_probabilities": {
+       "benign": 0.0133,
+       "urgency": 0.0811,
+       "scarcity": 0.0007,
+       "social_proof": 0.008,
+       "misdirection": 0.897
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "add",
+       "99",
+       "protection",
+       "shipping"
+      ],
+      "similar_examples": [
+       {
+        "text": "Free Shipping",
+        "label": "benign",
+        "similarity": 0.628
+       },
+       {
+        "text": "Free Shipping*",
+        "label": "benign",
+        "similarity": 0.613
+       }
+      ],
+      "source_location": {
+       "source_type": "html",
+       "char_start": null,
+       "char_end": null,
+       "line": null,
+       "css_selector": "form#checkout > label > input",
+       "html_tag": "input[type=checkbox]",
+       "html_snippet": "<label data-source=\"authored\"><input checked=\"\" name=\"protection\" type=\"checkbox\"/> Add shipping protection for $4.99</label>",
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Give accept and decline options equal visual weight and neutral wording. A decline option should simply say what it does, e.g. 'No thanks' or 'Continue without the discount'.",
+      "suggested_rewrite": null,
+      "short_reason": "Guilt-tripping or steering wording instead of a neutral choice"
+     },
+     {
+      "id": "f2",
+      "category": "preselected_option",
+      "category_label": "Preselected option",
+      "evidence": "Add shipping protection for $4.99",
+      "explanation": "This option is already selected in the page markup. Shoppers who do not notice it opt in by default, which can add charges or consents they did not actively choose. The label mentions a price, subscription, add-on or consent, so the default may cost the shopper money or data.",
+      "detection_method": "dom_observation",
+      "model_score": null,
+      "confidence_pct": null,
+      "confidence_statement": "Directly observed in the HTML: this checkbox is pre-selected (checked attribute). No model score - this is a factual DOM observation.",
+      "category_probabilities": null,
+      "risk_level": "medium",
+      "key_terms": [],
+      "similar_examples": [],
+      "source_location": {
+       "source_type": "html",
+       "char_start": null,
+       "char_end": null,
+       "line": null,
+       "css_selector": "form#checkout > label > input",
+       "html_tag": "input[type=checkbox]",
+       "html_snippet": "<label data-source=\"authored\"><input checked=\"\" name=\"protection\" type=\"checkbox\"/> Add shipping protection for $4.99</label>",
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Leave optional add-ons, subscriptions and marketing consents unchecked by default so the shopper makes an explicit, informed choice. Show any cost next to the option.",
+      "suggested_rewrite": null,
+      "short_reason": "Option is pre-ticked, so shoppers opt in by default (mentions a cost or consent)"
+     }
+    ],
+    "benign_elements": [
+     {
+      "text": "Claim discount and continue",
+      "p_dark": 0.0119,
+      "flagged": false,
+      "source_location": {
+       "source_type": "html",
+       "char_start": null,
+       "char_end": null,
+       "line": null,
+       "css_selector": "form#checkout > button.btn-primary",
+       "html_tag": "button",
+       "html_snippet": "<button class=\"btn-primary\" data-source=\"authored\" type=\"submit\">Claim discount and continue</button>",
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     },
+     {
+      "text": "Take time to pay.",
+      "p_dark": 0.1394,
+      "flagged": false,
+      "source_location": {
+       "source_type": "html",
+       "char_start": null,
+       "char_end": null,
+       "line": null,
+       "css_selector": "body > main > p:nth-of-type(2)",
+       "html_tag": "p",
+       "html_snippet": "<p data-source=\"test-split\">Take time to pay.</p>",
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     }
+    ],
+    "disclaimer": "ClearCart is an assistive screening tool. Scores are calibrated model estimates that an element matches a dark-pattern category learned from the ec-darkpattern dataset - they are indications of potentially deceptive design, not proof of fraud or a legal finding. A human reviewer should verify every finding.",
+    "image_size": null,
+    "warnings": [],
+    "intelligence": null,
+    "versions": null
+   },
+   "pressure": 0.75,
+   "fused_into": null
+  },
+  {
+   "index": 3,
+   "name": "Cancellation / exit",
+   "stage_type": "exit",
+   "position": 7,
+   "input_type": "text",
+   "captured_at": "2026-11-12T10:20:00+00:00",
+   "synthetic": true,
+   "content": "Yes, keep my membership\nNO, I DON'T FEEL LUCKY",
+   "audit": {
+    "audit_id": "2230b55bbe39",
+    "input_type": "text",
+    "created_at": "2026-11-13T18:41:52+00:00",
+    "processing_ms": 3,
+    "summary": {
+     "elements_analysed": 2,
+     "suspicious_findings": 1,
+     "categories_detected": [
+      {
+       "category": "misdirection",
+       "category_label": "Misdirection / confirmshaming",
+       "count": 1,
+       "max_score": 0.996
+      }
+     ],
+     "overall_risk": "high",
+     "overall_score": 0.996,
+     "overall_confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misdirection / confirmshaming.",
+     "no_concern": false,
+     "summary_text": "1 potentially deceptive element(s) found among 2 analysed: Misdirection / confirmshaming (1). Overall risk is high. Review each finding's evidence before drawing conclusions.",
+     "risk_score": 99,
+     "threshold": 0.68
+    },
+    "findings": [
+     {
+      "id": "f1",
+      "category": "misdirection",
+      "category_label": "Misdirection / confirmshaming",
+      "evidence": "NO, I DON'T FEEL LUCKY",
+      "explanation": "The wording steers the choice through framing rather than information - e.g. a decline option that shames the user ('No thanks, I don't want to save money') or an upsell framed as the default path. Words in this element that most increased the model's score: “i”, “no”, “i don”.",
+      "detection_method": "ml_classifier",
+      "model_score": 0.996,
+      "confidence_pct": 99,
+      "confidence_statement": "ClearCart is 99% sure this is a fraud/scam (dark pattern) tactic: Misdirection / confirmshaming.",
+      "category_probabilities": {
+       "benign": 0.004,
+       "urgency": 0.0002,
+       "scarcity": 0.0001,
+       "social_proof": 0.0001,
+       "misdirection": 0.9956
+      },
+      "risk_level": "high",
+      "key_terms": [
+       "i",
+       "no",
+       "i don",
+       "don"
+      ],
+      "similar_examples": [
+       {
+        "text": "I don't feel lucky",
+        "label": "misdirection",
+        "similarity": 0.887
+       },
+       {
+        "text": "Last chance! Only 1 left",
+        "label": "scarcity",
+        "similarity": 0.261
+       }
+      ],
+      "source_location": {
+       "source_type": "text",
+       "char_start": 24,
+       "char_end": 46,
+       "line": 2,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      },
+      "ethical_recommendation": "Give accept and decline options equal visual weight and neutral wording. A decline option should simply say what it does, e.g. 'No thanks' or 'Continue without the discount'.",
+      "suggested_rewrite": "No thanks",
+      "short_reason": "Guilt-tripping or steering wording instead of a neutral choice"
+     }
+    ],
+    "benign_elements": [
+     {
+      "text": "Yes, keep my membership",
+      "p_dark": 0.6211,
+      "flagged": false,
+      "source_location": {
+       "source_type": "text",
+       "char_start": 0,
+       "char_end": 23,
+       "line": 1,
+       "css_selector": null,
+       "html_tag": null,
+       "html_snippet": null,
+       "bbox": null,
+       "ocr_confidence": null
+      }
+     }
+    ],
+    "disclaimer": "ClearCart is an assistive screening tool. Scores are calibrated model estimates that an element matches a dark-pattern category learned from the ec-darkpattern dataset - they are indications of potentially deceptive design, not proof of fraud or a legal finding. A human reviewer should verify every finding.",
+    "image_size": null,
+    "warnings": [],
+    "intelligence": null,
+    "versions": null
+   },
+   "pressure": 0.6225,
+   "fused_into": null
+  }
+ ],
+ "fspm": {
+  "available": true,
+  "reason": null,
+  "formula": "FSPM = 100 * sum(F_pos(i) * p_i) / sum(F_pos(i))",
+  "stages": [
+   {
+    "stage_index": 0,
+    "name": "Product page",
+    "position": 2,
+    "pressure": 0.7498,
+    "pressure_sources": [
+     {
+      "stage_index": 0,
+      "finding_id": "f2",
+      "text": "19 people viewed this product per day",
+      "evidence_id": "s1:f2"
+     },
+     {
+      "stage_index": 0,
+      "finding_id": "f1",
+      "text": "Only 5 item(s) left.",
+      "evidence_id": "s1:f1"
+     }
+    ],
+    "weights": {
+     "fibonacci": 0.0526,
+     "linear": 0.125,
+     "equal": 0.25
+    },
+    "contributions": {
+     "fibonacci": 3.95,
+     "linear": 9.37,
+     "equal": 18.74
+    }
+   },
+   {
+    "stage_index": 1,
+    "name": "Cart",
+    "position": 3,
+    "pressure": 0.7495,
+    "pressure_sources": [
+     {
+      "stage_index": 1,
+      "finding_id": "f2",
+      "text": "OFFER ENDS 00:54:59",
+      "evidence_id": "s2:f2"
+     },
+     {
+      "stage_index": 1,
+      "finding_id": "f1",
+      "text": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+      "evidence_id": "s2:f1"
+     }
+    ],
+    "weights": {
+     "fibonacci": 0.1053,
+     "linear": 0.1875,
+     "equal": 0.25
+    },
+    "contributions": {
+     "fibonacci": 7.89,
+     "linear": 14.05,
+     "equal": 18.74
+    }
+   },
+   {
+    "stage_index": 2,
+    "name": "Checkout",
+    "position": 4,
+    "pressure": 0.75,
+    "pressure_sources": [
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     }
+    ],
+    "weights": {
+     "fibonacci": 0.1579,
+     "linear": 0.25,
+     "equal": 0.25
+    },
+    "contributions": {
+     "fibonacci": 11.84,
+     "linear": 18.75,
+     "equal": 18.75
+    }
+   },
+   {
+    "stage_index": 3,
+    "name": "Cancellation / exit",
+    "position": 7,
+    "pressure": 0.6225,
+    "pressure_sources": [
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ],
+    "weights": {
+     "fibonacci": 0.6842,
+     "linear": 0.4375,
+     "equal": 0.25
+    },
+    "contributions": {
+     "fibonacci": 42.59,
+     "linear": 27.23,
+     "equal": 15.56
+    }
+   }
+  ],
+  "scores": {
+   "fibonacci": 66.27,
+   "linear": 69.41,
+   "equal": 71.79
+  },
+  "top_stage_index": 3,
+  "fibonacci_numbers": [
+   1,
+   1,
+   2,
+   3,
+   5,
+   8,
+   13
+  ],
+  "positions_mode": "canonical"
+ },
+ "temporal": {
+  "available": true,
+  "reason": null,
+  "ordering": "timestamp",
+  "events": [
+   {
+    "stage_index": 0,
+    "stage_name": "Product page",
+    "timestamp": "2026-11-12T10:00:00+00:00",
+    "kind": "model_inference",
+    "category": "social_proof",
+    "description": "Classifier flagged Social proof pressure (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 0,
+      "finding_id": "f2",
+      "text": "19 people viewed this product per day",
+      "evidence_id": "s1:f2"
+     }
+    ],
+    "pressure": 0.7498,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": null
+   },
+   {
+    "stage_index": 0,
+    "stage_name": "Product page",
+    "timestamp": "2026-11-12T10:00:00+00:00",
+    "kind": "model_inference",
+    "category": "scarcity",
+    "description": "Classifier flagged Misleading scarcity (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 0,
+      "finding_id": "f1",
+      "text": "Only 5 item(s) left.",
+      "evidence_id": "s1:f1"
+     }
+    ],
+    "pressure": 0.7498,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": null
+   },
+   {
+    "stage_index": 1,
+    "stage_name": "Cart",
+    "timestamp": "2026-11-12T10:04:00+00:00",
+    "kind": "model_inference",
+    "category": "urgency",
+    "description": "Classifier flagged Misleading urgency (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 1,
+      "finding_id": "f2",
+      "text": "OFFER ENDS 00:54:59",
+      "evidence_id": "s2:f2"
+     }
+    ],
+    "pressure": 0.7495,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": -0.0003
+   },
+   {
+    "stage_index": 1,
+    "stage_name": "Cart",
+    "timestamp": "2026-11-12T10:04:00+00:00",
+    "kind": "model_inference",
+    "category": "social_proof",
+    "description": "Classifier flagged Social proof pressure (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 1,
+      "finding_id": "f1",
+      "text": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+      "evidence_id": "s2:f1"
+     }
+    ],
+    "pressure": 0.7495,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": -0.0003
+   },
+   {
+    "stage_index": 2,
+    "stage_name": "Checkout",
+    "timestamp": "2026-11-12T10:13:00+00:00",
+    "kind": "observed_fact",
+    "category": "countdown_reset",
+    "description": "Countdown read 00:54:59 at 'Cart' (“OFFER ENDS 00:54:59”) and 00:58:40 at the later stage 'Checkout' (“OFFER ENDS 00:58:40”). The later observation showed MORE time remaining (+00:03:41), so the countdown did not keep running down between the two observations. The captures are 00:09:00 apart; a countdown running in real time would show about 00:45:59 (tolerance 60 s), but 00:58:40 was shown.",
+    "evidence": [
+     {
+      "stage_index": 1,
+      "finding_id": "f2",
+      "text": "OFFER ENDS 00:54:59",
+      "evidence_id": "s2:f2"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     }
+    ],
+    "pressure": 0.75,
+    "deceptive_signal": true,
+    "previous_state": "00:54:59 remaining",
+    "current_state": "00:58:40 remaining",
+    "pressure_delta": 0.0005
+   },
+   {
+    "stage_index": 2,
+    "stage_name": "Checkout",
+    "timestamp": "2026-11-12T10:13:00+00:00",
+    "kind": "observed_fact",
+    "category": "new_preselected_option",
+    "description": "Pre-selected option “Add shipping protection for $4.99” first appears at stage 'Checkout'; it was not pre-selected at any earlier stage (the label mentions a cost or consent).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": "f2",
+      "text": "Add shipping protection for $4.99",
+      "evidence_id": "s3:f2"
+     }
+    ],
+    "pressure": 0.75,
+    "deceptive_signal": true,
+    "previous_state": "not pre-selected",
+    "current_state": "pre-selected",
+    "pressure_delta": 0.0005
+   },
+   {
+    "stage_index": 2,
+    "stage_name": "Checkout",
+    "timestamp": "2026-11-12T10:13:00+00:00",
+    "kind": "observation",
+    "category": "choice_asymmetry",
+    "description": "A competing accept/decline choice first appears at 'Checkout': “Claim discount and continue” vs “no thanks, I'll save money another day” (MCAI 54/100, coverage 100%).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": null,
+      "text": "Claim discount and continue",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     }
+    ],
+    "pressure": 0.75,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": 0.0005
+   },
+   {
+    "stage_index": 2,
+    "stage_name": "Checkout",
+    "timestamp": "2026-11-12T10:13:00+00:00",
+    "kind": "model_inference",
+    "category": "urgency",
+    "description": "Classifier flagged Misleading urgency (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     }
+    ],
+    "pressure": 0.75,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": 0.0005
+   },
+   {
+    "stage_index": 2,
+    "stage_name": "Checkout",
+    "timestamp": "2026-11-12T10:13:00+00:00",
+    "kind": "model_inference",
+    "category": "misdirection",
+    "description": "Classifier flagged Misdirection / confirmshaming (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     }
+    ],
+    "pressure": 0.75,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": 0.0005
+   },
+   {
+    "stage_index": 2,
+    "stage_name": "Checkout",
+    "timestamp": "2026-11-12T10:13:00+00:00",
+    "kind": "model_inference",
+    "category": "misdirection",
+    "description": "Classifier flagged Misdirection / confirmshaming (98% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": "f1",
+      "text": "Add shipping protection for $4.99",
+      "evidence_id": "s3:f1"
+     }
+    ],
+    "pressure": 0.75,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": 0.0005
+   },
+   {
+    "stage_index": 3,
+    "stage_name": "Cancellation / exit",
+    "timestamp": "2026-11-12T10:20:00+00:00",
+    "kind": "observation",
+    "category": "interaction_difficulty",
+    "description": "Declared choice path at 'Cancellation / exit' (Keep membership vs cancel membership (declared)): accepting takes 1 step(s), declining takes 5. Step counts are declared by the auditor, not observed by ClearCart.",
+    "evidence": [],
+    "pressure": 0.6225,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": -0.1275
+   },
+   {
+    "stage_index": 3,
+    "stage_name": "Cancellation / exit",
+    "timestamp": "2026-11-12T10:20:00+00:00",
+    "kind": "observation",
+    "category": "choice_asymmetry",
+    "description": "Choice asymmetry rose from 54 at 'Checkout' to 75 at 'Cancellation / exit' (worst accept/decline pair per stage).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": null,
+      "text": "Claim discount and continue",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     },
+     {
+      "stage_index": 3,
+      "finding_id": null,
+      "text": "Yes, keep my membership",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ],
+    "pressure": 0.6225,
+    "deceptive_signal": false,
+    "previous_state": "MCAI 54",
+    "current_state": "MCAI 75",
+    "pressure_delta": -0.1275
+   },
+   {
+    "stage_index": 3,
+    "stage_name": "Cancellation / exit",
+    "timestamp": "2026-11-12T10:20:00+00:00",
+    "kind": "observation",
+    "category": "decline_path_change",
+    "description": "The decline option changed between 'Checkout' (“no thanks, I'll save money another day”) and 'Cancellation / exit' (“NO, I DON'T FEEL LUCKY”).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": null,
+      "text": "Claim discount and continue",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     },
+     {
+      "stage_index": 3,
+      "finding_id": null,
+      "text": "Yes, keep my membership",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ],
+    "pressure": 0.6225,
+    "deceptive_signal": false,
+    "previous_state": "decline: “no thanks, I'll save money another day”",
+    "current_state": "decline: “NO, I DON'T FEEL LUCKY”",
+    "pressure_delta": -0.1275
+   },
+   {
+    "stage_index": 3,
+    "stage_name": "Cancellation / exit",
+    "timestamp": "2026-11-12T10:20:00+00:00",
+    "kind": "model_inference",
+    "category": "misdirection",
+    "description": "Classifier flagged Misdirection / confirmshaming (99% calibrated).",
+    "evidence": [
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ],
+    "pressure": 0.6225,
+    "deceptive_signal": false,
+    "previous_state": null,
+    "current_state": null,
+    "pressure_delta": -0.1275
+   }
+  ],
+  "pressure_progression": [
+   0.7498,
+   0.7495,
+   0.75,
+   0.6225
+  ],
+  "progression_stage_indices": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "metrics": {
+   "units": 4,
+   "category_persistence": {
+    "urgency": 0.5,
+    "scarcity": 0.25,
+    "social_proof": 0.5,
+    "misdirection": 0.5
+   },
+   "repeated_signals": [
+    {
+     "signal": "offer ends",
+     "stages": [
+      "Cart",
+      "Checkout"
+     ]
+    }
+   ],
+   "pressure_deltas": [
+    {
+     "from": "Product page",
+     "to": "Cart",
+     "delta": -0.0003
+    },
+    {
+     "from": "Cart",
+     "to": "Checkout",
+     "delta": 0.0005
+    },
+    {
+     "from": "Checkout",
+     "to": "Cancellation / exit",
+     "delta": -0.1275
+    }
+   ],
+   "mean_abs_pressure_change": 0.0428,
+   "max_pressure_increase": 0.0005,
+   "countdown_resets": 1,
+   "new_preselections": 1,
+   "price_change_events": 0,
+   "stock_change_events": 0,
+   "declared_step_gap_change": null
+  }
+ },
+ "cdi": {
+  "cdi": 76.45,
+  "band": "high",
+  "weights_version": "cdi-w1",
+  "components": [
+   {
+    "key": "content_pressure",
+    "label": "Content pressure (classifier)",
+    "available": true,
+    "value": 0.6627,
+    "weight": 0.55,
+    "effective_weight": 0.55,
+    "contribution": 36.45,
+    "provenance": "model+observed",
+    "explanation": "Journey content pressure = FSPM (Fibonacci-weighted stage pressures, incl. observed countdown resets)/100. Replaces, not adds to, page-level content pressure.",
+    "evidence": [
+     {
+      "stage_index": 0,
+      "finding_id": "f2",
+      "text": "19 people viewed this product per day",
+      "evidence_id": "s1:f2"
+     },
+     {
+      "stage_index": 0,
+      "finding_id": "f1",
+      "text": "Only 5 item(s) left.",
+      "evidence_id": "s1:f1"
+     },
+     {
+      "stage_index": 1,
+      "finding_id": "f2",
+      "text": "OFFER ENDS 00:54:59",
+      "evidence_id": "s2:f2"
+     },
+     {
+      "stage_index": 1,
+      "finding_id": "f1",
+      "text": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+      "evidence_id": "s2:f1"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     },
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ]
+   },
+   {
+    "key": "choice_asymmetry",
+    "label": "Choice asymmetry (visual + interaction)",
+    "available": true,
+    "value": 0.8,
+    "weight": 0.25,
+    "effective_weight": 0.25,
+    "contribution": 20.0,
+    "provenance": "declared",
+    "explanation": "Worst choice set (c1): visual/interaction asymmetry 80/100.",
+    "evidence": [
+     {
+      "stage_index": 3,
+      "finding_id": null,
+      "text": "Yes, keep my membership",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ]
+   },
+   {
+    "key": "observed_obstruction",
+    "label": "Observed obstruction (DOM / journey facts)",
+    "available": true,
+    "value": 1.0,
+    "weight": 0.2,
+    "effective_weight": 0.2,
+    "contribution": 20.0,
+    "provenance": "observed",
+    "explanation": "1 observed obstruction fact(s); the strongest sets the value (max, not sum).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": "f2",
+      "text": "Add shipping protection for $4.99",
+      "evidence_id": "s3:f2"
+     }
+    ]
+   }
+  ],
+  "coverage": 1.0,
+  "evidence_items": 11,
+  "sensitivity": {
+   "one_at_a_time": [
+    {
+     "component": "content_pressure",
+     "low": 74.25,
+     "high": 80.31
+    },
+    {
+     "component": "choice_asymmetry",
+     "low": 75.94,
+     "high": 76.84
+    },
+    {
+     "component": "observed_obstruction",
+     "low": 73.83,
+     "high": 78.59
+    }
+   ],
+   "dirichlet_p05": 72.29,
+   "dirichlet_p95": 81.34,
+   "samples": 1000
+  },
+  "confidence": {
+   "evidence_by_provenance": {
+    "model": 8,
+    "declared": 1,
+    "observed": 1
+   },
+   "model_evidence": 8,
+   "mean_model_confidence": 0.9988,
+   "min_model_confidence": 0.9958,
+   "level": "high",
+   "note": "Confidence describes how sure the evidence is, not how severe the deception is."
+  },
+  "alternatives": {
+   "weighted_mean (selected)": 76.45,
+   "geometric": 75.42,
+   "max": 100.0,
+   "power2": 77.56,
+   "noisy_or": 100.0
+  },
+  "formula": "CDI = 100 * sum_{j in available} w_j * x_j / sum_{j in available} w_j",
+  "note": "Interpretable screening index. Not a probability that a merchant is fraudulent."
+ },
+ "mcai": {
+  "available": true,
+  "reason": null,
+  "formula": "MCAI = 100 * sum_{d in available} w_d * D_d / sum_{d in available} w_d",
+  "weights": {
+   "visual": 0.4,
+   "interaction": 0.3,
+   "semantic": 0.3
+  },
+  "choice_sets": [
+   {
+    "id": "s3-c1",
+    "accept": {
+     "role": "accept",
+     "text": "Claim discount and continue",
+     "css_selector": "form#checkout > button.btn-primary",
+     "bbox": null,
+     "finding_id": null
+    },
+    "decline": {
+     "role": "decline",
+     "text": "no thanks, I'll save money another day",
+     "css_selector": "form#checkout > a.decline",
+     "bbox": null,
+     "finding_id": "f4"
+    },
+    "dimensions": [
+     {
+      "name": "visual",
+      "available": true,
+      "score": 0.5108,
+      "provenance": "measured",
+      "reason": null,
+      "features": [
+       {
+        "feature": "control_kind",
+        "accept_value": 1.0,
+        "decline_value": 0.35,
+        "accept_provenance": "measured",
+        "decline_provenance": "measured",
+        "asymmetry": 0.65,
+        "note": "button-like control"
+       },
+       {
+        "feature": "font_size_px",
+        "accept_value": 20.0,
+        "decline_value": 11.0,
+        "accept_provenance": "measured",
+        "decline_provenance": "measured",
+        "asymmetry": 0.45,
+        "note": null
+       },
+       {
+        "feature": "font_weight",
+        "accept_value": 700.0,
+        "decline_value": 400.0,
+        "accept_provenance": "measured",
+        "decline_provenance": "default",
+        "asymmetry": 0.4286,
+        "note": null
+       },
+       {
+        "feature": "background_fill",
+        "accept_value": 1.0,
+        "decline_value": 0.0,
+        "accept_provenance": "measured",
+        "decline_provenance": "default",
+        "asymmetry": 1.0,
+        "note": "background: #0f766e"
+       },
+       {
+        "feature": "contrast_ratio",
+        "accept_value": 5.473,
+        "decline_value": 2.539,
+        "accept_provenance": "measured",
+        "decline_provenance": "default",
+        "asymmetry": 0.5361,
+        "note": null
+       },
+       {
+        "feature": "opacity",
+        "accept_value": 1.0,
+        "decline_value": 1.0,
+        "accept_provenance": "default",
+        "decline_provenance": "default",
+        "asymmetry": 0.0,
+        "note": null
+       },
+       {
+        "feature": "rendered_area",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "unavailable",
+        "decline_provenance": "unavailable",
+        "asymmetry": null,
+        "note": "needs rendered layout; not computed from declared HTML/CSS"
+       }
+      ]
+     },
+     {
+      "name": "interaction",
+      "available": true,
+      "score": 0.5,
+      "provenance": "inferred",
+      "reason": "Inferred from page structure, not from observed click depth.",
+      "features": [
+       {
+        "feature": "steps",
+        "accept_value": 1.0,
+        "decline_value": 2.0,
+        "accept_provenance": "inferred",
+        "decline_provenance": "inferred",
+        "asymmetry": 0.5,
+        "note": "structural estimate (accept = 1 step)"
+       },
+       {
+        "feature": "preselected_optouts",
+        "accept_value": 0.0,
+        "decline_value": 1.0,
+        "accept_provenance": "inferred",
+        "decline_provenance": "inferred",
+        "asymmetry": null,
+        "note": "1 pre-ticked cost/consent option(s) must be unticked to decline them"
+       }
+      ]
+     },
+     {
+      "name": "semantic",
+      "available": true,
+      "score": 0.6101,
+      "provenance": "model",
+      "reason": null,
+      "features": [
+       {
+        "feature": "guilt",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "model",
+        "decline_provenance": "model",
+        "asymmetry": 1.0,
+        "note": "calibrated P(misdirection) of the decline wording"
+       },
+       {
+        "feature": "accept_pressure",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "model",
+        "decline_provenance": "model",
+        "asymmetry": 0.0119,
+        "note": "calibrated P(dark pattern) of the accept wording"
+       },
+       {
+        "feature": "wording_imbalance",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "measured",
+        "decline_provenance": "measured",
+        "asymmetry": 0.4286,
+        "note": "relative difference in word count (unequal disclosure)"
+       }
+      ]
+     }
+    ],
+    "mcai": 53.73,
+    "coverage": 1.0,
+    "role_detection": "rule-based lexicon (candidate extraction only)",
+    "dimension_contributions": {
+     "visual": 20.43,
+     "interaction": 15.0,
+     "semantic": 18.3
+    },
+    "top_dimension": "visual",
+    "alternatives": {
+     "weighted_mean (selected)": 53.73,
+     "geometric": 53.53,
+     "max": 61.01,
+     "power2": 53.95,
+     "noisy_or": 54.0
+    },
+    "sensitivity": {
+     "one_at_a_time": [
+      {
+       "component": "visual",
+       "low": 53.29,
+       "high": 54.4
+      },
+      {
+       "component": "interaction",
+       "low": 53.25,
+       "high": 54.39
+      },
+      {
+       "component": "semantic",
+       "low": 52.45,
+       "high": 54.68
+      }
+     ],
+     "dirichlet_p05": 52.16,
+     "dirichlet_p95": 55.54,
+     "samples": 1000
+    }
+   },
+   {
+    "id": "s4-c1",
+    "accept": {
+     "role": "accept",
+     "text": "Yes, keep my membership",
+     "css_selector": null,
+     "bbox": null,
+     "finding_id": null
+    },
+    "decline": {
+     "role": "decline",
+     "text": "NO, I DON'T FEEL LUCKY",
+     "css_selector": null,
+     "bbox": null,
+     "finding_id": "f1"
+    },
+    "dimensions": [
+     {
+      "name": "visual",
+      "available": false,
+      "score": null,
+      "provenance": "unavailable",
+      "reason": "Pasted text has no visual properties.",
+      "features": []
+     },
+     {
+      "name": "interaction",
+      "available": true,
+      "score": 0.8,
+      "provenance": "declared",
+      "reason": null,
+      "features": [
+       {
+        "feature": "steps",
+        "accept_value": 1.0,
+        "decline_value": 5.0,
+        "accept_provenance": "declared",
+        "decline_provenance": "declared",
+        "asymmetry": 0.8,
+        "note": "Keep membership vs cancel membership (declared)"
+       }
+      ]
+     },
+     {
+      "name": "semantic",
+      "available": true,
+      "score": 0.7031,
+      "provenance": "model",
+      "reason": null,
+      "features": [
+       {
+        "feature": "guilt",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "model",
+        "decline_provenance": "model",
+        "asymmetry": 0.9956,
+        "note": "calibrated P(misdirection) of the decline wording"
+       },
+       {
+        "feature": "accept_pressure",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "model",
+        "decline_provenance": "model",
+        "asymmetry": 0.6211,
+        "note": "calibrated P(dark pattern) of the accept wording"
+       },
+       {
+        "feature": "wording_imbalance",
+        "accept_value": null,
+        "decline_value": null,
+        "accept_provenance": "measured",
+        "decline_provenance": "measured",
+        "asymmetry": 0.2,
+        "note": "relative difference in word count (unequal disclosure)"
+       }
+      ]
+     }
+    ],
+    "mcai": 75.16,
+    "coverage": 0.6,
+    "role_detection": "rule-based lexicon (candidate extraction only)",
+    "dimension_contributions": {
+     "interaction": 40.0,
+     "semantic": 35.16
+    },
+    "top_dimension": "interaction",
+    "alternatives": {
+     "weighted_mean (selected)": 75.16,
+     "geometric": 75.0,
+     "max": 80.0,
+     "power2": 75.31,
+     "noisy_or": 75.63
+    },
+    "sensitivity": {
+     "one_at_a_time": [
+      {
+       "component": "interaction",
+       "low": 73.54,
+       "high": 76.12
+      },
+      {
+       "component": "semantic",
+       "low": 74.19,
+       "high": 76.77
+      }
+     ],
+     "dirichlet_p05": 73.27,
+     "dirichlet_p95": 76.85,
+     "samples": 1000
+    }
+   }
+  ],
+  "mcai": 75.16
+ },
+ "counterfactual": {
+  "edits": [
+   {
+    "target": "f2",
+    "stage_index": 0,
+    "category": "social_proof",
+    "action": "remove_unverifiable_claim",
+    "original": "19 people viewed this product per day",
+    "redesigned": null,
+    "diff": [],
+    "original_score": 0.9998,
+    "redesigned_score": 0.0,
+    "facts_preserved": true,
+    "explanation": "Optimiser selected 'remove_unverifiable_claim' (lowest model score among 2 feasible of 2 candidates). Social proof cannot be rewritten without a verifiable data source; remove it or replace it with verifiable aggregate data (e.g. rating and number of reviews, linked to the reviews).",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "19 people viewed this product per day",
+      "score": 0.9998,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     },
+     {
+      "variant": "remove_unverifiable_claim",
+      "text": null,
+      "score": 0.0,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 7
+     }
+    ]
+   },
+   {
+    "target": "f1",
+    "stage_index": 0,
+    "category": "scarcity",
+    "action": "no_safe_rewrite",
+    "original": "Only 5 item(s) left.",
+    "redesigned": null,
+    "diff": [],
+    "original_score": 0.9991,
+    "redesigned_score": null,
+    "facts_preserved": true,
+    "explanation": "No removable pressure phrase was found (only case or punctuation would change); no safe automatic rewrite. Verify the claim and state it neutrally, or remove it. Optimiser: no feasible candidate scored lower than the original.",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "Only 5 item(s) left.",
+      "score": 0.9991,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     }
+    ]
+   },
+   {
+    "target": "f2",
+    "stage_index": 1,
+    "category": "urgency",
+    "action": "no_safe_rewrite",
+    "original": "OFFER ENDS 00:54:59",
+    "redesigned": null,
+    "diff": [],
+    "original_score": 1.0,
+    "redesigned_score": null,
+    "facts_preserved": true,
+    "explanation": "No removable pressure phrase was found (only case or punctuation would change); no safe automatic rewrite. Verify the claim and state it neutrally, or remove it. Optimiser: no feasible candidate scored lower than the original.",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "OFFER ENDS 00:54:59",
+      "score": 1.0,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     }
+    ]
+   },
+   {
+    "target": "f1",
+    "stage_index": 1,
+    "category": "social_proof",
+    "action": "remove_unverifiable_claim",
+    "original": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+    "redesigned": null,
+    "diff": [],
+    "original_score": 0.9958,
+    "redesigned_score": 0.0,
+    "facts_preserved": true,
+    "explanation": "Optimiser selected 'remove_unverifiable_claim' (lowest model score among 2 feasible of 2 candidates). Social proof cannot be rewritten without a verifiable data source; remove it or replace it with verifiable aggregate data (e.g. rating and number of reviews, linked to the reviews).",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+      "score": 0.9958,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     },
+     {
+      "variant": "remove_unverifiable_claim",
+      "text": null,
+      "score": 0.0,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 9
+     }
+    ]
+   },
+   {
+    "target": "f3",
+    "stage_index": 2,
+    "category": "urgency",
+    "action": "no_safe_rewrite",
+    "original": "OFFER ENDS 00:58:40",
+    "redesigned": null,
+    "diff": [],
+    "original_score": 1.0,
+    "redesigned_score": null,
+    "facts_preserved": true,
+    "explanation": "No removable pressure phrase was found (only case or punctuation would change); no safe automatic rewrite. Verify the claim and state it neutrally, or remove it. Optimiser: no feasible candidate scored lower than the original.",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "OFFER ENDS 00:58:40",
+      "score": 1.0,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     }
+    ]
+   },
+   {
+    "target": "f4",
+    "stage_index": 2,
+    "category": "misdirection",
+    "action": "rewrite",
+    "original": "no thanks, I'll save money another day",
+    "redesigned": "Decline",
+    "diff": [
+     {
+      "op": "delete",
+      "text": "no thanks, I'll save money another day"
+     },
+     {
+      "op": "insert",
+      "text": "Decline"
+     }
+    ],
+    "original_score": 1.0,
+    "redesigned_score": 0.0073,
+    "facts_preserved": true,
+    "explanation": "Optimiser selected 'neutral_decline' (lowest model score among 6 feasible of 6 candidates). Decline option reworded neutrally: it now simply states the choice, without guilt or loss framing.",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "no thanks, I'll save money another day",
+      "score": 1.0,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     },
+     {
+      "variant": "minimal",
+      "text": "No thanks",
+      "score": 0.9938,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 7
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "No thanks",
+      "score": 0.9938,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 7
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "No, thank you",
+      "score": 0.9537,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 7
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "Decline",
+      "score": 0.0073,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 7
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "Continue without this offer",
+      "score": 0.7259,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 7
+     }
+    ]
+   },
+   {
+    "target": "f1",
+    "stage_index": 2,
+    "category": "misdirection",
+    "action": "no_safe_rewrite",
+    "original": "Add shipping protection for $4.99",
+    "redesigned": null,
+    "diff": [],
+    "original_score": 0.9867,
+    "redesigned_score": null,
+    "facts_preserved": true,
+    "explanation": "Up-sell or steering framing: no safe automatic rewrite (it would require knowing the offer's real terms). Present the offer and the decline with neutral wording and equal visual weight. Optimiser: no feasible candidate scored lower than the original.",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "Add shipping protection for $4.99",
+      "score": 0.9867,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     }
+    ]
+   },
+   {
+    "target": "f2",
+    "stage_index": 2,
+    "category": "preselected_option",
+    "action": "uncheck_default",
+    "original": "Add shipping protection for $4.99",
+    "redesigned": "[unchecked by default] Add shipping protection for $4.99",
+    "diff": [
+     {
+      "op": "insert",
+      "text": "[unchecked by default]"
+     },
+     {
+      "op": "equal",
+      "text": "Add shipping protection for $4.99"
+     }
+    ],
+    "original_score": null,
+    "redesigned_score": null,
+    "facts_preserved": true,
+    "explanation": "Directly observed pre-selected option (DOM state, not a model score). Redesign: leave it unchecked so the shopper opts in explicitly; wording unchanged.",
+    "candidates": []
+   },
+   {
+    "target": "f1",
+    "stage_index": 3,
+    "category": "misdirection",
+    "action": "rewrite",
+    "original": "NO, I DON'T FEEL LUCKY",
+    "redesigned": "Decline",
+    "diff": [
+     {
+      "op": "delete",
+      "text": "NO, I DON'T FEEL LUCKY"
+     },
+     {
+      "op": "insert",
+      "text": "Decline"
+     }
+    ],
+    "original_score": 0.996,
+    "redesigned_score": 0.0073,
+    "facts_preserved": true,
+    "explanation": "Optimiser selected 'neutral_decline' (lowest model score among 6 feasible of 6 candidates). Decline option reworded neutrally: it now simply states the choice, without guilt or loss framing.",
+    "candidates": [
+     {
+      "variant": "original",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "score": 0.996,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 0
+     },
+     {
+      "variant": "minimal",
+      "text": "No thanks",
+      "score": 0.9938,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 5
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "No thanks",
+      "score": 0.9938,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 5
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "No, thank you",
+      "score": 0.9537,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 5
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "Decline",
+      "score": 0.0073,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 5
+     },
+     {
+      "variant": "neutral_decline",
+      "text": "Continue without this offer",
+      "score": 0.7259,
+      "feasible": true,
+      "violated": [],
+      "edit_distance": 5
+     }
+    ]
+   }
+  ],
+  "original_cdi": 76.45,
+  "redesigned_cdi": 11.92,
+  "risk_reduction_pct": 84.4,
+  "original_components": [
+   {
+    "key": "content_pressure",
+    "label": "Content pressure (classifier)",
+    "available": true,
+    "value": 0.6627,
+    "weight": 0.55,
+    "effective_weight": 0.55,
+    "contribution": 36.45,
+    "provenance": "model+observed",
+    "explanation": "Journey content pressure = FSPM (Fibonacci-weighted stage pressures, incl. observed countdown resets)/100. Replaces, not adds to, page-level content pressure.",
+    "evidence": [
+     {
+      "stage_index": 0,
+      "finding_id": "f2",
+      "text": "19 people viewed this product per day",
+      "evidence_id": "s1:f2"
+     },
+     {
+      "stage_index": 0,
+      "finding_id": "f1",
+      "text": "Only 5 item(s) left.",
+      "evidence_id": "s1:f1"
+     },
+     {
+      "stage_index": 1,
+      "finding_id": "f2",
+      "text": "OFFER ENDS 00:54:59",
+      "evidence_id": "s2:f2"
+     },
+     {
+      "stage_index": 1,
+      "finding_id": "f1",
+      "text": "45 ADDED TO BAG IN THE PAST 24 HOURS",
+      "evidence_id": "s2:f1"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f4",
+      "text": "no thanks, I'll save money another day",
+      "evidence_id": "s3:f4"
+     },
+     {
+      "stage_index": 2,
+      "finding_id": "f3",
+      "text": "OFFER ENDS 00:58:40",
+      "evidence_id": "s3:f3"
+     },
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ]
+   },
+   {
+    "key": "choice_asymmetry",
+    "label": "Choice asymmetry (visual + interaction)",
+    "available": true,
+    "value": 0.8,
+    "weight": 0.25,
+    "effective_weight": 0.25,
+    "contribution": 20.0,
+    "provenance": "declared",
+    "explanation": "Worst choice set (c1): visual/interaction asymmetry 80/100.",
+    "evidence": [
+     {
+      "stage_index": 3,
+      "finding_id": null,
+      "text": "Yes, keep my membership",
+      "evidence_id": null
+     },
+     {
+      "stage_index": 3,
+      "finding_id": "f1",
+      "text": "NO, I DON'T FEEL LUCKY",
+      "evidence_id": "s4:f1"
+     }
+    ]
+   },
+   {
+    "key": "observed_obstruction",
+    "label": "Observed obstruction (DOM / journey facts)",
+    "available": true,
+    "value": 1.0,
+    "weight": 0.2,
+    "effective_weight": 0.2,
+    "contribution": 20.0,
+    "provenance": "observed",
+    "explanation": "1 observed obstruction fact(s); the strongest sets the value (max, not sum).",
+    "evidence": [
+     {
+      "stage_index": 2,
+      "finding_id": "f2",
+      "text": "Add shipping protection for $4.99",
+      "evidence_id": "s3:f2"
+     }
+    ]
+   }
+  ],
+  "redesigned_components": [
+   {
+    "key": "content_pressure",
+    "label": "Content pressure (classifier)",
+    "available": true,
+    "value": 0.2168,
+    "weight": 0.55,
+    "effective_weight": 0.55,
+    "contribution": 11.92,
+    "provenance": "model",
+    "explanation": "Original findings re-scored after their rewrites (model-estimated); rewrites scored below threshold no longer count.",
+    "evidence": []
+   },
+   {
+    "key": "choice_asymmetry",
+    "label": "Choice asymmetry (visual + interaction)",
+    "available": true,
+    "value": 0.0,
+    "weight": 0.25,
+    "effective_weight": 0.25,
+    "contribution": 0.0,
+    "provenance": "by_construction",
+    "explanation": "Redesign specification gives both choices equal visual weight and equal step counts.",
+    "evidence": []
+   },
+   {
+    "key": "observed_obstruction",
+    "label": "Observed obstruction (DOM / journey facts)",
+    "available": true,
+    "value": 0.0,
+    "weight": 0.2,
+    "effective_weight": 0.2,
+    "contribution": 0.0,
+    "provenance": "by_construction",
+    "explanation": "Redesign specification leaves optional add-ons and consents unchecked.",
+    "evidence": []
+   }
+  ],
+  "original_semantic_pressure": 0.6566,
+  "redesigned_semantic_pressure": 0.2677,
+  "original_mcai": 75.16,
+  "redesigned_mcai": 17.19,
+  "original_fspm": 66.27,
+  "redesigned_fspm": 21.68,
+  "optimisation": {
+   "method": "exact per-element minimisation over a finite candidate set (one batched model call)",
+   "objective": "minimise the redesigned CDI (model-estimated content pressure + by-construction choice/obstruction terms)",
+   "constraints": [
+    "no added facts or offer words",
+    "no removed commercial facts",
+    "disclosure terms kept",
+    "decline options stay declines",
+    "non-empty and changed (except the original baseline)"
+   ],
+   "optimality": "content pressure is monotone non-decreasing in each element's score and constraints are per-element, so the per-element minimum is the global minimum over the candidate space",
+   "tie_break": "within 0.005 of the best score, prefer an actual change over the unchanged original, then the smaller word-level edit distance",
+   "caveat": "The objective is the classifier's own indicator and can exploit its label biases; all candidates are shown."
+  },
+  "label": "Model-estimated reduction: the redesigned text is re-scored by the same classifier. This is not a measured change in consumer behaviour."
+ },
+ "config_version": "intel-v1.1",
+ "disclaimer": "Journey indices (FSPM, MCAI, CDI) are interpretable screening indices built on ClearCart's calibrated classifier and direct observations. They are not probabilities that a merchant is fraudulent and have only been evaluated on synthetic, explicitly labelled benchmarks. Fibonacci weighting is a proposed weighting, shown alongside equal and linear baselines.",
+ "warnings": [
+  "This journey contains authored (synthetic) demonstration content; see the stage badges."
+ ],
+ "versions": {
+  "app": "1.1.0",
+  "model": "ensemble_lr_xgb",
+  "model_trained_at": "2026-11-11 17:45:06",
+  "calibration": "temperature=0.4477",
+  "threshold_text": "0.68",
+  "threshold_ocr": "0.90",
+  "intel_config": "intel-v1.1",
+  "cdi_weights": "cdi-w1"
+ },
+ "fusion": [],
+ "replay": {
+  "inputs": [
+   {
+    "name": "Product page",
+    "stage_type": "product",
+    "input_type": "text",
+    "content": "Mystic Topaz: Rings, Earrings, Necklaces and Bracelets\nOnly 5 item(s) left.\n19 people viewed this product per day\nShipping and Duties",
+    "file_field": null,
+    "captured_at": "2026-11-12T10:00:00+00:00",
+    "choice_path": null,
+    "synthetic": true,
+    "fuse_with": null
+   },
+   {
+    "name": "Cart",
+    "stage_type": "cart",
+    "input_type": "text",
+    "content": "My Account\n45 ADDED TO BAG IN THE PAST 24 HOURS\nOFFER ENDS 00:54:59\nPay weekly",
+    "file_field": null,
+    "captured_at": "2026-11-12T10:04:00+00:00",
+    "choice_path": null,
+    "synthetic": true,
+    "fuse_with": null
+   },
+   {
+    "name": "Checkout",
+    "stage_type": "checkout",
+    "input_type": "html",
+    "content": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Checkout</title>\n<!-- AUTHORED demo markup. data-source=\"test-split\" = verbatim ec-darkpattern TEST row; data-source=\"authored\" = written for this demo. -->\n<style>\n.timer{color:#b91c1c;font-weight:700}\n.btn-primary{background:#0f766e;color:#ffffff;font-size:20px;font-weight:700;padding:14px 28px;border-radius:8px}\n.decline{color:#9ca3af;font-size:11px}\n</style></head><body><main>\n<p class=\"timer\" data-source=\"authored\">OFFER ENDS 00:58:40</p>\n<p data-source=\"test-split\">Take time to pay.</p>\n<form id=\"checkout\">\n  <label data-source=\"authored\"><input type=\"checkbox\" name=\"protection\" checked> Add shipping protection for $4.99</label>\n  <button type=\"submit\" class=\"btn-primary\" data-source=\"authored\">Claim discount and continue</button>\n  <a href=\"#\" class=\"decline\" data-source=\"test-split\">no thanks, I&#x27;ll save money another day</a>\n</form></main></body></html>",
+    "file_field": null,
+    "captured_at": "2026-11-12T10:13:00+00:00",
+    "choice_path": null,
+    "synthetic": true,
+    "fuse_with": null
+   },
+   {
+    "name": "Cancellation / exit",
+    "stage_type": "exit",
+    "input_type": "text",
+    "content": "Yes, keep my membership\nNO, I DON'T FEEL LUCKY",
+    "file_field": null,
+    "captured_at": "2026-11-12T10:20:00+00:00",
+    "choice_path": {
+     "label": "Keep membership vs cancel membership (declared)",
+     "accept_steps": 1,
+     "decline_steps": 5
+    },
+    "synthetic": true,
+    "fuse_with": null
+   }
+  ],
+  "input_sha256": [
+   "9e352bf88c449c66a4427334b3c6300682ba5b5c41b0156e56ac0298dc834e64",
+   "5ee7e134ea12dabf77031713c7aa685b427c6ef7544da97ff712f9b4bbb0b866",
+   "1e7aaf1e3737b3e125752f87daae3aa519fddbdfb5819355886ab6bb03584408",
+   "5bf6988691d71407dfe82daa6f2498627078b61d1e38050504a78d59c5674990"
+  ],
+  "versions": {
+   "app": "1.1.0",
+   "model": "ensemble_lr_xgb",
+   "model_trained_at": "2026-11-11 17:45:06",
+   "calibration": "temperature=0.4477",
+   "threshold_text": "0.68",
+   "threshold_ocr": "0.90",
+   "intel_config": "intel-v1.1",
+   "cdi_weights": "cdi-w1"
+  },
+  "expected": {
+   "fspm": {
+    "fibonacci": 66.27,
+    "linear": 69.41,
+    "equal": 71.79
+   },
+   "cdi": 76.45,
+   "stage_pressures": [
+    0.7498,
+    0.7495,
+    0.75,
+    0.6225
+   ],
+   "findings": [
+    [
+     [
+      "f2",
+      "social_proof",
+      0.9998
+     ],
+     [
+      "f1",
+      "scarcity",
+      0.9991
+     ]
+    ],
+    [
+     [
+      "f2",
+      "urgency",
+      1.0
+     ],
+     [
+      "f1",
+      "social_proof",
+      0.9958
+     ]
+    ],
+    [
+     [
+      "f3",
+      "urgency",
+      1.0
+     ],
+     [
+      "f4",
+      "misdirection",
+      1.0
+     ],
+     [
+      "f1",
+      "misdirection",
+      0.9867
+     ],
+     [
+      "f2",
+      "preselected_option",
+      null
+     ]
+    ],
+    [
+     [
+      "f1",
+      "misdirection",
+      0.996
+     ]
+    ]
+   ]
+  }
+ }
+}

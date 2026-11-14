@@ -1,0 +1,34 @@
+[
+  {
+    "id": "text-deceptive",
+    "title": "Product page text with dark patterns (test split)",
+    "input_type": "text",
+    "content": "newsletter signup (privacy policy)\nLAST CHANCE - UP TO 70% OFF - ENDS IN: 20 HRS 28 MINS 30 SECS\nMoTrail\nLIMITED TIME OFFER 10% OFF - ENTER CODE \\\"CASES\\\" AT CHECKOUT\nCases for Magsafe Refine by Product Type: Cases for Magsafe\n87% offers claimed. Hurry up!\n__________\nHurry, only a few left!\nSearch for similiar products\nAnother babe in Alexandria, United States just ordered Flat Tummy Tea\nEmail Address*\n45 ADDED TO BAG IN THE PAST 24 HOURS\nEyelashes\nNo, I'll rather pay full price.\nCosmic Rainbow\nI do not want to protect my item",
+    "provenance": "Every line is a verbatim row from ec-darkpattern dataset.tsv, held-out TEST split (row_ids 4, 175, 14, 263, 45, 65, 72, 95, 91, 34, 101, 64, 132, 114, 136, 215). Lines chosen by dataset order, not by model output.",
+    "expected": "Ground truth: “LAST CHANCE - UP TO 70% OFF - ENDS IN: 2” = urgency; “LIMITED TIME OFFER 10% OFF - ENTER CODE ” = urgency; “87% offers claimed. Hurry up!” = scarcity; “Hurry, only a few left!” = scarcity; “Another babe in Alexandria, United State” = social_proof; “45 ADDED TO BAG IN THE PAST 24 HOURS” = social_proof; “No, I'll rather pay full price.” = misdirection; “I do not want to protect my item” = misdirection"
+  },
+  {
+    "id": "text-benign",
+    "title": "Benign storefront text (test split)",
+    "input_type": "text",
+    "content": "Buy Wearables»\nBuy with humm.\nPlant-Based Beauty\nFrame out of stock in this colour\nUniversal Fit Collapsible Smart Phone Stand\nLast Shape Guide\nBaby & Toddler Toys\nThis site uses cookies to provide and improve your shopping experience. If you want to benefit from this improved service, please opt-in.\nThanks! -RMO Team\nsales@ecklers.net\nLens Manual Washer\nMotocross Boots\nNursery\nor",
+    "provenance": "Verbatim 'Not Dark Pattern' rows from ec-darkpattern TEST split (row_ids 174, 219, 229, 231, 253, 276, 277, 287, 309, 330, 355, 376, 378, 395).",
+    "expected": "Ground truth: all lines are labelled Not Dark Pattern."
+  },
+  {
+    "id": "html-checkout",
+    "title": "Checkout page HTML (authored markup, test-split strings)",
+    "input_type": "html",
+    "content": "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\"><title>Demo checkout</title>\n<!-- Markup authored by the ClearCart team for demo purposes. Elements with data-source=\"test-split\" contain verbatim\n     strings from the ec-darkpattern TEST split. The two checkbox labels are authored (marked data-source=\"authored\"). -->\n<style>.banner{background:#fee2e2}</style></head>\n<body>\n<header><nav><a href=\"/\">newsletter signup (privacy policy)</a> <a href=\"/cart\">MoTrail</a></nav></header>\n<main>\n  <div class=\"banner\" id=\"promo-banner\" data-source=\"test-split\">LAST CHANCE - UP TO 70% OFF - ENDS IN: 20 HRS 28 MINS 30 SECS</div>\n  <h1 class=\"product-title\" data-source=\"test-split\">Cases for Magsafe Refine by Product Type: Cases for Magsafe</h1>\n  <p class=\"stock\" data-source=\"test-split\">87% offers claimed. Hurry up!</p>\n  <p class=\"activity\" data-source=\"test-split\">Another babe in Alexandria, United States just ordered Flat Tummy Tea</p>\n  <p data-source=\"test-split\">__________</p>\n  <form id=\"checkout\">\n    <label data-source=\"authored\"><input type=\"checkbox\" name=\"protection\" checked> Add shipping protection for $4.99</label>\n    <label data-source=\"authored\"><input type=\"checkbox\" name=\"newsletter\" checked> Send me marketing emails and partner offers</label>\n    <label><input type=\"checkbox\" name=\"remember\"> Remember me</label>\n    <button type=\"submit\" class=\"btn-primary\" data-source=\"test-split\">Search for similiar products</button>\n    <a href=\"#\" class=\"decline\" data-source=\"test-split\">No, I&#x27;ll rather pay full price.</a>\n  </form>\n  <p class=\"hidden-note\" style=\"display:none\">This hidden note is ignored by the extractor.</p>\n</main>\n<footer><p data-source=\"test-split\">Email Address*</p></footer>\n</body></html>\n",
+    "provenance": "HTML structure and the two pre-checked checkbox labels are authored by the ClearCart team for the demo. Text marked data-source=\"test-split\" is verbatim from ec-darkpattern TEST split (row_ids 175, 65, 34, 114, 4, 14, 45, 72, 91, 101).",
+    "expected": "Ground truth: “LAST CHANCE - UP TO 70% OFF - ENDS IN: 2” = urgency; “87% offers claimed. Hurry up!” = scarcity; “Another babe in Alexandria, United State” = social_proof; “No, I'll rather pay full price.” = misdirection; two pre-checked checkboxes are DOM observations."
+  },
+  {
+    "id": "html-benign",
+    "title": "Benign page HTML (authored markup, test-split strings)",
+    "input_type": "html",
+    "content": "<!doctype html><html><body><!-- authored markup; text = verbatim ec-darkpattern TEST-split benign rows -->\n<main>\n  <p data-source=\"test-split\">Your first payment will be due on the day of your purchase.*</p>\n  <p data-source=\"test-split\">Glows In The Dark</p>\n  <p data-source=\"test-split\">Fashion Bags</p>\n  <p data-source=\"test-split\">This is a green tea without the bitterness.</p>\n  <p data-source=\"test-split\">Christian Dior</p>\n  <p data-source=\"test-split\">Share this product</p>\n  <p data-source=\"test-split\">PopTop Refine by Product Type: PopTop</p>\n  <p data-source=\"test-split\">Cleaning Brushes &amp; Tools</p>\n  <label><input type=\"checkbox\" name=\"remember\"> Remember me</label>\n  <button>Continue</button>\n</main></body></html>\n",
+    "provenance": "Authored markup; paragraph text is verbatim 'Not Dark Pattern' rows from the TEST split (row_ids 421, 426, 437, 440, 448, 449, 459, 463). 'Remember me' and 'Continue' are authored.",
+    "expected": "Ground truth: no dark patterns; the only checkbox is unchecked."
+  }
+]

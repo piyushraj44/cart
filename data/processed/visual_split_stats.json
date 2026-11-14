@@ -1,0 +1,107 @@
+{
+  "corrections": {
+    "rows": 98,
+    "matched": 97,
+    "already_reflected_in_groundtruth": 94,
+    "discrepancies_not_applied": [
+      {
+        "image": "12810_9mifsrp.jpg",
+        "groundtruth": [
+          "Default Choice"
+        ],
+        "correction_would_give": [
+          "Attention Distraction",
+          "Default Choice"
+        ]
+      },
+      {
+        "image": "www.stealthangelsurvival.com.png",
+        "groundtruth": [
+          "Activity Message",
+          "Low Stock Message"
+        ],
+        "correction_would_give": [
+          "Activity Message",
+          "Limited Time Message",
+          "Low Stock Message"
+        ]
+      },
+      {
+        "image": "4636.jpg",
+        "groundtruth": [
+          "Nagging"
+        ],
+        "correction_would_give": [
+          "False Hierarchy",
+          "Nagging"
+        ]
+      }
+    ],
+    "image_not_in_groundtruth": [
+      "50736.jpg"
+    ]
+  },
+  "images": 1606,
+  "groundtruth_entries": 1608,
+  "files_without_label": [
+    "50736.jpg",
+    "642b1fe13be378a1b9fc68a0_yxQIu_kBj4KtZGqVCRk61HUKIUaOZ-heq7dIqxQdrJU.png",
+    "artsper.com.png"
+  ],
+  "near_duplicate_pairs_merged": 181,
+  "groups": 1414,
+  "largest_group": 10,
+  "per_split": {
+    "train": {
+      "images": 1124,
+      "groups": 976,
+      "web": 58,
+      "Hard to Close": 478,
+      "Default Choice": 203,
+      "False Hierarchy": 202,
+      "Nagging": 174,
+      "Privacy Zuckering": 79,
+      "Pay to Avoid Ad": 68,
+      "no_target_label": 99
+    },
+    "val": {
+      "images": 241,
+      "groups": 219,
+      "web": 12,
+      "Hard to Close": 102,
+      "Default Choice": 44,
+      "False Hierarchy": 43,
+      "Nagging": 37,
+      "Privacy Zuckering": 17,
+      "Pay to Avoid Ad": 15,
+      "no_target_label": 24
+    },
+    "test": {
+      "images": 241,
+      "groups": 219,
+      "web": 13,
+      "Hard to Close": 103,
+      "Default Choice": 43,
+      "False Hierarchy": 43,
+      "Nagging": 38,
+      "Privacy Zuckering": 17,
+      "Pay to Avoid Ad": 14,
+      "no_target_label": 21
+    }
+  },
+  "group_overlap": {
+    "train-val": 0,
+    "train-test": 0,
+    "val-test": 0
+  },
+  "source_md5": {
+    "groundtrue.json": "73ca3644c308864eea9dc63ca87e200f",
+    "correction.xlsx": "c0a4cf7a3caab3f92b6cfdbbd56ddf3a"
+  },
+  "ocr_eval_images_also_in_visual_split": {
+    "train": 228,
+    "val": 52,
+    "test": 53
+  },
+  "ocr_eval_note": "ml/eval_screenshots DEV/TEST images are ContextRico files and also appear here. The OCR/text evaluation is unaffected because the text model is not trained on them and does not change."
+}

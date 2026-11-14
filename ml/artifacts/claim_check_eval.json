@@ -1,0 +1,614 @@
+{
+  "threshold": 0.68,
+  "exploratory_text": {
+    "before": {
+      "tp": 9,
+      "fp": 11,
+      "fn": 2,
+      "tn": 5,
+      "precision": 0.45,
+      "recall": 0.8182,
+      "f1": 0.5806,
+      "false_positive_rate": 0.6875
+    },
+    "after": {
+      "tp": 9,
+      "fp": 6,
+      "fn": 2,
+      "tn": 10,
+      "precision": 0.6,
+      "recall": 0.8182,
+      "f1": 0.6923,
+      "false_positive_rate": 0.375
+    },
+    "cases": [
+      {
+        "id": "b01",
+        "label": 0,
+        "text": "Sale price ₹2,990. Regular price ₹3,950.",
+        "p_dark": 0.7745,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "b02",
+        "label": 0,
+        "text": "Free shipping on orders over ₹2,990",
+        "p_dark": 0.9267,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "b03",
+        "label": 0,
+        "text": "Delivery in 3-5 working days",
+        "p_dark": 0.8527,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "b04",
+        "label": 0,
+        "text": "20% off selected shoes through 30 November",
+        "p_dark": 0.6895,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "b05",
+        "label": 0,
+        "text": "Save $15 with code WELCOME15",
+        "p_dark": 0.8706,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "b06",
+        "label": 0,
+        "text": "Buy one, get one half price",
+        "p_dark": 0.852,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "b07",
+        "label": 0,
+        "text": "Limited-time offer: 15% off until Sunday at 23:59",
+        "p_dark": 1.0,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "b08",
+        "label": 0,
+        "text": "Offer ends in 02:00:00 on 30 November",
+        "p_dark": 1.0,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "b09",
+        "label": 0,
+        "text": "Only 2 left in stock at this location",
+        "p_dark": 1.0,
+        "category": "scarcity",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "b10",
+        "label": 0,
+        "text": "12 customers reviewed this product",
+        "p_dark": 0.9953,
+        "category": "social_proof",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "b11",
+        "label": 0,
+        "text": "Popular this week",
+        "p_dark": 0.3896,
+        "category": "social_proof",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "b12",
+        "label": 0,
+        "text": "Subscribe to get 10% off your first order",
+        "p_dark": 0.9501,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "b14",
+        "label": 0,
+        "text": "Reject optional cookies",
+        "p_dark": 0.001,
+        "category": "misdirection",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "b15",
+        "label": 0,
+        "text": "We use cookies to remember your preferences.",
+        "p_dark": 0.007,
+        "category": "misdirection",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "b23",
+        "label": 0,
+        "text": "View all available sizes",
+        "p_dark": 0.0045,
+        "category": "scarcity",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "b24",
+        "label": 0,
+        "text": "Coupon valid from 1 to 30 November",
+        "p_dark": 0.659,
+        "category": "urgency",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "d01",
+        "label": 1,
+        "text": "No thanks, I hate saving money",
+        "p_dark": 0.9995,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d02",
+        "label": 1,
+        "text": "No thanks, I prefer paying full price",
+        "p_dark": 1.0,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d03",
+        "label": 1,
+        "text": "Hurry! Only 2 left in stock.",
+        "p_dark": 1.0,
+        "category": "scarcity",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d04",
+        "label": 1,
+        "text": "Sale ends in 02:14:09 - order now!",
+        "p_dark": 0.9999,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d05",
+        "label": 1,
+        "text": "12 people are viewing this right now",
+        "p_dark": 1.0,
+        "category": "social_proof",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d06",
+        "label": 1,
+        "text": "Someone in your city bought this 2 minutes ago",
+        "p_dark": 1.0,
+        "category": "social_proof",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d07",
+        "label": 1,
+        "text": "You will miss out forever if you leave this page",
+        "p_dark": 0.2205,
+        "category": "misdirection",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "d08",
+        "label": 1,
+        "text": "Claim your offer before the timer runs out",
+        "p_dark": 0.9124,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d09",
+        "label": 1,
+        "text": "No, I do not care about my family's safety",
+        "p_dark": 0.5518,
+        "category": "misdirection",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "d10",
+        "label": 1,
+        "text": "Only 1 room left at this price! Book now",
+        "p_dark": 0.9981,
+        "category": "scarcity",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "d11",
+        "label": 1,
+        "text": "Everyone is buying this right now. Hurry!",
+        "p_dark": 0.8924,
+        "category": "social_proof",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      }
+    ]
+  },
+  "fresh": {
+    "before": {
+      "tp": 11,
+      "fp": 9,
+      "fn": 1,
+      "tn": 3,
+      "precision": 0.55,
+      "recall": 0.9167,
+      "f1": 0.6875,
+      "false_positive_rate": 0.75
+    },
+    "after": {
+      "tp": 11,
+      "fp": 1,
+      "fn": 1,
+      "tn": 11,
+      "precision": 0.9167,
+      "recall": 0.9167,
+      "f1": 0.9167,
+      "false_positive_rate": 0.0833
+    },
+    "cases": [
+      {
+        "id": "fb01",
+        "label": 0,
+        "text": "Black Friday: 25% off all jackets until 1 December",
+        "p_dark": 0.3082,
+        "category": "social_proof",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "fb02",
+        "label": 0,
+        "text": "Was ₹1,499, now ₹999",
+        "p_dark": 0.4754,
+        "category": "urgency",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "fb03",
+        "label": 0,
+        "text": "Free returns within 30 days",
+        "p_dark": 0.9602,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb04",
+        "label": 0,
+        "text": "Use code AUTUMN10 for 10% off at checkout",
+        "p_dark": 0.9769,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb05",
+        "label": 0,
+        "text": "Offer valid until 15 December 2026",
+        "p_dark": 0.9289,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb06",
+        "label": 0,
+        "text": "Free delivery on orders over £40",
+        "p_dark": 0.7867,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb07",
+        "label": 0,
+        "text": "Regular price $120. Sale price $90.",
+        "p_dark": 0.6772,
+        "category": "misdirection",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "fb08",
+        "label": 0,
+        "text": "Dispatched within 2 working days",
+        "p_dark": 0.9433,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb09",
+        "label": 0,
+        "text": "Buy 2, get the third free - ends 6 January",
+        "p_dark": 0.9228,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb10",
+        "label": 0,
+        "text": "MRP ₹2,499. You save ₹500.",
+        "p_dark": 0.9928,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fb11",
+        "label": 0,
+        "text": "Winter sale ends Sunday at 23:59",
+        "p_dark": 0.9941,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fb12",
+        "label": 0,
+        "text": "Members get 15% off, valid to 31/12/2026",
+        "p_dark": 0.8075,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "fd01",
+        "label": 1,
+        "text": "Hurry, sale ends soon!",
+        "p_dark": 0.9982,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd02",
+        "label": 1,
+        "text": "Up to 70% off - limited time only",
+        "p_dark": 1.0,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd03",
+        "label": 1,
+        "text": "Only 4 left at this price",
+        "p_dark": 0.9999,
+        "category": "scarcity",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd04",
+        "label": 1,
+        "text": "Deal ends in 00:09:59",
+        "p_dark": 0.9999,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd05",
+        "label": 1,
+        "text": "Selling fast - 40% off today only",
+        "p_dark": 0.9982,
+        "category": "scarcity",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd06",
+        "label": 1,
+        "text": "Last chance to save ₹500!",
+        "p_dark": 0.915,
+        "category": "misdirection",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd07",
+        "label": 1,
+        "text": "Don't miss out: 30% off ends tonight",
+        "p_dark": 0.9917,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd08",
+        "label": 1,
+        "text": "Almost gone! Was $80, now $40",
+        "p_dark": 0.4512,
+        "category": "social_proof",
+        "flagged_before": false,
+        "flagged_after": false,
+        "gate_after": null
+      },
+      {
+        "id": "fd09",
+        "label": 1,
+        "text": "18 people have this in their cart",
+        "p_dark": 1.0,
+        "category": "social_proof",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd10",
+        "label": 1,
+        "text": "Grab it before it's gone - 20% off until 30 November",
+        "p_dark": 0.9052,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd11",
+        "label": 1,
+        "text": "Act now, price goes up in 2 hours",
+        "p_dark": 0.9405,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      },
+      {
+        "id": "fd12",
+        "label": 1,
+        "text": "Offer expired 1 January 2020 - still claim 50% off now",
+        "p_dark": 0.9947,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": true,
+        "gate_after": null
+      }
+    ]
+  },
+  "test": {
+    "before": {
+      "tp": 144,
+      "fp": 1,
+      "fn": 18,
+      "tn": 166,
+      "precision": 0.9931,
+      "recall": 0.8889,
+      "f1": 0.9381,
+      "false_positive_rate": 0.006
+    },
+    "after": {
+      "tp": 142,
+      "fp": 1,
+      "fn": 20,
+      "tn": 166,
+      "precision": 0.993,
+      "recall": 0.8765,
+      "f1": 0.9311,
+      "false_positive_rate": 0.006
+    },
+    "changed": [
+      {
+        "id": "t268",
+        "label": 1,
+        "text": "EXTRA -30% OFF WITH CODE: EXTRA30 Ends in: 0 0 0 0 days 0 0 4 4 hours . 0 0 9 9 min . 2 2 8 8 sec",
+        "p_dark": 1.0,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      },
+      {
+        "id": "t325",
+        "label": 1,
+        "text": "40% OFF EVERYTHING* ENTER: 40PLT + FREE SHIPPING ON ALL ORDERS OVER $80",
+        "p_dark": 0.9799,
+        "category": "urgency",
+        "flagged_before": true,
+        "flagged_after": false,
+        "gate_after": "checkable_claim"
+      }
+    ]
+  },
+  "criteria": {
+    "test_recall_drop_ok": true,
+    "test_fp_not_increased": true,
+    "exploratory_text_precision_not_lower": true,
+    "fresh_precision_not_lower": true,
+    "exploratory_text_fpr_not_higher": true,
+    "fresh_fpr_not_higher": true,
+    "all_pass": true
+  }
+}

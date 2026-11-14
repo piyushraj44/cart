@@ -1,0 +1,2513 @@
+{
+  "generated_at": "2026-11-13T18:57:04+00:00",
+  "config_version": "intel-v1.1",
+  "command": ".venv/bin/python -m ml.research_intelligence",
+  "seed": 2027,
+  "python": "3.12.16",
+  "classifier_threshold": 0.68,
+  "test_split_rows": 329,
+  "test_split_label_counts": {
+    "benign": 167,
+    "scarcity": 59,
+    "social_proof": 45,
+    "urgency": 30,
+    "misdirection": 28
+  },
+  "caveats": [
+    "No labelled dataset of journeys, choice sets or composite deception levels exists; R1-R3/R5 use SYNTHETIC inputs built from real TEST-split strings or authored markup.",
+    "R1(e) reference expectations and R2 designed levels are the authors' design intent, not ground truth.",
+    "R4 score reductions are model-estimated by the same classifier (circular): they show the cues the model relies on were removed, not that shoppers would be less pressured.",
+    "R6 latencies are in-process TestClient timings on one machine (single-threaded OpenMP)."
+  ],
+  "studies": {
+    "R1_fspm_robustness": {
+      "synthetic": true,
+      "kind": "property/sensitivity study on synthetic journeys built from real TEST-split strings (no ground truth)",
+      "design": "400 synthetic 4-stage journeys with declared stage types ['product', 'cart', 'checkout', 'payment'] -> canonical positions [2, 3, 4, 5]. Each stage = 3 distinct TEST-split strings, each drawn from the dark pool (label != benign) with probability 0.35, else from the benign pool. Stage pressure = pressure.content_pressure(Auditor(clf).audit(segment_text(stage),'text').findings) (the engine's per-stage quantity).",
+      "schemes": {
+        "fibonacci": "Engine default (proposed): w = F(pos), F(1)=F(2)=1.",
+        "linear": "Engine baseline: w = pos.",
+        "equal": "Engine baseline: w = 1 (order-free weighted mean).",
+        "geometric_phi": "w = phi^(pos-1), phi = 1.618. F(n) ~ phi^n / sqrt(5), so this is the smooth closed-form analogue of Fibonacci; it differs only at small positions (F(1)=F(2) gives landing and product equal weight). Tests whether anything is specific to the integer Fibonacci sequence.",
+        "geometric_2": "w = 2^(pos-1): a stronger recency emphasis than Fibonacci (ratio 2 instead of ~1.618); upper bracket.",
+        "fib_capped3": "'recency-capped': w = min(F(pos), 3) - Fibonacci up to checkout (pos 4), flat afterwards. Bounds the leverage of any single late stage at 3x the first stage, so a missing or duplicated late capture should move the score less while keeping a recency ordering for early stages.",
+        "max_pressure": "Order-free, non-compensatory baseline: 100 * max_i p_i (the single worst stage)."
+      },
+      "positions": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "normalised_weights_at_positions": {
+        "fibonacci": [
+          0.0909,
+          0.1818,
+          0.2727,
+          0.4545
+        ],
+        "linear": [
+          0.1429,
+          0.2143,
+          0.2857,
+          0.3571
+        ],
+        "equal": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ],
+        "geometric_phi": [
+          0.1056,
+          0.1708,
+          0.2764,
+          0.4472
+        ],
+        "geometric_2": [
+          0.0667,
+          0.1333,
+          0.2667,
+          0.5333
+        ],
+        "fib_capped3": [
+          0.1111,
+          0.2222,
+          0.3333,
+          0.3333
+        ]
+      },
+      "stage_pressure_summary": {
+        "mean": 0.4453,
+        "share_zero": 0.31,
+        "share_ge_0_5": 0.6544
+      },
+      "score_summary": {
+        "fibonacci": {
+          "mean": 44.46,
+          "sd": 18.11
+        },
+        "linear": {
+          "mean": 44.44,
+          "sd": 16.77
+        },
+        "equal": {
+          "mean": 44.53,
+          "sd": 15.88
+        },
+        "geometric_phi": {
+          "mean": 44.42,
+          "sd": 17.98
+        },
+        "geometric_2": {
+          "mean": 44.42,
+          "sd": 19.56
+        },
+        "fib_capped3": {
+          "mean": 44.34,
+          "sd": 17.0
+        },
+        "max_pressure": {
+          "mean": 68.58,
+          "sd": 11.45
+        }
+      },
+      "a_single_observation_noise": {
+        "design": "For every journey, 3 replicates; in each replicate EVERY stage has one random string replaced by another TEST-split string with the same gold label (not already in the stage). |delta score| on the 0-100 scale. noise_to_signal = mean |delta| / SD of the scheme's scores across the 400 journeys (schemes have different spreads). rank_spearman = Spearman rho between original and perturbed (replicate 1) scores across journeys.",
+        "per_scheme": {
+          "fibonacci": {
+            "n": 1200,
+            "mean": 2.644,
+            "median": 0.1727,
+            "p95": 16.5785,
+            "max": 45.2665,
+            "min": 0.0,
+            "noise_to_signal": 0.146,
+            "rank_spearman": 0.9288
+          },
+          "linear": {
+            "n": 1200,
+            "mean": 2.6529,
+            "median": 0.1777,
+            "p95": 17.1256,
+            "max": 40.0031,
+            "min": 0.0,
+            "noise_to_signal": 0.1582,
+            "rank_spearman": 0.9253
+          },
+          "equal": {
+            "n": 1200,
+            "mean": 2.6719,
+            "median": 0.1605,
+            "p95": 15.6002,
+            "max": 31.2469,
+            "min": 0.0,
+            "noise_to_signal": 0.1683,
+            "rank_spearman": 0.9243
+          },
+          "geometric_phi": {
+            "n": 1200,
+            "mean": 2.6467,
+            "median": 0.1691,
+            "p95": 16.7358,
+            "max": 45.0373,
+            "min": 0.0,
+            "noise_to_signal": 0.1472,
+            "rank_spearman": 0.9275
+          },
+          "geometric_2": {
+            "n": 1200,
+            "mean": 2.6527,
+            "median": 0.1483,
+            "p95": 16.225,
+            "max": 49.8,
+            "min": 0.0,
+            "noise_to_signal": 0.1356,
+            "rank_spearman": 0.9319
+          },
+          "fib_capped3": {
+            "n": 1200,
+            "mean": 2.6606,
+            "median": 0.1679,
+            "p95": 19.3226,
+            "max": 41.4771,
+            "min": 0.0,
+            "noise_to_signal": 0.1565,
+            "rank_spearman": 0.9242
+          },
+          "max_pressure": {
+            "n": 1200,
+            "mean": 1.7205,
+            "median": 0.0087,
+            "p95": 12.2117,
+            "max": 62.4875,
+            "min": 0.0,
+            "noise_to_signal": 0.1502,
+            "rank_spearman": 0.8746
+          }
+        }
+      },
+      "b_missing_stage": {
+        "design": "Each stage of each journey is dropped in turn (3-stage journey). 'canonical': the remaining stages keep their canonical positions (what the engine does when stage types are declared); 'submission_order': positions are renumbered 1..3 (engine behaviour without stage types). Pair ranking: 3000 random journey pairs (original ties excluded); a change = the sign of score(A) - score(B) differs after the drop (a new tie counts as a change).",
+        "mean_abs_delta_by_dropped_stage": {
+          "canonical": {
+            "fibonacci": {
+              "product": 2.591,
+              "cart": 5.19,
+              "checkout": 7.835,
+              "payment": 13.27
+            },
+            "linear": {
+              "product": 4.062,
+              "cart": 6.104,
+              "checkout": 8.167,
+              "payment": 10.397
+            },
+            "equal": {
+              "product": 7.098,
+              "cart": 7.089,
+              "checkout": 7.118,
+              "payment": 7.244
+            },
+            "geometric_phi": {
+              "product": 3.009,
+              "cart": 4.87,
+              "checkout": 7.914,
+              "payment": 13.054
+            },
+            "geometric_2": {
+              "product": 1.91,
+              "cart": 3.819,
+              "checkout": 7.721,
+              "payment": 15.628
+            },
+            "fib_capped3": {
+              "product": 3.157,
+              "cart": 6.382,
+              "checkout": 9.573,
+              "payment": 9.731
+            },
+            "max_pressure": {
+              "product": 2.469,
+              "cart": 2.95,
+              "checkout": 2.322,
+              "payment": 2.583
+            }
+          },
+          "submission_order": {
+            "fibonacci": {
+              "product": 2.965,
+              "cart": 5.536,
+              "checkout": 7.784,
+              "payment": 13.344
+            },
+            "linear": {
+              "product": 4.893,
+              "cart": 6.092,
+              "checkout": 8.343,
+              "payment": 10.502
+            },
+            "equal": {
+              "product": 7.098,
+              "cart": 7.089,
+              "checkout": 7.118,
+              "payment": 7.244
+            },
+            "geometric_phi": {
+              "product": 3.009,
+              "cart": 4.837,
+              "checkout": 7.997,
+              "payment": 13.054
+            },
+            "geometric_2": {
+              "product": 1.91,
+              "cart": 3.784,
+              "checkout": 7.782,
+              "payment": 15.628
+            },
+            "fib_capped3": {
+              "product": 5.301,
+              "cart": 7.364,
+              "checkout": 9.461,
+              "payment": 9.848
+            },
+            "max_pressure": {
+              "product": 2.469,
+              "cart": 2.95,
+              "checkout": 2.322,
+              "payment": 2.583
+            }
+          }
+        },
+        "mean_abs_delta_overall": {
+          "canonical": {
+            "fibonacci": 7.221,
+            "linear": 7.183,
+            "equal": 7.137,
+            "geometric_phi": 7.212,
+            "geometric_2": 7.269,
+            "fib_capped3": 7.211,
+            "max_pressure": 2.581
+          },
+          "submission_order": {
+            "fibonacci": 7.407,
+            "linear": 7.458,
+            "equal": 7.137,
+            "geometric_phi": 7.224,
+            "geometric_2": 7.276,
+            "fib_capped3": 7.993,
+            "max_pressure": 2.581
+          }
+        },
+        "pair_ranking": {
+          "canonical": {
+            "fibonacci": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1275,
+              "rank_change_rate_random_stage_missing_in_one": 0.1024
+            },
+            "linear": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1349,
+              "rank_change_rate_random_stage_missing_in_one": 0.1175
+            },
+            "equal": {
+              "pairs_considered": 2995,
+              "rank_change_rate_same_stage_missing_in_both": 0.1462,
+              "rank_change_rate_random_stage_missing_in_one": 0.1252
+            },
+            "geometric_phi": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1273,
+              "rank_change_rate_random_stage_missing_in_one": 0.1041
+            },
+            "geometric_2": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.125,
+              "rank_change_rate_random_stage_missing_in_one": 0.1008
+            },
+            "fib_capped3": {
+              "pairs_considered": 2996,
+              "rank_change_rate_same_stage_missing_in_both": 0.1333,
+              "rank_change_rate_random_stage_missing_in_one": 0.1202
+            },
+            "max_pressure": {
+              "pairs_considered": 2863,
+              "rank_change_rate_same_stage_missing_in_both": 0.1212,
+              "rank_change_rate_random_stage_missing_in_one": 0.0744
+            }
+          },
+          "submission_order": {
+            "fibonacci": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1448,
+              "rank_change_rate_random_stage_missing_in_one": 0.1101
+            },
+            "linear": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1419,
+              "rank_change_rate_random_stage_missing_in_one": 0.1221
+            },
+            "equal": {
+              "pairs_considered": 2995,
+              "rank_change_rate_same_stage_missing_in_both": 0.1462,
+              "rank_change_rate_random_stage_missing_in_one": 0.1252
+            },
+            "geometric_phi": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1338,
+              "rank_change_rate_random_stage_missing_in_one": 0.1068
+            },
+            "geometric_2": {
+              "pairs_considered": 2997,
+              "rank_change_rate_same_stage_missing_in_both": 0.1304,
+              "rank_change_rate_random_stage_missing_in_one": 0.1021
+            },
+            "fib_capped3": {
+              "pairs_considered": 2996,
+              "rank_change_rate_same_stage_missing_in_both": 0.1598,
+              "rank_change_rate_random_stage_missing_in_one": 0.1338
+            },
+            "max_pressure": {
+              "pairs_considered": 2863,
+              "rank_change_rate_same_stage_missing_in_both": 0.1212,
+              "rank_change_rate_random_stage_missing_in_one": 0.0744
+            }
+          }
+        }
+      },
+      "c_repeated_signals": {
+        "design": "Journeys containing at least one dark TEST string that the classifier flags on its own: one such string is duplicated (appended) into a random OTHER stage ('cross-stage') and, separately, appended a second time to its OWN stage ('within-stage'). delta = new - original score.",
+        "n_journeys": 393,
+        "within_stage_duplicate_delta": {
+          "fibonacci": {
+            "max_abs": 0.0
+          },
+          "linear": {
+            "max_abs": 0.0
+          },
+          "equal": {
+            "max_abs": 0.0
+          },
+          "geometric_phi": {
+            "max_abs": 0.0
+          },
+          "geometric_2": {
+            "max_abs": 0.0
+          },
+          "fib_capped3": {
+            "max_abs": 0.0
+          },
+          "max_pressure": {
+            "max_abs": 0.0
+          }
+        },
+        "within_stage_note": "De-duplication rule inside a stage: c_k = max over findings of category k, so a repeated string (same category, same score) cannot raise the stage pressure; delta is exactly 0 for every scheme.",
+        "cross_stage_delta": {
+          "fibonacci": {
+            "n": 393,
+            "mean": 7.5774,
+            "median": 4.5842,
+            "p95": 28.3761,
+            "max": 28.4091,
+            "min": 0.0
+          },
+          "linear": {
+            "n": 393,
+            "mean": 7.5449,
+            "median": 4.4536,
+            "p95": 22.2955,
+            "max": 22.3214,
+            "min": 0.0
+          },
+          "equal": {
+            "n": 393,
+            "mean": 7.4714,
+            "median": 3.2425,
+            "p95": 15.625,
+            "max": 15.625,
+            "min": 0.0
+          },
+          "geometric_phi": {
+            "n": 393,
+            "mean": 7.5849,
+            "median": 4.6821,
+            "p95": 27.9184,
+            "max": 27.9508,
+            "min": 0.0
+          },
+          "geometric_2": {
+            "n": 393,
+            "mean": 7.6201,
+            "median": 4.0571,
+            "p95": 33.2947,
+            "max": 33.3333,
+            "min": 0.0
+          },
+          "fib_capped3": {
+            "n": 393,
+            "mean": 7.5706,
+            "median": 4.1904,
+            "p95": 20.8313,
+            "max": 20.8333,
+            "min": 0.0
+          },
+          "max_pressure": {
+            "n": 393,
+            "mean": 2.6602,
+            "median": 0.0,
+            "p95": 12.4872,
+            "max": 12.91,
+            "min": 0.0
+          }
+        },
+        "cross_stage_mean_delta_by_target_stage": {
+          "fibonacci": {
+            "product": 2.743,
+            "cart": 5.508,
+            "checkout": 8.063,
+            "payment": 13.457
+          },
+          "linear": {
+            "product": 4.31,
+            "cart": 6.491,
+            "checkout": 8.447,
+            "payment": 10.573
+          },
+          "equal": {
+            "product": 7.542,
+            "cart": 7.573,
+            "checkout": 7.391,
+            "payment": 7.401
+          },
+          "geometric_phi": {
+            "product": 3.185,
+            "cart": 5.174,
+            "checkout": 8.172,
+            "payment": 13.24
+          },
+          "geometric_2": {
+            "product": 2.011,
+            "cart": 4.039,
+            "checkout": 7.884,
+            "payment": 15.789
+          },
+          "fib_capped3": {
+            "product": 3.352,
+            "cart": 6.731,
+            "checkout": 9.855,
+            "payment": 9.868
+          },
+          "max_pressure": {
+            "product": 3.227,
+            "cart": 2.878,
+            "checkout": 2.349,
+            "payment": 2.266
+          }
+        },
+        "cross_stage_note": "FSPM has NO cross-stage de-duplication: the same claim shown at two stages is treated as two exposures. The inflation is proportional to the weight of the stage it is copied into."
+      },
+      "d_order_sensitivity": {
+        "design": "Each journey's 4 stage pressures sorted ascending (escalating) vs descending (de-escalating) on positions [2, 3, 4, 5]; difference = escalating - de-escalating.",
+        "per_scheme": {
+          "fibonacci": {
+            "mean_diff": 21.591,
+            "median_diff": 26.904,
+            "max_diff": 38.172,
+            "frac_escalating_higher": 0.9825
+          },
+          "linear": {
+            "mean_diff": 13.108,
+            "median_diff": 15.992,
+            "max_diff": 23.789,
+            "frac_escalating_higher": 0.9825
+          },
+          "equal": {
+            "mean_diff": 0.0,
+            "median_diff": 0.0,
+            "max_diff": 0.0,
+            "frac_escalating_higher": 0.0
+          },
+          "geometric_phi": {
+            "mean_diff": 20.719,
+            "median_diff": 25.495,
+            "max_diff": 37.325,
+            "frac_escalating_higher": 0.9825
+          },
+          "geometric_2": {
+            "mean_diff": 28.067,
+            "median_diff": 34.825,
+            "max_diff": 50.196,
+            "frac_escalating_higher": 0.9825
+          },
+          "fib_capped3": {
+            "mean_diff": 14.391,
+            "median_diff": 16.596,
+            "max_diff": 27.356,
+            "frac_escalating_higher": 0.9825
+          },
+          "max_pressure": {
+            "mean_diff": 0.0,
+            "median_diff": 0.0,
+            "max_diff": 0.0,
+            "frac_escalating_higher": 0.0
+          }
+        }
+      },
+      "e_reference_cases": {
+        "synthetic": true,
+        "reference_is_design_intent_not_ground_truth": true,
+        "design": "14 reference journeys over the declared stages landing, cart, checkout, exit (canonical positions [1, 3, 4, 7]). Stage contents: B = two unflagged benign TEST strings; D1 = B[0] + one urgency string; D2 = D1 + one misdirection string; D3 = urgency + misdirection + scarcity strings (all TEST-split rows that the classifier flags in their gold category; chosen at random with a fixed seed). 33 pairwise expectations in 6 groups, written by the authors BEFORE computing scores; G6 is a deliberately contestable trade-off (breadth/persistence vs recency). Kendall-style agreement: concordant = 1, tie = 0.5, discordant = 0 (strict: ties count 0).",
+        "strings": {
+          "benign_1_row_id": 1497,
+          "benign_2_row_id": 1045,
+          "urgency_row_id": 528,
+          "misdirection_row_id": 1661,
+          "scarcity_row_id": 923,
+          "texts": {
+            "b1": "Teething Remedies",
+            "b2": "Indoor Festive Lights",
+            "urgency": "Sale ends soon:",
+            "misdirection": "This offer is only VALID if you add to cart now!",
+            "scarcity": "Only 3 available"
+          }
+        },
+        "stage_pressures": {
+          "B": 0.0,
+          "D1": 0.6237,
+          "D2": 0.7405,
+          "D3": 0.865
+        },
+        "journeys": {
+          "benign": "B B B B",
+          "L1": "D1 B B B",
+          "A1": "B D1 B B",
+          "C1": "B B D1 B",
+          "E1": "B B B D1",
+          "LA": "D1 D1 B B",
+          "CE": "B B D1 D1",
+          "L2": "D2 B B B",
+          "C2": "B B D2 B",
+          "E2": "B B B D2",
+          "ALL1": "D1 D1 D1 D1",
+          "ESC": "B D1 D2 D3",
+          "DESC": "D3 D2 D1 B",
+          "LAC": "D1 D1 D1 B"
+        },
+        "positions": [
+          1,
+          3,
+          4,
+          7
+        ],
+        "expectations": [
+          {
+            "group": "G1_benign_floor",
+            "higher": "L1",
+            "lower": "benign",
+            "statement": "any dark journey (L1) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "A1",
+            "lower": "benign",
+            "statement": "any dark journey (A1) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "C1",
+            "lower": "benign",
+            "statement": "any dark journey (C1) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "E1",
+            "lower": "benign",
+            "statement": "any dark journey (E1) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "LA",
+            "lower": "benign",
+            "statement": "any dark journey (LA) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "CE",
+            "lower": "benign",
+            "statement": "any dark journey (CE) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "L2",
+            "lower": "benign",
+            "statement": "any dark journey (L2) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "C2",
+            "lower": "benign",
+            "statement": "any dark journey (C2) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "E2",
+            "lower": "benign",
+            "statement": "any dark journey (E2) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "ALL1",
+            "lower": "benign",
+            "statement": "any dark journey (ALL1) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "ESC",
+            "lower": "benign",
+            "statement": "any dark journey (ESC) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "DESC",
+            "lower": "benign",
+            "statement": "any dark journey (DESC) > all-benign"
+          },
+          {
+            "group": "G1_benign_floor",
+            "higher": "LAC",
+            "lower": "benign",
+            "statement": "any dark journey (LAC) > all-benign"
+          },
+          {
+            "group": "G2_position",
+            "higher": "A1",
+            "lower": "L1",
+            "statement": "same tactic at cart > at landing"
+          },
+          {
+            "group": "G2_position",
+            "higher": "C1",
+            "lower": "A1",
+            "statement": "same tactic at checkout > at cart"
+          },
+          {
+            "group": "G2_position",
+            "higher": "E1",
+            "lower": "C1",
+            "statement": "same tactic at exit > at checkout"
+          },
+          {
+            "group": "G2_position",
+            "higher": "E1",
+            "lower": "L1",
+            "statement": "same tactic at exit > at landing"
+          },
+          {
+            "group": "G2_position",
+            "higher": "C2",
+            "lower": "L2",
+            "statement": "two tactics at checkout > two tactics at landing"
+          },
+          {
+            "group": "G2_position",
+            "higher": "E2",
+            "lower": "C2",
+            "statement": "two tactics at exit > two tactics at checkout"
+          },
+          {
+            "group": "G2_position",
+            "higher": "CE",
+            "lower": "LA",
+            "statement": "tactic at checkout+exit > tactic at landing+cart"
+          },
+          {
+            "group": "G2_position",
+            "higher": "CE",
+            "lower": "L1",
+            "statement": "tactic only at checkout+exit > tactic only at landing"
+          },
+          {
+            "group": "G3_breadth",
+            "higher": "L2",
+            "lower": "L1",
+            "statement": "two tactics in the landing stage > one"
+          },
+          {
+            "group": "G3_breadth",
+            "higher": "C2",
+            "lower": "C1",
+            "statement": "two tactics in the checkout stage > one"
+          },
+          {
+            "group": "G3_breadth",
+            "higher": "E2",
+            "lower": "E1",
+            "statement": "two tactics in the exit stage > one"
+          },
+          {
+            "group": "G4_coverage",
+            "higher": "LA",
+            "lower": "L1",
+            "statement": "landing+cart > landing only"
+          },
+          {
+            "group": "G4_coverage",
+            "higher": "CE",
+            "lower": "C1",
+            "statement": "checkout+exit > checkout only"
+          },
+          {
+            "group": "G4_coverage",
+            "higher": "CE",
+            "lower": "E1",
+            "statement": "checkout+exit > exit only"
+          },
+          {
+            "group": "G4_coverage",
+            "higher": "ALL1",
+            "lower": "CE",
+            "statement": "every stage > checkout+exit"
+          },
+          {
+            "group": "G4_coverage",
+            "higher": "ALL1",
+            "lower": "LA",
+            "statement": "every stage > landing+cart"
+          },
+          {
+            "group": "G4_coverage",
+            "higher": "LAC",
+            "lower": "LA",
+            "statement": "landing+cart+checkout > landing+cart"
+          },
+          {
+            "group": "G5_escalation",
+            "higher": "ESC",
+            "lower": "DESC",
+            "statement": "escalating > de-escalating (same multiset of stage pressures)"
+          },
+          {
+            "group": "G6_contestable_tradeoff",
+            "higher": "LAC",
+            "lower": "E1",
+            "statement": "pressure at 3 of 4 stages > one tactic only at the exit"
+          },
+          {
+            "group": "G6_contestable_tradeoff",
+            "higher": "LAC",
+            "lower": "C1",
+            "statement": "pressure at 3 of 4 stages > one tactic only at checkout"
+          }
+        ],
+        "scores": {
+          "fibonacci": {
+            "benign": 0.0,
+            "L1": 3.28,
+            "A1": 6.57,
+            "C1": 9.85,
+            "E1": 42.67,
+            "LA": 9.85,
+            "CE": 52.52,
+            "L2": 3.9,
+            "C2": 11.69,
+            "E2": 50.66,
+            "ALL1": 62.37,
+            "ESC": 77.44,
+            "DESC": 22.19,
+            "LAC": 19.7
+          },
+          "linear": {
+            "benign": 0.0,
+            "L1": 4.16,
+            "A1": 12.47,
+            "C1": 16.63,
+            "E1": 29.11,
+            "LA": 16.63,
+            "CE": 45.74,
+            "L2": 4.94,
+            "C2": 19.75,
+            "E2": 34.55,
+            "ALL1": 62.37,
+            "ESC": 72.59,
+            "DESC": 37.21,
+            "LAC": 33.26
+          },
+          "equal": {
+            "benign": 0.0,
+            "L1": 15.59,
+            "A1": 15.59,
+            "C1": 15.59,
+            "E1": 15.59,
+            "LA": 31.18,
+            "CE": 31.18,
+            "L2": 18.51,
+            "C2": 18.51,
+            "E2": 18.51,
+            "ALL1": 62.37,
+            "ESC": 55.73,
+            "DESC": 55.73,
+            "LAC": 46.78
+          },
+          "geometric_phi": {
+            "benign": 0.0,
+            "L1": 2.42,
+            "A1": 6.33,
+            "C1": 10.24,
+            "E1": 43.38,
+            "LA": 8.75,
+            "CE": 53.62,
+            "L2": 2.87,
+            "C2": 12.16,
+            "E2": 51.5,
+            "ALL1": 62.37,
+            "ESC": 78.66,
+            "DESC": 21.11,
+            "LAC": 18.99
+          },
+          "geometric_2": {
+            "benign": 0.0,
+            "L1": 0.81,
+            "A1": 3.24,
+            "C1": 6.48,
+            "E1": 51.84,
+            "LA": 4.05,
+            "CE": 58.32,
+            "L2": 0.96,
+            "C2": 7.69,
+            "E2": 61.54,
+            "ALL1": 62.37,
+            "ESC": 82.83,
+            "DESC": 11.45,
+            "LAC": 10.53
+          },
+          "fib_capped3": {
+            "benign": 0.0,
+            "L1": 6.93,
+            "A1": 13.86,
+            "C1": 20.79,
+            "E1": 20.79,
+            "LA": 20.79,
+            "CE": 41.58,
+            "L2": 8.23,
+            "C2": 24.68,
+            "E2": 24.68,
+            "ALL1": 62.37,
+            "ESC": 67.38,
+            "DESC": 46.86,
+            "LAC": 41.58
+          },
+          "max_pressure": {
+            "benign": 0.0,
+            "L1": 62.37,
+            "A1": 62.37,
+            "C1": 62.37,
+            "E1": 62.37,
+            "LA": 62.37,
+            "CE": 62.37,
+            "L2": 74.05,
+            "C2": 74.05,
+            "E2": 74.05,
+            "ALL1": 62.37,
+            "ESC": 86.5,
+            "DESC": 86.5,
+            "LAC": 62.37
+          }
+        },
+        "agreement": {
+          "fibonacci": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 0.9697,
+              "strict_agreement": 0.9697
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 1.0,
+              "strict_agreement": 1.0
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 8,
+                "ties": 0,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 6,
+                "ties": 0,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G5_escalation": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 1,
+                "n": 2,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.5
+              }
+            },
+            "not_satisfied": [
+              "LAC > E1 (pressure at 3 of 4 stages > one tactic only at the exit): 19.70 vs 42.67"
+            ]
+          },
+          "linear": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 1.0,
+              "strict_agreement": 1.0
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 1.0,
+              "strict_agreement": 1.0
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 8,
+                "ties": 0,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 6,
+                "ties": 0,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G5_escalation": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 2,
+                "ties": 0,
+                "discordant": 0,
+                "n": 2,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              }
+            },
+            "not_satisfied": []
+          },
+          "equal": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 0.8788,
+              "strict_agreement": 0.7576
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 0.871,
+              "strict_agreement": 0.7419
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 1,
+                "ties": 7,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 0.5625,
+                "strict_agreement": 0.125
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 6,
+                "ties": 0,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G5_escalation": {
+                "concordant": 0,
+                "ties": 1,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 2,
+                "ties": 0,
+                "discordant": 0,
+                "n": 2,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              }
+            },
+            "not_satisfied": [
+              "TIE A1 = L1 (same tactic at cart > at landing): 15.59",
+              "TIE C1 = A1 (same tactic at checkout > at cart): 15.59",
+              "TIE E1 = C1 (same tactic at exit > at checkout): 15.59",
+              "TIE E1 = L1 (same tactic at exit > at landing): 15.59",
+              "TIE C2 = L2 (two tactics at checkout > two tactics at landing): 18.51",
+              "TIE E2 = C2 (two tactics at exit > two tactics at checkout): 18.51",
+              "TIE CE = LA (tactic at checkout+exit > tactic at landing+cart): 31.18",
+              "TIE ESC = DESC (escalating > de-escalating (same multiset of stage pressures)): 55.73"
+            ]
+          },
+          "geometric_phi": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 0.9697,
+              "strict_agreement": 0.9697
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 1.0,
+              "strict_agreement": 1.0
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 8,
+                "ties": 0,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 6,
+                "ties": 0,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G5_escalation": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 1,
+                "n": 2,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.5
+              }
+            },
+            "not_satisfied": [
+              "LAC > E1 (pressure at 3 of 4 stages > one tactic only at the exit): 18.99 vs 43.38"
+            ]
+          },
+          "geometric_2": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 0.9697,
+              "strict_agreement": 0.9697
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 1.0,
+              "strict_agreement": 1.0
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 8,
+                "ties": 0,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 6,
+                "ties": 0,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G5_escalation": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 1,
+                "n": 2,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.5
+              }
+            },
+            "not_satisfied": [
+              "LAC > E1 (pressure at 3 of 4 stages > one tactic only at the exit): 10.53 vs 51.84"
+            ]
+          },
+          "fib_capped3": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 0.9697,
+              "strict_agreement": 0.9394
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 0.9677,
+              "strict_agreement": 0.9355
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 6,
+                "ties": 2,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 0.875,
+                "strict_agreement": 0.75
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 6,
+                "ties": 0,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G5_escalation": {
+                "concordant": 1,
+                "ties": 0,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 2,
+                "ties": 0,
+                "discordant": 0,
+                "n": 2,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              }
+            },
+            "not_satisfied": [
+              "TIE E1 = C1 (same tactic at exit > at checkout): 20.79",
+              "TIE E2 = C2 (two tactics at exit > two tactics at checkout): 24.68"
+            ]
+          },
+          "max_pressure": {
+            "overall": {
+              "n": 33,
+              "agreement_ties_half": 0.7424,
+              "strict_agreement": 0.4848
+            },
+            "excluding_G6_contestable": {
+              "n": 31,
+              "agreement_ties_half": 0.7581,
+              "strict_agreement": 0.5161
+            },
+            "per_group": {
+              "G1_benign_floor": {
+                "concordant": 13,
+                "ties": 0,
+                "discordant": 0,
+                "n": 13,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G2_position": {
+                "concordant": 0,
+                "ties": 8,
+                "discordant": 0,
+                "n": 8,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.0
+              },
+              "G3_breadth": {
+                "concordant": 3,
+                "ties": 0,
+                "discordant": 0,
+                "n": 3,
+                "agreement_ties_half": 1.0,
+                "strict_agreement": 1.0
+              },
+              "G4_coverage": {
+                "concordant": 0,
+                "ties": 6,
+                "discordant": 0,
+                "n": 6,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.0
+              },
+              "G5_escalation": {
+                "concordant": 0,
+                "ties": 1,
+                "discordant": 0,
+                "n": 1,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.0
+              },
+              "G6_contestable_tradeoff": {
+                "concordant": 0,
+                "ties": 2,
+                "discordant": 0,
+                "n": 2,
+                "agreement_ties_half": 0.5,
+                "strict_agreement": 0.0
+              }
+            },
+            "not_satisfied": [
+              "TIE A1 = L1 (same tactic at cart > at landing): 62.37",
+              "TIE C1 = A1 (same tactic at checkout > at cart): 62.37",
+              "TIE E1 = C1 (same tactic at exit > at checkout): 62.37",
+              "TIE E1 = L1 (same tactic at exit > at landing): 62.37",
+              "TIE C2 = L2 (two tactics at checkout > two tactics at landing): 74.05",
+              "TIE E2 = C2 (two tactics at exit > two tactics at checkout): 74.05",
+              "TIE CE = LA (tactic at checkout+exit > tactic at landing+cart): 62.37",
+              "TIE CE = L1 (tactic only at checkout+exit > tactic only at landing): 62.37",
+              "TIE LA = L1 (landing+cart > landing only): 62.37",
+              "TIE CE = C1 (checkout+exit > checkout only): 62.37",
+              "TIE CE = E1 (checkout+exit > exit only): 62.37",
+              "TIE ALL1 = CE (every stage > checkout+exit): 62.37",
+              "TIE ALL1 = LA (every stage > landing+cart): 62.37",
+              "TIE LAC = LA (landing+cart+checkout > landing+cart): 62.37",
+              "TIE ESC = DESC (escalating > de-escalating (same multiset of stage pressures)): 86.50",
+              "TIE LAC = E1 (pressure at 3 of 4 stages > one tactic only at the exit): 62.37",
+              "TIE LAC = C1 (pressure at 3 of 4 stages > one tactic only at checkout): 62.37"
+            ]
+          }
+        }
+      },
+      "conclusion": {
+        "summary_lines": [
+          "Reference agreement (ties = 0.5), all 33 expectations: linear 1.0, fibonacci 0.9697, geometric_phi 0.9697, geometric_2 0.9697, fib_capped3 0.9697, equal 0.8788, max_pressure 0.7424.",
+          "Excluding the contestable G6 trade-off: fibonacci 1.0, linear 1.0, geometric_phi 1.0, geometric_2 1.0, fib_capped3 0.9677, equal 0.871, max_pressure 0.7581.",
+          "Position expectations (G2): fibonacci 1.0, linear 1.0, geometric_phi 1.0, geometric_2 1.0, fib_capped3 0.875, equal 0.5625, max_pressure 0.5.",
+          "Noise-to-signal (lower = more stable): geometric_2 0.1356, fibonacci 0.146, geometric_phi 0.1472, max_pressure 0.1502, fib_capped3 0.1565, linear 0.1582, equal 0.1683.",
+          "Missing stage, mean |delta| (canonical positions): max_pressure 2.581, equal 7.137, linear 7.183, fib_capped3 7.211, geometric_phi 7.212, fibonacci 7.221, geometric_2 7.269.",
+          "Pair-ranking change rate when the same stage is missing in both journeys: max_pressure 0.1212, geometric_2 0.125, geometric_phi 0.1273, fibonacci 0.1275, fib_capped3 0.1333, linear 0.1349, equal 0.1462.",
+          "Escalating minus de-escalating (mean points): fibonacci 21.591, linear 13.108, equal 0.0, geometric_phi 20.719, geometric_2 28.067, fib_capped3 14.391, max_pressure 0.0."
+        ],
+        "verdict": [
+          "Fibonacci (like every recency-increasing scheme) has a measurable advantage over EQUAL and MAX on the position and escalation expectations, which those order-free schemes cannot satisfy (they tie).",
+          "Against LINEAR (and the geometric-phi analogue) there is no measurable advantage on the reference expectations: they satisfy the same pairs.",
+          "Robustness: mean |delta| under single-observation noise is practically identical for the weighted schemes (fibonacci 2.644, linear 2.6529, equal 2.6719 points; noise-to-signal fibonacci 0.146 vs linear 0.1582 vs equal 0.1683, lower for fibonacci only because its scores are more spread out). The cost of recency weighting is concentrated leverage of the LAST stage: dropping the payment stage moves fibonacci by 13.27 points (linear 10.397, equal 7.244); duplicating a flagged string into the payment stage adds 13.457 points on average (linear 10.573, equal 7.401; worst case fibonacci 28.4091 vs linear 22.3214 vs equal 15.625). The pair-ranking change rate with a missing stage is 0.1275 for fibonacci vs 0.1349 linear and 0.1462 equal.",
+          "On the contestable G6 trade-off (persistence over 3 stages vs one tactic at the exit) fibonacci scores 0.5 vs linear 1.0: Fibonacci's exit weight (F(7)=13) lets one exit tactic outrank pressure at three earlier stages. Overall: Fibonacci's measurable advantage is over order-free schemes (equal, max); it is not measurably better than linear or a smooth geometric weighting, and it is more sensitive to the final stage."
+        ]
+      },
+      "seconds": 3.4
+    },
+    "R2_mcai_aggregation": {
+      "synthetic": true,
+      "labels_from_construction": true,
+      "kind": "synthetic labelled benchmark; designed level = authors' construction, not ground truth",
+      "design": "All 64 subsets of the 6 benchmark-B visual factors (weight, size, fill, link, grey, opacity) x all 8 subsets of 3 inferred-interaction cues {pretick: a pre-ticked 'Add extended warranty for $9.99' checkbox (AUTHORED) in the offer container; details: decline inside a collapsed <details>; navaway: decline is a link to another page} x 4 decline wordings (AUTHORED neutral 'No thanks' + 3 random TEST-split misdirection rows that the decline lexicon recognises) = 2048 HTML choice sets. Designed level = #visual factors + #interaction cues + 1 if misdirection wording (0..10). Dimension scores from compute_mcai; every aggregator applied to the same available dimensions with MCAI weights via aggregation.alternatives().",
+      "n_cases": 2048,
+      "n_detected": 2048,
+      "n_interaction_cues_recovered_exactly": 2048,
+      "misdirection_decline_row_ids": [
+        612,
+        474,
+        1163
+      ],
+      "seconds": 0.9,
+      "dimension_means_by_cue_count": {
+        "0": 0.0,
+        "1": 0.5,
+        "2": 0.6667,
+        "3": 0.75
+      },
+      "semantic_by_wording": {
+        "neutral": 0.9083,
+        "misdirection_612": 0.7842,
+        "misdirection_474": 0.7804,
+        "misdirection_1163": 0.7804
+      },
+      "per_aggregator": {
+        "weighted_mean (selected)": {
+          "spearman_rho_vs_level": 0.7957,
+          "spearman_p": 0.0,
+          "kendall_tau_b": 0.6517,
+          "spearman_rho_within_fixed_wording_mean": 0.9235,
+          "spearman_rho_within_fixed_wording": {
+            "No thanks": 0.9235,
+            "NO, I DON'T FEEL LUCKY": 0.9235,
+            "no thanks, I'll save money another day": 0.9235,
+            "No thanks, I don't like saving money": 0.9235
+          },
+          "per_level_mean": [
+            27.25,
+            32.14,
+            37.35,
+            42.47,
+            47.31,
+            51.79,
+            55.89,
+            59.63,
+            63.05,
+            66.21,
+            69.17
+          ],
+          "adjacent_level_mean_violations": 0,
+          "factor_edges": {
+            "edges": 9216,
+            "violations": 0,
+            "flat_share": 0.0,
+            "strictly_increasing_share": 1.0
+          },
+          "wording_edges_neutral_to_misdirection": {
+            "edges": 1536,
+            "decreases": 1536,
+            "note": "dimension-level effect (semantic sub-scores), not an aggregator property"
+          },
+          "collapse_to_zero_share": 0.0,
+          "collapse_share_among_cases_with_exactly_one_zero_dimension": 0.0,
+          "cases_with_exactly_one_zero_dimension": 280,
+          "dominance_share": 0.0,
+          "score_equals_max_dimension_share": 0.0,
+          "mean_score": 52.41,
+          "range": [
+            23.41,
+            72.97
+          ]
+        },
+        "geometric": {
+          "spearman_rho_vs_level": 0.8163,
+          "spearman_p": 0.0,
+          "kendall_tau_b": 0.6774,
+          "spearman_rho_within_fixed_wording_mean": 0.882,
+          "spearman_rho_within_fixed_wording": {
+            "No thanks": 0.882,
+            "NO, I DON'T FEEL LUCKY": 0.882,
+            "no thanks, I'll save money another day": 0.882,
+            "No thanks, I don't like saving money": 0.882
+          },
+          "per_level_mean": [
+            0.0,
+            0.0,
+            8.97,
+            21.42,
+            32.64,
+            42.17,
+            50.0,
+            56.24,
+            61.12,
+            65.04,
+            68.53
+          ],
+          "adjacent_level_mean_violations": 0,
+          "factor_edges": {
+            "edges": 9216,
+            "violations": 0,
+            "flat_share": 0.0885,
+            "strictly_increasing_share": 0.9115
+          },
+          "wording_edges_neutral_to_misdirection": {
+            "edges": 1536,
+            "decreases": 1323,
+            "note": "dimension-level effect (semantic sub-scores), not an aggregator property"
+          },
+          "collapse_to_zero_share": 0.1387,
+          "collapse_share_among_cases_with_exactly_one_zero_dimension": 1.0,
+          "cases_with_exactly_one_zero_dimension": 280,
+          "dominance_share": 0.0,
+          "score_equals_max_dimension_share": 0.0,
+          "mean_score": 42.36,
+          "range": [
+            0.0,
+            71.69
+          ]
+        },
+        "max": {
+          "spearman_rho_vs_level": -0.2198,
+          "spearman_p": 7.77837194154363e-24,
+          "kendall_tau_b": -0.1844,
+          "spearman_rho_within_fixed_wording_mean": null,
+          "spearman_rho_within_fixed_wording": {
+            "No thanks": null,
+            "NO, I DON'T FEEL LUCKY": null,
+            "no thanks, I'll save money another day": null,
+            "No thanks, I don't like saving money": null
+          },
+          "per_level_mean": [
+            90.83,
+            87.66,
+            85.4,
+            83.71,
+            82.39,
+            81.33,
+            80.47,
+            79.75,
+            79.14,
+            78.62,
+            78.17
+          ],
+          "adjacent_level_mean_violations": 10,
+          "factor_edges": {
+            "edges": 9216,
+            "violations": 0,
+            "flat_share": 1.0,
+            "strictly_increasing_share": 0.0
+          },
+          "wording_edges_neutral_to_misdirection": {
+            "edges": 1536,
+            "decreases": 1536,
+            "note": "dimension-level effect (semantic sub-scores), not an aggregator property"
+          },
+          "collapse_to_zero_share": 0.0,
+          "collapse_share_among_cases_with_exactly_one_zero_dimension": 0.0,
+          "cases_with_exactly_one_zero_dimension": 280,
+          "dominance_share": 1.0,
+          "score_equals_max_dimension_share": 1.0,
+          "mean_score": 81.33,
+          "range": [
+            78.04,
+            90.83
+          ]
+        },
+        "power2": {
+          "spearman_rho_vs_level": 0.6326,
+          "spearman_p": 2.103118984356232e-229,
+          "kendall_tau_b": 0.5036,
+          "spearman_rho_within_fixed_wording_mean": 0.8806,
+          "spearman_rho_within_fixed_wording": {
+            "No thanks": 0.8805,
+            "NO, I DON'T FEEL LUCKY": 0.8806,
+            "no thanks, I'll save money another day": 0.8806,
+            "No thanks, I don't like saving money": 0.8806
+          },
+          "per_level_mean": [
+            49.75,
+            50.03,
+            51.21,
+            52.97,
+            55.09,
+            57.41,
+            59.84,
+            62.33,
+            64.83,
+            67.31,
+            69.77
+          ],
+          "adjacent_level_mean_violations": 0,
+          "factor_edges": {
+            "edges": 9216,
+            "violations": 0,
+            "flat_share": 0.0,
+            "strictly_increasing_share": 1.0
+          },
+          "wording_edges_neutral_to_misdirection": {
+            "edges": 1536,
+            "decreases": 1536,
+            "note": "dimension-level effect (semantic sub-scores), not an aggregator property"
+          },
+          "collapse_to_zero_share": 0.0,
+          "collapse_share_among_cases_with_exactly_one_zero_dimension": 0.0,
+          "cases_with_exactly_one_zero_dimension": 280,
+          "dominance_share": 0.0,
+          "score_equals_max_dimension_share": 0.0,
+          "mean_score": 58.15,
+          "range": [
+            42.74,
+            74.23
+          ]
+        },
+        "noisy_or": {
+          "spearman_rho_vs_level": 0.4892,
+          "spearman_p": 1.0673008452416243e-123,
+          "kendall_tau_b": 0.415,
+          "spearman_rho_within_fixed_wording_mean": 0.8963,
+          "spearman_rho_within_fixed_wording": {
+            "No thanks": 0.8963,
+            "NO, I DON'T FEEL LUCKY": 0.8963,
+            "no thanks, I'll save money another day": 0.8963,
+            "No thanks, I don't like saving money": 0.8963
+          },
+          "per_level_mean": [
+            51.17,
+            50.89,
+            52.23,
+            54.3,
+            56.68,
+            59.13,
+            61.56,
+            63.9,
+            66.16,
+            68.34,
+            70.47
+          ],
+          "adjacent_level_mean_violations": 1,
+          "factor_edges": {
+            "edges": 9216,
+            "violations": 0,
+            "flat_share": 0.0,
+            "strictly_increasing_share": 1.0
+          },
+          "wording_edges_neutral_to_misdirection": {
+            "edges": 1536,
+            "decreases": 1536,
+            "note": "dimension-level effect (semantic sub-scores), not an aggregator property"
+          },
+          "collapse_to_zero_share": 0.0,
+          "collapse_share_among_cases_with_exactly_one_zero_dimension": 0.0,
+          "cases_with_exactly_one_zero_dimension": 280,
+          "dominance_share": 0.0,
+          "score_equals_max_dimension_share": 0.0,
+          "mean_score": 59.72,
+          "range": [
+            36.54,
+            77.24
+          ]
+        }
+      },
+      "metric_definitions": {
+        "factor_edges": "(case, same case + one visual factor or one interaction cue), identical decline text; violation = score decreases; flat = unchanged.",
+        "collapse_to_zero_share": "share of cases where the aggregate is 0 although at least one dimension is > 0.",
+        "dominance_share": "among cases where every dimension is > 0: share where zeroing every dimension except the largest changes the aggregate by < 1 point (the max dimension alone explains the score).",
+        "score_equals_max_dimension_share": "share of all cases where the aggregate is within 1 point of 100 x the largest dimension."
+      },
+      "semantic_dimension_finding": "The semantic dimension scores the AUTHORED neutral decline 'No thanks' at 0.9083 but the TEST-split misdirection declines at 0.7842, 0.7804, 0.7804: the classifier assigns high P(misdirection) to 'No thanks' (dataset label bias, see benchmark D) and the short neutral decline also maximises the word-count imbalance sub-score. So switching to misdirection wording LOWERS the semantic score on every wording edge; this is a property of the semantic dimension, not of any aggregator, and it caps every aggregator's rank agreement with the designed level (which counts misdirection wording as +1).",
+      "recommendation": {
+        "best_spearman": "geometric",
+        "best_spearman_within_fixed_wording": "weighted_mean (selected)",
+        "text": "Spearman rho vs designed level: weighted_mean (selected) 0.7957, geometric 0.8163, max -0.2198, power2 0.6326, noisy_or 0.4892. Mean rho within a fixed decline wording (removes the semantic confound): weighted_mean (selected) 0.9235, geometric 0.882, max None, power2 0.8806, noisy_or 0.8963. Geometric collapses to 0 in 0.1387 of cases (every case with a zero dimension, e.g. no interaction cue or no visual factor); max is flat on 1.0 of factor edges (dominance 1.0). The selected weighted mean has 0 monotonicity violations, 0.0 flat edges, no collapse and dominance 0.0. geometric has the highest overall rank agreement (0.8163 vs 0.7957 for the selected mean), but it achieves this by mapping every design with a zero dimension to 0 (collapse share 0.1387, flat factor edges 0.0885): adding a visual factor to a page with no interaction cue does not move the score at all. Recommendation: keep the weighted arithmetic mean (no collapse, strictly monotone on every factor edge, exact additive attribution); the small rho gap is the price of not collapsing. Fix the semantic dimension's 'No thanks' bias separately."
+      }
+    },
+    "R3_cdi_aggregation": {
+      "kind": "demo inputs through the live API path + synthetic component vectors",
+      "synthetic_note": "Journeys in journeys.json are SYNTHETIC demos (authored order/markup + verbatim TEST strings); synthetic vectors are random.",
+      "demo": [
+        {
+          "id": "text-deceptive",
+          "kind": "single page",
+          "input_type": "text",
+          "components": {
+            "content_pressure": 0.9994
+          },
+          "cdi_selected": 99.94,
+          "alternatives": {
+            "weighted_mean (selected)": 99.94,
+            "geometric": 99.94,
+            "max": 99.94,
+            "power2": 99.94,
+            "noisy_or": 99.94
+          },
+          "missing_components": [
+            "choice_asymmetry",
+            "observed_obstruction"
+          ],
+          "cdi_zero_filled": 54.97,
+          "ii_semantic_in_asymmetry": {
+            "asym_visual_interaction": null,
+            "asym_with_semantic": 0.9998,
+            "cdi_if_semantic_included": 99.95,
+            "inflation_points": 0.01
+          }
+        },
+        {
+          "id": "text-benign",
+          "kind": "single page",
+          "input_type": "text",
+          "components": {
+            "content_pressure": 0.0
+          },
+          "cdi_selected": 0.0,
+          "alternatives": {
+            "weighted_mean (selected)": 0.0,
+            "geometric": 0.0,
+            "max": 0.0,
+            "power2": 0.0,
+            "noisy_or": 0.0
+          },
+          "missing_components": [
+            "choice_asymmetry",
+            "observed_obstruction"
+          ],
+          "cdi_zero_filled": 0.0,
+          "ii_semantic_in_asymmetry": {
+            "asym_visual_interaction": null,
+            "asym_with_semantic": null,
+            "cdi_if_semantic_included": null,
+            "inflation_points": null
+          }
+        },
+        {
+          "id": "html-checkout",
+          "kind": "single page",
+          "input_type": "html",
+          "components": {
+            "content_pressure": 0.7498,
+            "choice_asymmetry": 0.4891,
+            "observed_obstruction": 1.0
+          },
+          "cdi_selected": 73.47,
+          "alternatives": {
+            "weighted_mean (selected)": 73.47,
+            "geometric": 71.38,
+            "max": 100.0,
+            "power2": 75.43,
+            "noisy_or": 100.0
+          },
+          "missing_components": [],
+          "cdi_zero_filled": null,
+          "ii_semantic_in_asymmetry": {
+            "asym_visual_interaction": 0.4891,
+            "asym_with_semantic": 0.5177,
+            "cdi_if_semantic_included": 74.18,
+            "inflation_points": 0.71
+          },
+          "iii_obstruction": {
+            "n_facts": 2,
+            "strengths": [
+              1.0,
+              1.0
+            ],
+            "max_selected": 1.0,
+            "sum_unclipped": 2.0,
+            "cdi_with_sum_clipped": 73.47,
+            "cdi_with_sum_unclipped_raw": 93.47
+          }
+        },
+        {
+          "id": "html-benign",
+          "kind": "single page",
+          "input_type": "html",
+          "components": {
+            "content_pressure": 0.0,
+            "observed_obstruction": 0.0
+          },
+          "cdi_selected": 0.0,
+          "alternatives": {
+            "weighted_mean (selected)": 0.0,
+            "geometric": 0.0,
+            "max": 0.0,
+            "power2": 0.0,
+            "noisy_or": 0.0
+          },
+          "missing_components": [
+            "choice_asymmetry"
+          ],
+          "cdi_zero_filled": 0.0,
+          "ii_semantic_in_asymmetry": {
+            "asym_visual_interaction": null,
+            "asym_with_semantic": null,
+            "cdi_if_semantic_included": null,
+            "inflation_points": null
+          }
+        },
+        {
+          "id": "journey-subscription",
+          "kind": "journey (SYNTHETIC demo)",
+          "components": {
+            "content_pressure": 0.6627,
+            "choice_asymmetry": 0.8,
+            "observed_obstruction": 1.0
+          },
+          "cdi_selected": 76.45,
+          "alternatives": {
+            "weighted_mean (selected)": 76.45,
+            "geometric": 75.42,
+            "max": 100.0,
+            "power2": 77.56,
+            "noisy_or": 100.0
+          },
+          "stage_pressures": [
+            0.7498,
+            0.7495,
+            0.75,
+            0.6225
+          ],
+          "fspm": {
+            "fibonacci": 66.27,
+            "linear": 69.41,
+            "equal": 71.79
+          },
+          "missing_components": [],
+          "cdi_zero_filled": null,
+          "i_fspm_instead_of_page_content": {
+            "selected_content": 0.6627,
+            "naive_fspm_plus_mean_page_pressure": 1.0,
+            "naive_sum_of_stage_pressures": 1.0,
+            "naive_sum_unclipped": 2.8718,
+            "cdi_selected": 76.45,
+            "cdi_naive_fspm_plus_page": 95.0,
+            "cdi_naive_sum": 95.0
+          },
+          "ii_semantic_in_asymmetry": {
+            "asym_visual_interaction": 0.8,
+            "asym_with_semantic": 0.7516,
+            "cdi_if_semantic_included": 75.24,
+            "inflation_points": -1.21
+          },
+          "iii_obstruction": {
+            "dom_facts": 1,
+            "temporal_facts": 1,
+            "unique_elements": 1,
+            "max_selected": 1.0,
+            "sum_without_dedup": 2.0,
+            "sum_with_dedup": 1.0,
+            "engine_value": 1.0
+          }
+        },
+        {
+          "id": "journey-benign",
+          "kind": "journey (SYNTHETIC demo)",
+          "components": {
+            "content_pressure": 0.0
+          },
+          "cdi_selected": 0.0,
+          "alternatives": {
+            "weighted_mean (selected)": 0.0,
+            "geometric": 0.0,
+            "max": 0.0,
+            "power2": 0.0,
+            "noisy_or": 0.0
+          },
+          "stage_pressures": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "fspm": {
+            "fibonacci": 0.0,
+            "linear": 0.0,
+            "equal": 0.0
+          },
+          "missing_components": [
+            "choice_asymmetry",
+            "observed_obstruction"
+          ],
+          "cdi_zero_filled": 0.0,
+          "i_fspm_instead_of_page_content": {
+            "selected_content": 0.0,
+            "naive_fspm_plus_mean_page_pressure": 0.0,
+            "naive_sum_of_stage_pressures": 0.0,
+            "naive_sum_unclipped": 0.0,
+            "cdi_selected": 0.0,
+            "cdi_naive_fspm_plus_page": 0.0,
+            "cdi_naive_sum": 0.0
+          },
+          "ii_semantic_in_asymmetry": {
+            "asym_visual_interaction": null,
+            "asym_with_semantic": null,
+            "cdi_if_semantic_included": null,
+            "inflation_points": null
+          }
+        }
+      ],
+      "synthetic_vectors": {
+        "design": "5000 SYNTHETIC component vectors: content_pressure always available, choice_asymmetry available w.p. 0.5, observed_obstruction w.p. 0.6; each available value is exactly 0 w.p. 0.3, else U(0,1).",
+        "per_aggregator": {
+          "weighted_mean (selected)": {
+            "mean": 35.01,
+            "spearman_vs_selected": 1.0,
+            "mean_minus_selected": 0.0,
+            "collapse_to_zero_while_selected_positive": 0.0,
+            "equals_max_component_share": 0.2786
+          },
+          "geometric": {
+            "mean": 22.77,
+            "spearman_vs_selected": 0.7247,
+            "mean_minus_selected": -12.25,
+            "collapse_to_zero_while_selected_positive": 0.3838,
+            "equals_max_component_share": 0.2744
+          },
+          "max": {
+            "mean": 52.77,
+            "spearman_vs_selected": 0.8243,
+            "mean_minus_selected": 17.76,
+            "collapse_to_zero_while_selected_positive": 0.0,
+            "equals_max_component_share": 1.0
+          },
+          "power2": {
+            "mean": 40.23,
+            "spearman_vs_selected": 0.9769,
+            "mean_minus_selected": 5.22,
+            "collapse_to_zero_while_selected_positive": 0.0,
+            "equals_max_component_share": 0.2828
+          },
+          "noisy_or": {
+            "mean": 39.82,
+            "spearman_vs_selected": 0.9758,
+            "mean_minus_selected": 4.81,
+            "collapse_to_zero_while_selected_positive": 0.0,
+            "equals_max_component_share": 0.2812
+          }
+        },
+        "missing_components": {
+          "share_with_missing": 0.7056,
+          "mean_renormalised": 35.11,
+          "mean_zero_filled": 24.85,
+          "mean_deflation_points_if_zero_filled": 10.27,
+          "max_deflation_points": 45.0,
+          "band_changes_if_zero_filled": 0.3707
+        }
+      },
+      "conclusion": [
+        "text-deceptive: including MCAI semantic in choice asymmetry would move CDI by 0.01 points (asymmetry None -> 0.9998).",
+        "text-deceptive: missing ['choice_asymmetry', 'observed_obstruction']; renormalised CDI 99.94 vs zero-filled 54.97.",
+        "text-benign: missing ['choice_asymmetry', 'observed_obstruction']; renormalised CDI 0.0 vs zero-filled 0.0.",
+        "html-checkout: including MCAI semantic in choice asymmetry would move CDI by 0.71 points (asymmetry 0.4891 -> 0.5177).",
+        "html-benign: missing ['choice_asymmetry']; renormalised CDI 0.0 vs zero-filled 0.0.",
+        "journey-subscription: CDI 76.45 with FSPM as journey content; naive FSPM + mean page pressure would give 95.0, naive sum of stage pressures 95.0.",
+        "journey-subscription: including MCAI semantic in choice asymmetry would move CDI by -1.21 points (asymmetry 0.8 -> 0.7516).",
+        "journey-benign: CDI 0.0 with FSPM as journey content; naive FSPM + mean page pressure would give 0.0, naive sum of stage pressures 0.0.",
+        "journey-benign: missing ['choice_asymmetry', 'observed_obstruction']; renormalised CDI 0.0 vs zero-filled 0.0.",
+        "Synthetic vectors with a missing component: zero-filling would deflate the CDI by 10.27 points on average (max 45.0) and change the display band in 0.3707 of them."
+      ],
+      "seconds": 0.4
+    },
+    "R4_counterfactual_optimiser": {
+      "synthetic": false,
+      "kind": "model-estimated optimiser study on every dark TEST-split row (scores by the same classifier)",
+      "design": "Each TEST row with label != benign is audited alone (segment_text -> Auditor.audit 'text'), MCAI choice sets are extracted, plan_edits + optimise run exactly as engine.single. Categories are FINDING (predicted) categories; 'choice_asymmetry' = equalise_choice edits for uncovered decline options. score reduction = P(dark) original - P(dark) of the selected candidate (0 when the original is kept; removal scores 0). Baseline = the pre-optimiser rule-based minimal rewrite from plan_edits.",
+      "threshold_tau": 0.68,
+      "dark_rows": 162,
+      "dark_rows_with_ml_findings": 147,
+      "rows_with_at_least_one_feasible_change": 106,
+      "rows_with_change_share": 0.7211,
+      "per_category": {
+        "ALL": {
+          "n_edits": 147,
+          "feasible_change_share": 0.7211,
+          "mean_score_reduction_all": 0.455,
+          "mean_score_reduction_changed": 0.631,
+          "baseline_minimal_rewrite_mean_reduction_all": 0.052,
+          "changed_below_threshold_share": 0.7264,
+          "winning_variants": {
+            "remove_unverifiable_claim": 44,
+            "minimal": 42,
+            "original": 41,
+            "neutral_decline": 15,
+            "drop_pressure_sentences": 5
+          },
+          "candidates": 331,
+          "winning_neutral_decline_texts": {
+            "Decline": 15
+          },
+          "infeasible_candidates": 0,
+          "violation_counts": {},
+          "chosen_not_exact_min_due_to_tie_band": 10
+        },
+        "misdirection": {
+          "n_edits": 19,
+          "feasible_change_share": 0.7895,
+          "mean_score_reduction_all": 0.7714,
+          "mean_score_reduction_changed": 0.9771,
+          "baseline_minimal_rewrite_mean_reduction_all": -0.0075,
+          "changed_below_threshold_share": 1.0,
+          "winning_variants": {
+            "neutral_decline": 15,
+            "original": 4
+          },
+          "candidates": 92,
+          "winning_neutral_decline_texts": {
+            "Decline": 15
+          },
+          "infeasible_candidates": 0,
+          "violation_counts": {},
+          "chosen_not_exact_min_due_to_tie_band": 0
+        },
+        "scarcity": {
+          "n_edits": 45,
+          "feasible_change_share": 0.5556,
+          "mean_score_reduction_all": 0.0146,
+          "mean_score_reduction_changed": 0.0262,
+          "baseline_minimal_rewrite_mean_reduction_all": 0.0146,
+          "changed_below_threshold_share": 0.04,
+          "winning_variants": {
+            "minimal": 25,
+            "original": 20
+          },
+          "candidates": 73,
+          "winning_neutral_decline_texts": {},
+          "infeasible_candidates": 0,
+          "violation_counts": {},
+          "chosen_not_exact_min_due_to_tie_band": 9
+        },
+        "social_proof": {
+          "n_edits": 44,
+          "feasible_change_share": 1.0,
+          "mean_score_reduction_all": 0.9757,
+          "mean_score_reduction_changed": 0.9757,
+          "baseline_minimal_rewrite_mean_reduction_all": 0.0,
+          "changed_below_threshold_share": 1.0,
+          "winning_variants": {
+            "remove_unverifiable_claim": 44
+          },
+          "candidates": 88,
+          "winning_neutral_decline_texts": {},
+          "infeasible_candidates": 0,
+          "violation_counts": {},
+          "chosen_not_exact_min_due_to_tie_band": 0
+        },
+        "urgency": {
+          "n_edits": 39,
+          "feasible_change_share": 0.5641,
+          "mean_score_reduction_all": 0.2217,
+          "mean_score_reduction_changed": 0.393,
+          "baseline_minimal_rewrite_mean_reduction_all": 0.183,
+          "changed_below_threshold_share": 0.7727,
+          "winning_variants": {
+            "minimal": 17,
+            "original": 17,
+            "drop_pressure_sentences": 5
+          },
+          "candidates": 78,
+          "winning_neutral_decline_texts": {},
+          "infeasible_candidates": 0,
+          "violation_counts": {},
+          "chosen_not_exact_min_due_to_tie_band": 1
+        }
+      },
+      "report_vs_selection_inconsistencies": {
+        "count": 0,
+        "examples": [],
+        "note": "edits whose returned action/redesigned text differs from the candidate the optimiser's own rule selects (re-derived from e.candidates)"
+      },
+      "seconds": 0.2,
+      "exactness_check": {
+        "design": "200 random multi-element pages: 3-6 distinct dark TEST strings joined by newlines (pages with < 2 ML findings redrawn). For every ML finding the optimiser's FEASIBLE candidates are taken with the engine's redesign rule (kept original -> its model score; removal -> 0; rewrite -> its score, or 0 if below tau). Brute force = minimum redesigned content pressure over the FULL product space of per-element feasible candidates (vectorised).",
+        "pages": 200,
+        "product_space_size": {
+          "n": 200,
+          "mean": 37.635,
+          "median": 12.0,
+          "p95": 109.8,
+          "max": 864.0,
+          "min": 1.0
+        },
+        "total_combinations_evaluated": 7527,
+        "mismatches_per_element_argmin_vs_bruteforce": 0,
+        "mismatches_optimiser_selection_vs_bruteforce": 45,
+        "max_gap_optimiser_minus_bruteforce": 0.002563,
+        "mismatches_engine_redesigned_content_vs_optimiser_selection": 0,
+        "tie_band": 0.005,
+        "note": "Per-element argmin is the exact global minimum (theory: pressure is monotone non-decreasing in each element's score and constraints are per-element). The optimiser's actual selection may differ from the argmin only through its documented tie band (prefer a real change / smaller edit within 0.005 of the best score).",
+        "examples_of_gap": [
+          {
+            "page": "Only a few more left!\nNo I don't feel lucky\nOnly a few left\n19 people viewed this product per day\n2 people are looking right now\nAvailability: Low in stock today",
+            "p_bruteforce": 0.624812,
+            "p_optimiser": 0.624938
+          },
+          {
+            "page": "83% offers claimed. Hurry up!\n70% offers claimed. Hurry up!\nI WANT TO PAY MORE LATER ;)\nOnly A Few Left",
+            "p_bruteforce": 0.725588,
+            "p_optimiser": 0.725712
+          },
+          {
+            "page": "Israël in Metz, France purchased a More ADVANCED Chord Substitutions\n146 people recently purchased this.\nHurry! Only 1 left in size M!!\nONLY A FEW LEFT\nactivate within 10:00",
+            "p_bruteforce": 0.748413,
+            "p_optimiser": 0.748475
+          },
+          {
+            "page": "Denise in Saluda, Virginia bought Terani Couture - 1911E9095 Embroidered Asymmetric Neck Mermaid Gown\nNO, I DON'T FEEL LUCKY\nSellout risk:\n3DAYS124606\nLESS THAN 5 LEFT!\nOnly 3 pieces in stock!",
+            "p_bruteforce": 0.62425,
+            "p_optimiser": 0.625
+          },
+          {
+            "page": "Only a few left\nJamie from Eloy United States purchased a CBD Oil Vape Additives 4 Pack About 7 hours ago\nI do not want to protect my item",
+            "p_bruteforce": 0.624812,
+            "p_optimiser": 0.624938
+          }
+        ],
+        "seconds": 0.4
+      }
+    },
+    "R5_cross_modal_fusion": {
+      "synthetic": true,
+      "kind": "demo checkout page captured in 2-3 modalities (AUTHORED demo markup + verbatim TEST strings)",
+      "design": "data/samples/checkout_deceptive.html captured as HTML, as text (the visible element texts the HTML extractor finds, one per line) and, if Tesseract is available, as a PIL-rendered screenshot of those lines (Arial 22px, SYNTHETIC rendering). Each journey is posted to /api/audit/journey with and without fuse_with linking the text and screenshot captures to the HTML stage. 'typed' declares stage types (product/checkout x3, so the UNFUSED journey falls back to submission order because the types repeat); 'untyped' uses submission order in both.",
+      "ocr_available": true,
+      "screenshot_included": true,
+      "ocr_lines_read": 12,
+      "visible_lines": 12,
+      "configs": {
+        "same_page_only": {
+          "with_fusion": {
+            "units": 1,
+            "positions": [
+              1
+            ],
+            "positions_mode": "submission_order",
+            "unit_pressures": [
+              0.7498
+            ],
+            "fspm": {
+              "fibonacci": 74.98,
+              "linear": 74.98,
+              "equal": 74.98
+            },
+            "cdi": 73.47,
+            "content_pressure": 0.7498,
+            "duplicate_pairs": 12,
+            "stage_pressures": [
+              0.7498,
+              0.7498,
+              0.7498
+            ]
+          },
+          "without_fusion": {
+            "units": 3,
+            "positions": [
+              1,
+              2,
+              3
+            ],
+            "positions_mode": "submission_order",
+            "unit_pressures": [
+              0.7498,
+              0.7498,
+              0.7498
+            ],
+            "fspm": {
+              "fibonacci": 74.98,
+              "linear": 74.98,
+              "equal": 74.98
+            },
+            "cdi": 73.47,
+            "content_pressure": 0.7498,
+            "duplicate_pairs": 0,
+            "stage_pressures": [
+              0.7498,
+              0.7498,
+              0.7498
+            ]
+          },
+          "inflation_avoided": {
+            "fspm": {
+              "fibonacci": 0.0,
+              "linear": 0.0,
+              "equal": 0.0
+            },
+            "cdi": 0.0
+          }
+        },
+        "product_then_checkout_typed": {
+          "with_fusion": {
+            "units": 2,
+            "positions": [
+              2,
+              4
+            ],
+            "positions_mode": "canonical",
+            "unit_pressures": [
+              0.0,
+              0.7498
+            ],
+            "fspm": {
+              "fibonacci": 56.24,
+              "linear": 49.99,
+              "equal": 37.49
+            },
+            "cdi": 63.16,
+            "content_pressure": 0.5624,
+            "duplicate_pairs": 12,
+            "stage_pressures": [
+              0.0,
+              0.7498,
+              0.7498,
+              0.7498
+            ]
+          },
+          "without_fusion": {
+            "units": 4,
+            "positions": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "positions_mode": "submission_order",
+            "unit_pressures": [
+              0.0,
+              0.7498,
+              0.7498,
+              0.7498
+            ],
+            "fspm": {
+              "fibonacci": 64.27,
+              "linear": 67.48,
+              "equal": 56.24
+            },
+            "cdi": 67.58,
+            "content_pressure": 0.6427,
+            "duplicate_pairs": 0,
+            "stage_pressures": [
+              0.0,
+              0.7498,
+              0.7498,
+              0.7498
+            ]
+          },
+          "inflation_avoided": {
+            "fspm": {
+              "fibonacci": 8.03,
+              "linear": 17.49,
+              "equal": 18.75
+            },
+            "cdi": 4.42
+          }
+        },
+        "product_then_checkout_untyped": {
+          "with_fusion": {
+            "units": 2,
+            "positions": [
+              1,
+              2
+            ],
+            "positions_mode": "submission_order",
+            "unit_pressures": [
+              0.0,
+              0.7498
+            ],
+            "fspm": {
+              "fibonacci": 37.49,
+              "linear": 49.99,
+              "equal": 37.49
+            },
+            "cdi": 52.85,
+            "content_pressure": 0.3749,
+            "duplicate_pairs": 12,
+            "stage_pressures": [
+              0.0,
+              0.7498,
+              0.7498,
+              0.7498
+            ]
+          },
+          "without_fusion": {
+            "units": 4,
+            "positions": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "positions_mode": "submission_order",
+            "unit_pressures": [
+              0.0,
+              0.7498,
+              0.7498,
+              0.7498
+            ],
+            "fspm": {
+              "fibonacci": 64.27,
+              "linear": 67.48,
+              "equal": 56.24
+            },
+            "cdi": 67.58,
+            "content_pressure": 0.6427,
+            "duplicate_pairs": 0,
+            "stage_pressures": [
+              0.0,
+              0.7498,
+              0.7498,
+              0.7498
+            ]
+          },
+          "inflation_avoided": {
+            "fspm": {
+              "fibonacci": 26.78,
+              "linear": 17.49,
+              "equal": 18.75
+            },
+            "cdi": 14.73
+          }
+        }
+      },
+      "seconds": 1.7
+    },
+    "R6_cache_performance": {
+      "kind": "latency of the real API code path (FastAPI TestClient, in-process; includes JSON (de)serialisation)",
+      "design": "Median over 5 runs after one warm-up per endpoint and condition. 'without_cache' monkeypatches backend.main.request_scorer to a no-op context manager, so every component calls clf.predict directly. clf.predict is wrapped to count batched classifier calls and texts scored (texts include repeats).",
+      "machine": {
+        "python": "3.12.16",
+        "platform": "macOS-26.6-arm64-arm-64bit"
+      },
+      "ocr_available": true,
+      "endpoints": {
+        "text": {
+          "with_cache": {
+            "median_ms": 28.0,
+            "runs_ms": [
+              28.2,
+              28.1,
+              27.9,
+              28.0,
+              27.8
+            ],
+            "classifier_calls": 3,
+            "texts_scored": 22,
+            "cdi": 99.94
+          },
+          "without_cache": {
+            "median_ms": 48.7,
+            "runs_ms": [
+              49.0,
+              48.5,
+              48.7,
+              48.8,
+              48.4
+            ],
+            "classifier_calls": 7,
+            "texts_scored": 37,
+            "cdi": 99.94
+          },
+          "speedup_x": 1.74,
+          "identical_cdi": true,
+          "identical_findings": true
+        },
+        "html": {
+          "with_cache": {
+            "median_ms": 24.5,
+            "runs_ms": [
+              24.5,
+              24.6,
+              24.4,
+              24.4,
+              24.7
+            ],
+            "classifier_calls": 3,
+            "texts_scored": 18,
+            "cdi": 73.47
+          },
+          "without_cache": {
+            "median_ms": 37.9,
+            "runs_ms": [
+              38.2,
+              38.5,
+              37.9,
+              37.8,
+              37.7
+            ],
+            "classifier_calls": 5,
+            "texts_scored": 29,
+            "cdi": 73.47
+          },
+          "speedup_x": 1.55,
+          "identical_cdi": true,
+          "identical_findings": true
+        },
+        "journey": {
+          "with_cache": {
+            "median_ms": 28.7,
+            "runs_ms": [
+              29.0,
+              28.8,
+              28.6,
+              28.7,
+              28.5
+            ],
+            "classifier_calls": 6,
+            "texts_scored": 19,
+            "cdi": 76.45
+          },
+          "without_cache": {
+            "median_ms": 55.0,
+            "runs_ms": [
+              54.9,
+              55.0,
+              55.0,
+              54.8,
+              55.0
+            ],
+            "classifier_calls": 14,
+            "texts_scored": 41,
+            "cdi": 76.45
+          },
+          "speedup_x": 1.92,
+          "identical_cdi": true,
+          "identical_findings": true
+        },
+        "screenshot": {
+          "with_cache": {
+            "median_ms": 440.3,
+            "runs_ms": [
+              443.3,
+              443.6,
+              440.2,
+              440.3,
+              437.4
+            ],
+            "classifier_calls": 3,
+            "texts_scored": 23,
+            "cdi": 62.5
+          },
+          "without_cache": {
+            "median_ms": 443.2,
+            "runs_ms": [
+              443.2,
+              449.0,
+              444.7,
+              442.8,
+              441.6
+            ],
+            "classifier_calls": 3,
+            "texts_scored": 27,
+            "cdi": 62.5
+          },
+          "speedup_x": 1.01,
+          "identical_cdi": true,
+          "identical_findings": true
+        }
+      },
+      "pdf_export": {
+        "audit_pdf_html": {
+          "median_ms": 8.9,
+          "runs_ms": [
+            9.1,
+            9.0,
+            8.9,
+            8.9,
+            8.9
+          ],
+          "bytes": 9084
+        },
+        "journey_pdf": {
+          "median_ms": 6.6,
+          "runs_ms": [
+            6.7,
+            6.5,
+            6.6,
+            6.5,
+            6.6
+          ],
+          "bytes": 7124
+        }
+      }
+    }
+  },
+  "research_cache_stats": {
+    "model_calls": 50,
+    "texts_scored": 385,
+    "texts_requested": 29886,
+    "cache_hits": 29501
+  },
+  "errors": {},
+  "figures": [
+    "research_cache_latency.png",
+    "research_cdi_fusion.png",
+    "research_fspm_robustness.png",
+    "research_mcai_aggregators.png",
+    "research_optimiser.png"
+  ],
+  "runtime_seconds": 20.4,
+  "model_load_seconds": 5.1
+}

@@ -1,0 +1,140 @@
+{
+  "model": "mobilenet_v3_large (IMAGENET1K_V2) fine-tuned, letterbox 384",
+  "seed": 42,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.1129,
+      "val_macro_ap": 0.4152,
+      "seconds": 29.2
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.9941,
+      "val_macro_ap": 0.5948,
+      "seconds": 21.4
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.8251,
+      "val_macro_ap": 0.6734,
+      "seconds": 21.1
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.7138,
+      "val_macro_ap": 0.7181,
+      "seconds": 22.4
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.6332,
+      "val_macro_ap": 0.7341,
+      "seconds": 22.7
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.5855,
+      "val_macro_ap": 0.7339,
+      "seconds": 22.1
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.5182,
+      "val_macro_ap": 0.7433,
+      "seconds": 21.3
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.4877,
+      "val_macro_ap": 0.7491,
+      "seconds": 20.8
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.4525,
+      "val_macro_ap": 0.7483,
+      "seconds": 22.5
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.4289,
+      "val_macro_ap": 0.7523,
+      "seconds": 23.2
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.413,
+      "val_macro_ap": 0.7535,
+      "seconds": 22.7
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.41,
+      "val_macro_ap": 0.7537,
+      "seconds": 23.8
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.3936,
+      "val_macro_ap": 0.7553,
+      "seconds": 24.9
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.3984,
+      "val_macro_ap": 0.7598,
+      "seconds": 26.2
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.4066,
+      "val_macro_ap": 0.7603,
+      "seconds": 24.9
+    }
+  ],
+  "best_epoch": 15,
+  "best_val_macro_ap": 0.7603,
+  "wall_seconds": 356.7,
+  "val": {
+    "per_label": {
+      "Hard to Close": {
+        "prevalence": 0.4232,
+        "n_pos": 102,
+        "ap": 0.9023,
+        "auroc": 0.9152
+      },
+      "Default Choice": {
+        "prevalence": 0.1826,
+        "n_pos": 44,
+        "ap": 0.6838,
+        "auroc": 0.892
+      },
+      "False Hierarchy": {
+        "prevalence": 0.1784,
+        "n_pos": 43,
+        "ap": 0.6642,
+        "auroc": 0.8946
+      },
+      "Nagging": {
+        "prevalence": 0.1535,
+        "n_pos": 37,
+        "ap": 0.7908,
+        "auroc": 0.949
+      },
+      "Privacy Zuckering": {
+        "prevalence": 0.0705,
+        "n_pos": 17,
+        "ap": 0.4058,
+        "auroc": 0.8921
+      },
+      "Pay to Avoid Ad": {
+        "prevalence": 0.0622,
+        "n_pos": 15,
+        "ap": 0.3547,
+        "auroc": 0.8835
+      }
+    },
+    "macro_ap_required": 0.7603
+  }
+}

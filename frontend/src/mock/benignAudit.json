@@ -1,0 +1,470 @@
+{
+ "audit_id": "8e87e77aa4a2",
+ "input_type": "text",
+ "created_at": "2026-11-13T18:41:52+00:00",
+ "processing_ms": 15,
+ "summary": {
+  "elements_analysed": 14,
+  "suspicious_findings": 0,
+  "categories_detected": [],
+  "overall_risk": "none",
+  "overall_score": 0.5158,
+  "overall_confidence_statement": "No suspicious patterns detected. The highest dark-pattern score among 14 element(s) was 51%, below the 68% flagging threshold.",
+  "no_concern": true,
+  "summary_text": "No suspicious patterns detected. All 14 analysed element(s) scored below the threshold.",
+  "risk_score": 51,
+  "threshold": 0.68
+ },
+ "findings": [],
+ "benign_elements": [
+  {
+   "text": "Motocross Boots",
+   "p_dark": 0.0019,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 357,
+    "char_end": 372,
+    "line": 12,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Baby & Toddler Toys",
+   "p_dark": 0.002,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 144,
+    "char_end": 163,
+    "line": 7,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Universal Fit Collapsible Smart Phone Stand",
+   "p_dark": 0.006,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 83,
+    "char_end": 126,
+    "line": 5,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Lens Manual Washer",
+   "p_dark": 0.007,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 338,
+    "char_end": 356,
+    "line": 11,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Nursery",
+   "p_dark": 0.0094,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 373,
+    "char_end": 380,
+    "line": 13,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Plant-Based Beauty",
+   "p_dark": 0.0102,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 30,
+    "char_end": 48,
+    "line": 3,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "sales@ecklers.net",
+   "p_dark": 0.0134,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 320,
+    "char_end": 337,
+    "line": 10,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "or",
+   "p_dark": 0.0141,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 381,
+    "char_end": 383,
+    "line": 14,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Buy Wearables»",
+   "p_dark": 0.0253,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 0,
+    "char_end": 14,
+    "line": 1,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Last Shape Guide",
+   "p_dark": 0.0315,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 127,
+    "char_end": 143,
+    "line": 6,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "This site uses cookies to provide and improve your shopping experience. If you want to benefit from this improved service, please opt-in.",
+   "p_dark": 0.0495,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 164,
+    "char_end": 301,
+    "line": 8,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Buy with humm.",
+   "p_dark": 0.095,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 15,
+    "char_end": 29,
+    "line": 2,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Frame out of stock in this colour",
+   "p_dark": 0.2402,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 49,
+    "char_end": 82,
+    "line": 4,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  },
+  {
+   "text": "Thanks! -RMO Team",
+   "p_dark": 0.5158,
+   "flagged": false,
+   "source_location": {
+    "source_type": "text",
+    "char_start": 302,
+    "char_end": 319,
+    "line": 9,
+    "css_selector": null,
+    "html_tag": null,
+    "html_snippet": null,
+    "bbox": null,
+    "ocr_confidence": null
+   }
+  }
+ ],
+ "disclaimer": "ClearCart is an assistive screening tool. Scores are calibrated model estimates that an element matches a dark-pattern category learned from the ec-darkpattern dataset - they are indications of potentially deceptive design, not proof of fraud or a legal finding. A human reviewer should verify every finding.",
+ "image_size": null,
+ "warnings": [],
+ "intelligence": {
+  "config_version": "intel-v1.1",
+  "cdi": {
+   "cdi": 0.0,
+   "band": "low",
+   "weights_version": "cdi-w1",
+   "components": [
+    {
+     "key": "content_pressure",
+     "label": "Content pressure (classifier)",
+     "available": true,
+     "value": 0.0,
+     "weight": 0.55,
+     "effective_weight": 1.0,
+     "contribution": 0.0,
+     "provenance": "model",
+     "explanation": "Intensity-breadth pressure: 0.5 x strongest flagged category + 0.5 x mean over the four categories (0 of 4 categories have flagged evidence).",
+     "evidence": []
+    },
+    {
+     "key": "choice_asymmetry",
+     "label": "Choice asymmetry (visual + interaction)",
+     "available": false,
+     "value": null,
+     "weight": 0.25,
+     "effective_weight": null,
+     "contribution": null,
+     "provenance": "unavailable",
+     "explanation": "No accept/decline choice pair was detected in this input.",
+     "evidence": []
+    },
+    {
+     "key": "observed_obstruction",
+     "label": "Observed obstruction (DOM / journey facts)",
+     "available": false,
+     "value": null,
+     "weight": 0.2,
+     "effective_weight": null,
+     "contribution": null,
+     "provenance": "unavailable",
+     "explanation": "Pre-selected options and other DOM states are only observable in HTML input or journey comparisons.",
+     "evidence": []
+    }
+   ],
+   "coverage": 0.55,
+   "evidence_items": 0,
+   "sensitivity": {
+    "one_at_a_time": [
+     {
+      "component": "content_pressure",
+      "low": 0.0,
+      "high": 0.0
+     }
+    ],
+    "dirichlet_p05": 0.0,
+    "dirichlet_p95": 0.0,
+    "samples": 0
+   },
+   "confidence": {
+    "evidence_by_provenance": {},
+    "model_evidence": 0,
+    "mean_model_confidence": null,
+    "min_model_confidence": null,
+    "level": "none",
+    "note": "Confidence describes how sure the evidence is, not how severe the deception is."
+   },
+   "alternatives": {
+    "weighted_mean (selected)": 0.0,
+    "geometric": 0.0,
+    "max": 0.0,
+    "power2": 0.0,
+    "noisy_or": 0.0
+   },
+   "formula": "CDI = 100 * sum_{j in available} w_j * x_j / sum_{j in available} w_j",
+   "note": "Interpretable screening index. Not a probability that a merchant is fraudulent."
+  },
+  "mcai": {
+   "available": false,
+   "reason": "No accept/decline choice pair was detected in this input.",
+   "formula": "MCAI = 100 * sum_{d in available} w_d * D_d / sum_{d in available} w_d",
+   "weights": {
+    "visual": 0.4,
+    "interaction": 0.3,
+    "semantic": 0.3
+   },
+   "choice_sets": [],
+   "mcai": null
+  },
+  "counterfactual": {
+   "edits": [],
+   "original_cdi": 0.0,
+   "redesigned_cdi": 0.0,
+   "risk_reduction_pct": null,
+   "original_components": [
+    {
+     "key": "content_pressure",
+     "label": "Content pressure (classifier)",
+     "available": true,
+     "value": 0.0,
+     "weight": 0.55,
+     "effective_weight": 1.0,
+     "contribution": 0.0,
+     "provenance": "model",
+     "explanation": "Intensity-breadth pressure: 0.5 x strongest flagged category + 0.5 x mean over the four categories (0 of 4 categories have flagged evidence).",
+     "evidence": []
+    },
+    {
+     "key": "choice_asymmetry",
+     "label": "Choice asymmetry (visual + interaction)",
+     "available": false,
+     "value": null,
+     "weight": 0.25,
+     "effective_weight": null,
+     "contribution": null,
+     "provenance": "unavailable",
+     "explanation": "No accept/decline choice pair was detected in this input.",
+     "evidence": []
+    },
+    {
+     "key": "observed_obstruction",
+     "label": "Observed obstruction (DOM / journey facts)",
+     "available": false,
+     "value": null,
+     "weight": 0.2,
+     "effective_weight": null,
+     "contribution": null,
+     "provenance": "unavailable",
+     "explanation": "Pre-selected options and other DOM states are only observable in HTML input or journey comparisons.",
+     "evidence": []
+    }
+   ],
+   "redesigned_components": [
+    {
+     "key": "content_pressure",
+     "label": "Content pressure (classifier)",
+     "available": true,
+     "value": 0.0,
+     "weight": 0.55,
+     "effective_weight": 1.0,
+     "contribution": 0.0,
+     "provenance": "model",
+     "explanation": "Original findings re-scored after their rewrites (model-estimated); rewrites scored below threshold no longer count.",
+     "evidence": []
+    },
+    {
+     "key": "choice_asymmetry",
+     "label": "Choice asymmetry (visual + interaction)",
+     "available": false,
+     "value": null,
+     "weight": 0.25,
+     "effective_weight": null,
+     "contribution": null,
+     "provenance": "unavailable",
+     "explanation": "Redesign specification gives both choices equal visual weight and equal step counts.",
+     "evidence": []
+    },
+    {
+     "key": "observed_obstruction",
+     "label": "Observed obstruction (DOM / journey facts)",
+     "available": false,
+     "value": null,
+     "weight": 0.2,
+     "effective_weight": null,
+     "contribution": null,
+     "provenance": "unavailable",
+     "explanation": "Redesign specification leaves optional add-ons and consents unchecked.",
+     "evidence": []
+    }
+   ],
+   "original_semantic_pressure": null,
+   "redesigned_semantic_pressure": null,
+   "original_mcai": null,
+   "redesigned_mcai": null,
+   "original_fspm": null,
+   "redesigned_fspm": null,
+   "optimisation": {
+    "method": "exact per-element minimisation over a finite candidate set (one batched model call)",
+    "objective": "minimise the redesigned CDI (model-estimated content pressure + by-construction choice/obstruction terms)",
+    "constraints": [
+     "no added facts or offer words",
+     "no removed commercial facts",
+     "disclosure terms kept",
+     "decline options stay declines",
+     "non-empty and changed (except the original baseline)"
+    ],
+    "optimality": "content pressure is monotone non-decreasing in each element's score and constraints are per-element, so the per-element minimum is the global minimum over the candidate space",
+    "tie_break": "within 0.005 of the best score, prefer an actual change over the unchanged original, then the smaller word-level edit distance",
+    "caveat": "The objective is the classifier's own indicator and can exploit its label biases; all candidates are shown."
+   },
+   "label": "Model-estimated reduction: the redesigned text is re-scored by the same classifier. This is not a measured change in consumer behaviour."
+  },
+  "fspm": {
+   "available": false,
+   "reason": "Single-page audit: sequential pressure needs a journey of two or more stages (use a journey audit).",
+   "formula": "FSPM = 100 * sum(F_pos(i) * p_i) / sum(F_pos(i))",
+   "stages": [],
+   "scores": {},
+   "top_stage_index": null,
+   "fibonacci_numbers": [],
+   "positions_mode": "submission_order"
+  },
+  "temporal": {
+   "available": false,
+   "reason": "Single-page audit: temporal comparison needs two or more snapshots or journey stages.",
+   "ordering": "submission_order",
+   "events": [],
+   "pressure_progression": [],
+   "progression_stage_indices": [],
+   "metrics": null
+  },
+  "status_note": "New in intel-v1.0: implemented and unit-tested; evaluated only on synthetic, explicitly labelled benchmarks (no real-world ground truth exists for these indices)."
+ },
+ "versions": {
+  "app": "1.1.0",
+  "model": "ensemble_lr_xgb",
+  "model_trained_at": "2026-11-11 17:45:06",
+  "calibration": "temperature=0.4477",
+  "threshold_text": "0.68",
+  "threshold_ocr": "0.90",
+  "intel_config": "intel-v1.1",
+  "cdi_weights": "cdi-w1"
+ }
+}

@@ -1,0 +1,92 @@
+{
+  "arch": "mobilenet_v3_large",
+  "pretrained_weights": "IMAGENET1K_V2",
+  "pretrained_file": "mobilenet_v3_large-5c1a4163.pth",
+  "pretrained_sha256": "5c1a416349c4cf298f2a6a5e2600ed0ee55e604713578f5e74e6bc8bcaef7997",
+  "size": 384,
+  "labels": [
+    "Hard to Close",
+    "Default Choice",
+    "False Hierarchy",
+    "Nagging",
+    "Privacy Zuckering",
+    "Pay to Avoid Ad"
+  ],
+  "label_config": {
+    "Hard to Close": {
+      "temperature": 1.288,
+      "threshold": 0.3231,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.8148,
+        "precision": 0.7719,
+        "recall": 0.8627
+      },
+      "ece_val_before": 0.0611,
+      "ece_val_after": 0.053
+    },
+    "Default Choice": {
+      "temperature": 1.1281,
+      "threshold": 0.8325,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.5753,
+        "precision": 0.7241,
+        "recall": 0.4773
+      },
+      "ece_val_before": 0.1729,
+      "ece_val_after": 0.1797
+    },
+    "False Hierarchy": {
+      "temperature": 1.0954,
+      "threshold": 0.7635,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.6133,
+        "precision": 0.7188,
+        "recall": 0.5349
+      },
+      "ece_val_before": 0.1298,
+      "ece_val_after": 0.143
+    },
+    "Nagging": {
+      "temperature": 1.2264,
+      "threshold": 0.7967,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.6471,
+        "precision": 0.7097,
+        "recall": 0.5946
+      },
+      "ece_val_before": 0.1373,
+      "ece_val_after": 0.1462
+    },
+    "Privacy Zuckering": {
+      "temperature": 0.9781,
+      "threshold": 0.9485,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.1111,
+        "precision": 1.0,
+        "recall": 0.0588
+      },
+      "ece_val_before": 0.1319,
+      "ece_val_after": 0.1302
+    },
+    "Pay to Avoid Ad": {
+      "temperature": 0.8481,
+      "threshold": 0.9873,
+      "reliable": true,
+      "val_at_threshold": {
+        "f1": 0.125,
+        "precision": 1.0,
+        "recall": 0.0667
+      },
+      "ece_val_before": 0.1204,
+      "ece_val_after": 0.1072
+    }
+  },
+  "model_sha256": "08acd61e3195e6cdc126baf32bd96de72687579494f76aa3f3716c96a89ff018",
+  "trained_on": "ContextRico-DP TRAIN split (data/processed/visual_split.csv)",
+  "provenance": "model (visual, experimental)"
+}

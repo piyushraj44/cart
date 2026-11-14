@@ -1,0 +1,53 @@
+{
+  "model": "frozen CLIP ViT-B/32 image embedding + one-vs-rest logistic regression (balanced), C per label on VAL",
+  "C": {
+    "Hard to Close": 10.0,
+    "Default Choice": 1.0,
+    "False Hierarchy": 10.0,
+    "Nagging": 10.0,
+    "Privacy Zuckering": 10.0,
+    "Pay to Avoid Ad": 10.0
+  },
+  "embedding_seconds": 126.2,
+  "val": {
+    "per_label": {
+      "Hard to Close": {
+        "prevalence": 0.4232,
+        "n_pos": 102,
+        "ap": 0.9043,
+        "auroc": 0.9142
+      },
+      "Default Choice": {
+        "prevalence": 0.1826,
+        "n_pos": 44,
+        "ap": 0.6126,
+        "auroc": 0.8456
+      },
+      "False Hierarchy": {
+        "prevalence": 0.1784,
+        "n_pos": 43,
+        "ap": 0.6959,
+        "auroc": 0.8659
+      },
+      "Nagging": {
+        "prevalence": 0.1535,
+        "n_pos": 37,
+        "ap": 0.836,
+        "auroc": 0.9528
+      },
+      "Privacy Zuckering": {
+        "prevalence": 0.0705,
+        "n_pos": 17,
+        "ap": 0.3877,
+        "auroc": 0.8829
+      },
+      "Pay to Avoid Ad": {
+        "prevalence": 0.0622,
+        "n_pos": 15,
+        "ap": 0.5888,
+        "auroc": 0.8788
+      }
+    },
+    "macro_ap_required": 0.7622
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "ec_darkpattern": {
+    "file": "raw/ec-darkpattern/dataset/dataset.tsv",
+    "rows": 2356,
+    "columns": [
+      "page_id",
+      "text",
+      "label",
+      "Pattern Category"
+    ],
+    "dtypes": {
+      "page_id": "str",
+      "text": "str",
+      "label": "int64",
+      "Pattern Category": "str"
+    },
+    "missing": {
+      "page_id": 0,
+      "text": 0,
+      "label": 0,
+      "Pattern Category": 0
+    },
+    "binary_label_counts": {
+      "1": 1178,
+      "0": 1178
+    },
+    "category_counts": {
+      "Not Dark Pattern": 1178,
+      "Scarcity": 418,
+      "Social Proof": 312,
+      "Urgency": 210,
+      "Misdirection": 195,
+      "Obstruction": 27,
+      "Sneaking": 12,
+      "Forced Action": 4
+    },
+    "unique_page_ids": 1248,
+    "empty_after_normalisation": 0,
+    "exact_duplicate_texts": 7,
+    "template_duplicate_texts": 366,
+    "template_groups_with_conflicting_labels": 2,
+    "char_length": {
+      "min": 1,
+      "median": 25.0,
+      "mean": 42.9,
+      "p95": 119.0,
+      "max": 857
+    },
+    "char_length_median_by_category": {
+      "Forced Action": 147.5,
+      "Misdirection": 35.0,
+      "Not Dark Pattern": 20.0,
+      "Obstruction": 387.0,
+      "Scarcity": 21.0,
+      "Sneaking": 100.5,
+      "Social Proof": 46.5,
+      "Urgency": 41.0
+    },
+    "page_ids_with_both_labels": 122,
+    "label_consistency_check": true,
+    "excluded_categories": {
+      "Obstruction": 27,
+      "Sneaking": 12,
+      "Forced Action": 4
+    },
+    "examples": {
+      "Urgency": [
+        "FLASH SALE | LIMITED TIME ONLY Shop Now",
+        "HURRY! EXCLUSIVE DEAL FOR YOU! 1 4 : 4 5",
+        "Offer ends in"
+      ],
+      "Not Dark Pattern": [
+        "Pillowcases & Shams",
+        "Write a review",
+        "To start your return, simply click on the following button and add your return details. Once the form is filled, you will receive an email with shipping instructions for how to ship the item(s) to our warehouse."
+      ],
+      "Scarcity": [
+        "In demand",
+        "Hurry! Only 2 left in stock",
+        "In Stock only 3 left"
+      ],
+      "Misdirection": [
+        "OUR BEST SELLING GOGGLE",
+        "No thanks. I don't like free things...",
+        "I don't feel lucky"
+      ],
+      "Social Proof": [
+        "1,142 people have added to cart recently",
+        "Michael in Pontiac, United States purchased a",
+        "9 people are viewing this."
+      ],
+      "Obstruction": [
+        "When you join the PetPlus Plan, you are given the option to purchase your membership on an annual or monthly basis and you are automatically enrolled in our recurring billing program. You may cancel at any time by contacting our customer service team, but you will not be refunded for any unused days on your membership if you choose to cancel prior to the end of your billing cycle. You may cancel your PetPlus membership at any time without penalty if you have not utilized any of your PetPlus benefits (including discounts on products and/or services). For customers charged on a monthly basis, if you have purchased products or used services using your PetPlus benefits, we will charge a $25 administrative fee per membership cancellation if the membership is cancelled within three months of enrollment.",
+        "\"No Worry\" Membership Renewal We will bill your credit card on file at the introductory rate of $2.99 per month for the first year, for membership rewards and discounts. At the end of the introductory period, you'll be billed at the regular monthly rate of $3.99 per month. If you don't want your membership renewed, simply contact us and we will cancel your subscription. You will be refunded for the current month's membership fee, less any membership savings you have received. Exclusive Toll-Free Hotline Number Because we want your calls to get top priority, we have a special number for Value Club members only: 1-800-648-4282. Your call will be handled with the utmost promptness, courtesy and efficiency possible.",
+        "You may cancel your JustFab VIP Membership at any time. There is absolutely no cancellation fee. If you would like to continue receiving selections, then just skip the month by clicking Skip This Month in your Boutique between the 1st and the 5th of the month. You won't be charged and no member credit will be generated for you. If you no longer want to skip the month, then call our Fashion Consultants on 020 36953830 (local rate) Mon-Fri 8:00AM to 8:00PM and Sat-Sun 10:00AM to 6:00PM or cancel your membership via chat."
+      ],
+      "Sneaking": [
+        "Shipping Insurance Remove Insurance",
+        "1 Netflix offer: Not available to customers with an active Netflix offer from Vodafone. Available only on Red+ Lite, Unlimited, Red+ Essentials and Red+ until the 8th of August 2019. Exit fee of $60 applies if you exit or transfer your plan before 6 months. Plan exit fees may also apply. Netflix Offer: One year Netflix ‘Standard’ plan ($14.99 a month) credit will be applied to your Netflix account on activation. At the end of your credit, you will be charged at your Netflix plan rate unless you cancel your Netflix subscription. Cancel Netflix at any time. Netflix compatible device required. See eligible plans and full Netflix terms.",
+        "◊After 1 year, subscription auto renews with fee. Review your iFit® Coach account on a computer, tablet, smartphone, or equipment console."
+      ],
+      "Forced Action": [
+        "I would like to join Backstage Pass & agree to the Terms & Conditions & to receive emails & other promotional offers.",
+        "I agree to receive marketing emails from Natural Life and agree to our Privacy Policy and terms of use.",
+        "I accept the Terms & Conditions of the FREE Brother Care Program and agree to receive exclusive offers and general promotions from Brother. I may withdraw my consent at any time."
+      ]
+    }
+  },
+  "contextrico_dp": {
+    "file": "data/raw/contextrico/groundtrue.json",
+    "images_in_ground_truth": 1608,
+    "record_keys": {
+      "labels": 1608,
+      "type": 258,
+      "segments": 258
+    },
+    "labels_per_image": {
+      "1": 1280,
+      "2": 258,
+      "3": 63,
+      "4": 7
+    },
+    "label_counts": {
+      "Hard to Close": 683,
+      "Default Choice": 291,
+      "False Hierarchy": 288,
+      "Nagging": 249,
+      "Privacy Zuckering": 113,
+      "Pay to Avoid Ad": 97,
+      "Attention Distraction": 76,
+      "Disguised Ad": 59,
+      "Limited Time Message": 42,
+      "Countdown Timer": 37,
+      "Low Stock Message": 21,
+      "Social Pyramid": 14,
+      "Gamification": 12,
+      "Activity Message": 11,
+      "Countdown on Ad": 9,
+      "High Demand Message": 5,
+      "Watch Ad to Unlock Features": 4,
+      "Price Comparison Prevention": 1,
+      "Forced Continuity": 1
+    },
+    "type_field": {
+      "None": 1350,
+      "mobile": 175,
+      "web": 83
+    },
+    "has_benign_images": false,
+    "images_with_segments": 258,
+    "text_observable_label_counts": {
+      "Limited Time Message": 42,
+      "Countdown Timer": 37,
+      "Countdown on Ad": 9,
+      "Low Stock Message": 21,
+      "High Demand Message": 5,
+      "Activity Message": 11
+    },
+    "image_files_found": 1609,
+    "gt_images_missing_on_disk": 2
+  }
+}

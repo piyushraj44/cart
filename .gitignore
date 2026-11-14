@@ -1,0 +1,35 @@
+# --- environments & dependencies
+.venv/
+frontend/node_modules/
+frontend/dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- raw datasets (download with: python -m ml.download_data [--images])
+data/raw/
+data/processed/ocr_cache/
+
+# --- pretrained encoder weights (auto-downloaded from Hugging Face on first run)
+ml/artifacts/minilm/
+
+# --- OS / editor noise
+.DS_Store
+.vscode/
+.idea/
+*.log
+!ml/artifacts/screenshot_eval.log
+
+# v2 experiments: large transformer weights and GPL-3.0 Mathur clone (not redistributed)
+ml/artifacts_v2/transformer_v2/
+ml/artifacts_v2/transformer_v1data/
+data/raw/mathur-dark-patterns/
+
+# experimental visual model: image cache, checkpoints, downloaded copies of ContextRico
+ml/artifacts_visual/cache/
+ml/artifacts_visual/*.pt
+new data/
+
+# local Claude Code settings
+.claude/
+clearcart*.zip

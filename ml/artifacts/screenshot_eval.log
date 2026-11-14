@@ -1,0 +1,20 @@
+[data] 83 positives, 250 negatives; split {'dev': {'positives': 42, 'negatives': 125, 'urgency': 29, 'scarcity': 12, 'social_proof': 6}, 'test': {'positives': 41, 'negatives': 125, 'urgency': 30, 'scarcity': 12, 'social_proof': 5}}
+[ocr] 1332 (image, config) jobs, 1332 not cached; 6 workers
+[ocr] 200/1332
+[ocr] 400/1332
+[ocr] 600/1332
+[ocr] 800/1332
+[ocr] 1000/1332
+[ocr] 1200/1332
+W1111 17:32:45.067000 22204 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 17019.12it/s]
+[model] scoring 10155 unique OCR texts
+[select] config=v4_psm3 tau=0.9 (4 of 56 DEV (config, tau) points meet neg flag rate <= 0.15; best admissible F1 0.7447. Chosen v4_psm3@0.9: F1 0.7447, cat-correct recall 0.8333, neg flag rate 0.136. Tie set: ['v4_psm3@0.9']. No admissible point at the text model's threshold.)
+  DEV v1_naive  det=0.833 cat=0.762 neg=0.288 P=0.493 F1=0.620 AUROC=0.8983 s/img=0.432
+  DEV v2        det=0.881 cat=0.857 neg=0.408 P=0.420 F1=0.569 AUROC=0.9025 s/img=0.725
+  DEV v3        det=0.881 cat=0.857 neg=0.408 P=0.420 F1=0.569 AUROC=0.9025 s/img=0.89
+  DEV v4_psm3   det=0.881 cat=0.881 neg=0.392 P=0.430 F1=0.578 AUROC=0.9147 s/img=0.762
+  TEST v1_naive     det=0.732 cat=0.634 neg=0.288 P=0.455 F1=0.561
+  TEST v4_psm3@0.9  det=0.634 cat=0.561 neg=0.144 P=0.591 F1=0.612
+[done] wrote ml/artifacts/screenshot_eval.json in 174.6s
+.venv/bin/python -m ml.eval_screenshots  913.84s user 26.72s system 536% cpu 2:55.36 total
